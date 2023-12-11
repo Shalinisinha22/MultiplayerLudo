@@ -3,10 +3,10 @@ import Svg, { Defs, LinearGradient, Stop, Path } from "react-native-svg";
 import { View } from "react-native";
 import * as Animatable from 'react-native-animatable';
 
-const Arrow3 = (props) => {
+const Arrow4 = (props) => {
   return (
     <Animatable.View 
-    style={{height: 30, width: 38, position: "absolute", bottom: 120, left: 190,transform: [{ rotate: "-90deg" }]}}
+    style={{height: 30, width: 38, position: "absolute", bottom: 124, left: 150,transform: [{ rotate: "90deg" }]}}
      animation="fadeIn"
     easing="ease-in-out"
     iterationCount="infinite"
@@ -61,4 +61,4 @@ const Arrow3 = (props) => {
   )
 }
 
-export default Arrow3
+export default Arrow4

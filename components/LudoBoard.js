@@ -420,7 +420,6 @@ const LudoBoard = () => {
                     style={[
                       styles.gridCell,
                       isStarCell(rowIndex, colIndex) && styles.starCell,
-                      
                       { backgroundColor: isCellColored(rowIndex, colIndex) },
                       removeInnerCellGrid(rowIndex, colIndex) ? styles.removeGrid
                         : null,

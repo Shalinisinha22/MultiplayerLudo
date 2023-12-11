@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TimerScreen from './Screens/TimerScreen';
 import LudoBoard from './components/LudoBoard';
+import APP from "./src/App"
 
 const App = () => {
   const Stack = createNativeStackNavigator();
@@ -26,10 +27,11 @@ const App = () => {
           barStyle={"dark-content"}
           translucent={false}
          />
-        <Stack.Navigator>
+         <APP></APP>
+        {/* <Stack.Navigator>
           <Stack.Screen name="LoadingScreen" component={TimerScreen} options={{ headerShown: false }} />
           <Stack.Screen name="LudoBoard" component={LudoBoard} options={{ headerShown: false }} />
-        </Stack.Navigator>
+        </Stack.Navigator> */}
 
       </SafeAreaView>  
     </NavigationContainer>

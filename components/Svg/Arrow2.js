@@ -5,7 +5,7 @@ import * as Animatable from 'react-native-animatable';
 
 const Arrow2 = (props) => (
    <Animatable.View 
-    style={{height: 30, width: 38, position: "absolute", top: 20, left: -40,transform: [{ rotate: "-90deg" }]}}
+    style={{height: 30, width: 38, position: "absolute", top: 120, left: 190,transform: [{ rotate: "-90deg" }]}}
      animation="fadeIn"
     easing="ease-in-out"
     iterationCount="infinite"
