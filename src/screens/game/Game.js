@@ -17,7 +17,9 @@ import Arrow2 from '../../../components/Svg/Arrow2';
 import Arrow3 from '../../../components/Svg/Arrow3';
 import Arrow4 from '../../../components/Svg/Arrow4';
 
+
 export default class Game extends Component{
+
     constructor(props){
         super(props);
         const { red, blue, yellow, green } = colors;
@@ -51,7 +53,6 @@ export default class Game extends Component{
         
     }
 
-  
   
     componentDidMount() {
         this.loadSound();
@@ -108,7 +109,7 @@ export default class Game extends Component{
 
       renderDiceIcons() {
         const { diceNumber } = this.state;
-       console.log(diceNumber)
+    //    console.log(diceNumber)
     
         if (diceNumber === 1) {
           return <FontAwesome5 name="dice-one" size={54} color="#fdfffc" />
@@ -356,7 +357,7 @@ export default class Game extends Component{
         }).start();
     
      
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        await new Promise(resolve => setTimeout(resolve, 1000));
        
         this.setState({isRolling:true,diceNumber:this.getRandomInt(),diceRollTestDataIndex:updatedDiceRollTestDataIndex})
         setTimeout(()=>{
@@ -437,8 +438,9 @@ export default class Game extends Component{
         const { moves } = this.state;
         let hasSix = moves.filter(move=>move==6).length>0
 
+
         const isMovePossibleForPosition = (position) =>{
-            console.log("441",position)
+            // console.log("441",position)
             if(position===FINISHED){
                 return false;
             }
@@ -453,7 +455,7 @@ export default class Game extends Component{
             let positionTocheckFor = parseInt(position.substring(1,position.length))
     
             moves.forEach((move)=>{
-                console.log(move)
+                // console.log(move)
                 if(!isMovePossible){
                    let possiblePossition =  move==1?18: move==2?17: move==3?16: move ==4? 15: move==5? 14: undefined;
                    if(possiblePossition){
@@ -466,6 +468,8 @@ export default class Game extends Component{
 
             return isMovePossible;
         }
+
+                       
         let countOfOptions = 0;
         isMovePossibleForPosition(one.position)? countOfOptions++ : undefined;
         isMovePossibleForPosition(two.position)? countOfOptions++ : undefined;
@@ -633,20 +637,26 @@ export default class Game extends Component{
         }
 
         if(this.didGetBonusWithNewPosition(piece) && !this.isPlayerFinished(this.state[piece.color])){
-            let count = this.state.bonusCount+1;
+            let count = this.state.bonusCount + 1;
             this.setState({bonusCount:count},()=>{
+                console.log("count",count)
                 let player = this.state[piece.color]
+                 console.log("moves", this.state.moves)
                 if(this.state.moves.length==1){
+                    // this.setState({animateForSelection:false,moves:this.state.moves})
                     this.updatePlayerPieces(player)
-                }else if(this.state.moves.length==0 || this.isPlayerFinished(player)){
-                    this.setState({animateForSelection:false,moves:[], turn: this.getNextTurn()})
                 }
+                else if(this.state.moves.length==0 || this.isPlayerFinished(player)){
+                    this.setState({animateForSelection:false,moves:[]})
+                }
+              
             })
         }else{
             this.setState(this.state,()=>{
                 let player = this.state[piece.color]
                 if(this.state.moves.length==1){
                     this.updatePlayerPieces(player)
+                 
                 }else if(this.state.moves.length==0 || this.isPlayerFinished(player)){
                     this.setState({animateForSelection:false,moves:[], turn: this.getNextTurn()})
                 }
@@ -656,7 +666,8 @@ export default class Game extends Component{
         
     }
 
-    didGetBonusWithNewPosition(piece){
+    didGetBonusWithNewPosition(piece)
+    {
         if(piece.position==FINISHED){
             return true;
         }
@@ -708,9 +719,11 @@ export default class Game extends Component{
         const { moves } = this.state;
         if(moves.length>=1){
             if(!this.isPlayerFinished(player)){
+
                 if(this.playerHasOptionsForMoves(player)){
                     this.setState({animateForSelection:true});
-                }else if(this.playerHasSinglePossibleMove(player)){
+                }
+                else if(this.playerHasSinglePossibleMove(player)){
                     if(this.playerHasSingleUnfinishedPiece(player)){
                         let singlePossibleMove = this.getSinglePossibleMove(player);
                         if(singlePossibleMove){
@@ -728,13 +741,15 @@ export default class Game extends Component{
                             this.setState({animateForSelection:true})
                         }
                     }
-                }else{
+                }
+                else{
                     this.setState({turn:this.getNextTurn(),moves:[],animateForSelection:false})        
                 }
             }else{
                 this.setState({turn:this.getNextTurn(),moves:[],animateForSelection:false})    
             }
-        }else{
+        }
+        else{
             this.setState({turn:this.getNextTurn(),animateForSelection:false})
         }
     }
@@ -783,7 +798,9 @@ export default class Game extends Component{
                 return;
             }
             this.movePieceByPosition(selectedPiece,moves.shift());
-        }else if(moves.length>1){
+        }
+        
+        else if(moves.length>1){
             if(selectedPiece.position==HOME){
                 moves.shift();
                 selectedPiece.position = selectedPiece.color== RED? R1 : selectedPiece.color== YELLOW ? Y1 : selectedPiece.color == GREEN ? G1 : selectedPiece.color == BLUE? B1: undefined;
@@ -806,16 +823,21 @@ export default class Game extends Component{
                         }  
                     }
                 })
-            }else{
+            }
+
+            else{
+
                 const onMoveSelected = (selectedMove)=>{
                     if(this.isMovePossibleForPosition(selectedPiece.position,selectedMove)){
+                        console.log("Move possible")
                         const index = moves.indexOf(parseInt(selectedMove));
                         if(index>-1){
                             moves.splice(index,1);
                         }
-                        this.movePieceByPosition(selectedPiece,selectedMove);
+                        this.movePieceByPosition(selectedPiece,parseInt(selectedMove));
                     }else{
                         ToastAndroid.show("Move not possible",ToastAndroid.LONG);
+                        console.log("Move not possible")
                     }
                 }
 
@@ -826,10 +848,14 @@ export default class Game extends Component{
                 optionTwo? moveOptions.push({text:optionTwo,onPress:()=>{onMoveSelected(optionTwo)}}):undefined;
                 let optionThree = moves.length>2? moves[2].toString(): undefined;
                 optionThree? moveOptions.push({text:optionThree,onPress:()=>{onMoveSelected(optionThree)}}):undefined;
+                console.log(moveOptions)
                 Alert.alert("Select your move","",moveOptions,{cancelable:true});
 
             }
+
         }
+      
+
     }
 
     isMovePossibleForPosition = (position,move) =>{
@@ -1023,3 +1049,4 @@ const styles = StyleSheet.create({
         // paddingRight: 20
       },
 })
+//  {"color": "yellow", "name": "one", "position": "G7", "updateTime": 1702364699116}

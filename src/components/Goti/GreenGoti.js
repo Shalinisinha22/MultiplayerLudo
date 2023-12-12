@@ -4,7 +4,9 @@ import { View } from "react-native"
 import * as Animatable from 'react-native-animatable';
 const GreenGoti = (props) => (
 
- <View style={{ zIndex: 1}}>
+
+
+  <View style={[{height:40,width:40,position:"absolute", top:-13,right:-7},]}>
     <Svg
     xmlns="http://www.w3.org/2000/svg"
     xmlSpace="preserve"
@@ -229,5 +231,6 @@ const GreenGoti = (props) => (
     />
    </Svg>
   </View>
+
 )
 export default GreenGoti

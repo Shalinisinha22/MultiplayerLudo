@@ -5,7 +5,7 @@ import * as Animatable from 'react-native-animatable';
 const YellowGoti = (props) => (
 
 
- <View style={{zIndex: 1}}>
+<View style={[{height:40,width:40,position:"absolute", top:-13,right:-7},]}>
   { console.log(props.player)}
    <Svg
     xmlns="http://www.w3.org/2000/svg"

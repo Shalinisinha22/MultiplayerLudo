@@ -34,7 +34,7 @@ export default PlayerBox = ({color,customStyle,one,two,three,four,onPieceSelecti
         if(piece.position==HOME){
             return(
                 <TouchableOpacity style={{flex:1}} onPress={()=>{onPieceSelection(piece)}}>
-                <View style={[styles.pieceStyle,{backgroundColor:color,borderRadius:20,} ]}>
+                <View style={[styles.circle,{backgroundColor:color,borderRadius:20,} ]}>
                    
                       {backgroundColor == "#ec1d27" && <RedGoti></RedGoti>}
                       {backgroundColor == "#01A147" && <GreenGoti></GreenGoti>}
@@ -89,5 +89,15 @@ const styles = StyleSheet.create({
         borderRadius:20,
         borderWidth:0.5,
         borderColor: "#000"
-    }
+    },
+    circle: {
+        width: 25,
+        height: 25,
+        borderRadius: 14,
+        backgroundColor: '#ec1d27', // Change the color as needed
+        position: 'absolute',
+        top: 15,
+        left: 10,
+        // marginTop: 1,
+      },
 })

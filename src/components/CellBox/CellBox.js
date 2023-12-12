@@ -9,13 +9,14 @@ import GreenGoti from '../Goti/GreenGoti';
 
 export default CellBox = ({backgroundColor,position, onPieceSelection, state,arrow, safe}) =>{
 
-
-
-
     const [highlighColor,setHighlightColor] = React.useState(backgroundColor);
     const [isAnimating,setIsAnimating] = React.useState(false);
     const [intervalId,setIntervalId] = React.useState(undefined);
+    
     let shouldRenderBackgroundColor = 1;
+
+
+
     const applyAnimationIfNeeded = () =>{
         if(shouldAnimateForSelection()){
             if(!isAnimating){
@@ -49,6 +50,8 @@ export default CellBox = ({backgroundColor,position, onPieceSelection, state,arr
         three.position == position ||
         four.position == position;
     }
+
+
     const shouldRenderPiece = ()=>{
         const { red,yellow, blue, green} = state;
         return red.pieces.one.position == position ||
@@ -74,6 +77,8 @@ export default CellBox = ({backgroundColor,position, onPieceSelection, state,arr
 
     
     }
+
+    
 
     const getPieceColor = () =>{
         const { red, yellow, blue, green } = state;
@@ -147,9 +152,14 @@ export default CellBox = ({backgroundColor,position, onPieceSelection, state,arr
 
         return isMovePossible;
     }
+
+
     applyAnimationIfNeeded();
     let color = state.isWaitingForDiceRoll? backgroundColor : highlighColor;
+
     return(
+
+
         <TouchableOpacity style={[styles.container,{backgroundColor: color}]}
 
             onPress={()=>{
@@ -163,7 +173,10 @@ export default CellBox = ({backgroundColor,position, onPieceSelection, state,arr
         >
            {arrow}
            {safe}
-           {/* {shouldRenderPiece() && <View style={[styles.pieceStyle,{backgroundColor:getPieceColor()}]}>
+
+
+           {/* {shouldRenderPiece() && 
+                   <View style={[styles.pieceStyle,{backgroundColor:getPieceColor()}]}>
                        { state.turn == RED && <RedGoti></RedGoti>}
                       {state.turn == GREEN && <GreenGoti></GreenGoti>}
                       {state.turn == YELLOW && <YellowGoti></YellowGoti>}
@@ -172,13 +185,16 @@ export default CellBox = ({backgroundColor,position, onPieceSelection, state,arr
                   
 
                   {shouldRenderPiece() && 
-                  <>
-                  { getPieceColor() == "#ec1d27" && <RedGoti></RedGoti>}
+                             <>
+                             { getPieceColor() == "#ec1d27" && <RedGoti></RedGoti>}
                              {getPieceColor() == "#01A147" && <GreenGoti></GreenGoti>}
                              {getPieceColor() == "#ffe01b" && <YellowGoti></YellowGoti>}
-                              {getPieceColor() == "#29b6f6" && <BlueGoti></BlueGoti>}
-                              </>}
+                             {getPieceColor() == "#29b6f6" && <BlueGoti></BlueGoti>}
+                              </>
+                  }
         </TouchableOpacity>
+
+
     )
 }
 

@@ -17,6 +17,7 @@ export default VerticalCellsContainer = ({position,onPieceSelection,state}) =>{
             <View style={styles.columnContainer}>
             {positionsArray.map((cellPosition)=>{
                 return(
+
                     <View style={styles.cellContainer} key={cellPosition}>
                         <CellBox backgroundColor={getCellBackgroundColor(cellPosition)}
                              arrow ={getCellArrow(cellPosition)}
