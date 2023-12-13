@@ -8,6 +8,7 @@ import TimerScreen from './Screens/TimerScreen';
 import LudoBoard from './components/LudoBoard';
 import APP from "./src/App"
 
+
 const App = () => {
   const Stack = createNativeStackNavigator();
   return (
@@ -28,6 +29,7 @@ const App = () => {
           translucent={false}
          />
          <APP></APP>
+        
         {/* <Stack.Navigator>
           <Stack.Screen name="LoadingScreen" component={TimerScreen} options={{ headerShown: false }} />
           <Stack.Screen name="LudoBoard" component={LudoBoard} options={{ headerShown: false }} />

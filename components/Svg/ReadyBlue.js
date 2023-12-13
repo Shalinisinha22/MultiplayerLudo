@@ -5,7 +5,7 @@ import * as Animatable from 'react-native-animatable';
 const ReadyBlue = (props) => (
 
     <Animatable.View 
-    style={{height:66, width:66, paddingLeft:25}}
+    style={[{height:40,width:40,position:"absolute", top:-13,right:-8},]}
      animation="fadeIn"// Specify the animation name
     easing="ease-in-out"
     iterationCount="infinite"

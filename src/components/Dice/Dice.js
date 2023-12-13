@@ -120,7 +120,7 @@ export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation}) 
         )
     }
     const renderDiceSurface = (diceNumber) =>{
-        console.log(diceNumber)
+        // console.log(diceNumber)
         switch(diceNumber){
             case 1:
             return renderSurfaceOne();

@@ -15,7 +15,8 @@ const getSafeArea = (position) => {
         case B9:
          return  <Ionicons name="star" size={14} color="white" style={{alignSelf:"center"}}/>
        
-
+        default:
+         return null
 
    }
 }

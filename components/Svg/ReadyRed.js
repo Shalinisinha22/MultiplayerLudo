@@ -7,12 +7,12 @@ const ReadyRed = (props) => (
 
 
    
-  <View 
-    style={{height:46, width:46, transform: [{ rotate: "-90deg" }], zIndex:1000, left:30, top:15}}
-    //  animation="fadeIn"// Specify the animation name
-    // easing="ease-in-out"
-    // iterationCount="infinite"
-    // duration={1000} // Animation duration in milliseconds
+  <Animatable.View style={[{height:40,width:40,position:"absolute", top:-13,right:-8},]}
+   
+     animation="fadeIn"// Specify the animation name
+    easing="ease-in-out"
+    iterationCount="infinite"
+    duration={1000} 
 
     
    >
@@ -241,6 +241,6 @@ const ReadyRed = (props) => (
     />
    </Svg>
 
-  </View>
+  </Animatable.View>
 )
 export default ReadyRed

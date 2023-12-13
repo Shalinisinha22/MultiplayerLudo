@@ -6,7 +6,7 @@ import * as Animatable from 'react-native-animatable';
 const Arrow3 = (props) => {
   return (
     <Animatable.View 
-    style={{height: 30, width: 38, position: "absolute", bottom: 120, left: 190,transform: [{ rotate: "-90deg" }]}}
+    style={{height: 30, width: 38, position: "absolute", bottom: 120, left: 210,transform: [{ rotate: "-90deg" }]}}
      animation="fadeIn"
     easing="ease-in-out"
     iterationCount="infinite"

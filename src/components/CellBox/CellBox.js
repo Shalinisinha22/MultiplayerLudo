@@ -6,6 +6,10 @@ import RedGoti from '../Goti/RedGoti';
 import YellowGoti from '../Goti/YellowGoti';
 import BlueGoti from '../Goti/BlueGoti';
 import GreenGoti from '../Goti/GreenGoti';
+import ReadyRed from '../../../components/Svg/ReadyRed';
+import ReadyGreen from '../../../components/Svg/ReadyGreen';
+import ReadyYellow from '../../../components/Svg/ReadyYellow';
+import ReadyBlue from '../../../components/Svg/ReadyBlue';
 
 export default CellBox = ({backgroundColor,position, onPieceSelection, state,arrow, safe}) =>{
 
@@ -15,19 +19,24 @@ export default CellBox = ({backgroundColor,position, onPieceSelection, state,arr
     
     let shouldRenderBackgroundColor = 1;
 
-
+   
 
     const applyAnimationIfNeeded = () =>{
+
         if(shouldAnimateForSelection()){
             if(!isAnimating){
                 setIsAnimating(true);
                 setIntervalId(setInterval(()=>{
-                    let color = backgroundColor == colors.white? "#999": colors.white;
+                    let color = backgroundColor == colors.white? colors.white : colors.white;
                     shouldRenderBackgroundColor++;
-                    shouldRenderBackgroundColor%2==0?setHighlightColor(backgroundColor):setHighlightColor(color);
+                    shouldRenderBackgroundColor%2 == 0?setHighlightColor(backgroundColor):setHighlightColor(backgroundColor);
                 },400));
             }
-        }else{
+        }
+
+
+        else{
+
             clearInterval(intervalId);
             if(isAnimating){
                 setIsAnimating(false);
@@ -42,6 +51,7 @@ export default CellBox = ({backgroundColor,position, onPieceSelection, state,arr
         const playerToCheckFor = turn == RED? red: turn ==YELLOW? yellow: turn == GREEN? green: turn == BLUE?blue: undefined;
         return positionMatchesPlayerPosition(playerToCheckFor) && isMovePossibleFromCurrentPosition();
     }
+
 
     const positionMatchesPlayerPosition = (playerToCheckFor) =>{
         const { one, two, three, four } = playerToCheckFor.pieces;
@@ -160,7 +170,7 @@ export default CellBox = ({backgroundColor,position, onPieceSelection, state,arr
     return(
 
 
-        <TouchableOpacity style={[styles.container,{backgroundColor: color}]}
+        <TouchableOpacity style={[styles.container,{backgroundColor:color}]}
 
             onPress={()=>{
                 if(isMovePossibleFromCurrentPosition()){
@@ -185,12 +195,15 @@ export default CellBox = ({backgroundColor,position, onPieceSelection, state,arr
                   
 
                   {shouldRenderPiece() && 
-                             <>
-                             { getPieceColor() == "#ec1d27" && <RedGoti></RedGoti>}
-                             {getPieceColor() == "#01A147" && <GreenGoti></GreenGoti>}
-                             {getPieceColor() == "#ffe01b" && <YellowGoti></YellowGoti>}
-                             {getPieceColor() == "#29b6f6" && <BlueGoti></BlueGoti>}
-                              </>
+                        <>
+
+                             { getPieceColor() == "#ec1d27" ? isAnimating ? <ReadyRed></ReadyRed> :<RedGoti></RedGoti>:null}
+                             {/* { getPieceColor() == "#ec1d27" && <RedGoti></RedGoti>} */}
+
+                             {getPieceColor() == "#01A147" ? isAnimating ? <ReadyGreen></ReadyGreen> : <GreenGoti></GreenGoti>:null}
+                             {getPieceColor() == "#ffe01b" ? isAnimating ? <ReadyYellow></ReadyYellow> : <YellowGoti></YellowGoti>:null}
+                             {getPieceColor() == "#29b6f6" ? isAnimating ? <ReadyBlue></ReadyBlue> : <BlueGoti></BlueGoti>:null}
+                        </>
                   }
         </TouchableOpacity>
 

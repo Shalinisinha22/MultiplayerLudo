@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View,Text,StyleSheet, Dimensions, ToastAndroid, Alert, ImageBackground,TouchableOpacity, Animated} from 'react-native';
+import {View,Text,StyleSheet, Dimensions, ToastAndroid, Alert, ImageBackground,TouchableOpacity, Animated, ActivityIndicator, Image} from 'react-native';
 import { colors } from '../../util/Colors';
 import PlayerBox from '../../components/PlayerBox/PlayerBox'
 import VerticalCellsContainer from '../../components/VerticalCellsContainer/VerticalCellsContainer';
@@ -16,6 +16,9 @@ import Arrow1 from '../../../components/Svg/Arrow1';
 import Arrow2 from '../../../components/Svg/Arrow2';
 import Arrow3 from '../../../components/Svg/Arrow3';
 import Arrow4 from '../../../components/Svg/Arrow4';
+
+
+
 
 
 export default class Game extends Component{
@@ -45,6 +48,7 @@ export default class Game extends Component{
            rollingRotation: this.rollingValue.interpolate({
             inputRange: [0, 1],
             outputRange: ['0deg', '360deg'],
+
           })
            
           
@@ -108,22 +112,32 @@ export default class Game extends Component{
 
 
       renderDiceIcons() {
-        const { diceNumber } = this.state;
-    //    console.log(diceNumber)
-    
+        const { diceNumber, isRolling } = this.state;
+
+        if (isRolling) {
+          return <Image rollTime={1000} source={require("../../../assets/DICE2.png")}></Image>
+
+        //    <FontAwesome5 name="dice-d6" size={54} color="#fdfffc" 
+        //   numDice={1}  // Set the number of dice as needed
+        //   rollTime={1000}
+        //   faceColor="#ff5733"
+        //   dotColor="#ffffff"
+        // />;
+        } 
         if (diceNumber === 1) {
-          return <FontAwesome5 name="dice-one" size={54} color="#fdfffc" />
+          return <FontAwesome5 name="dice-one" size={54} color="#fdfffc" />;
         } else if (diceNumber === 2) {
-          return  <FontAwesome5 name="dice-two" size={54} color="#fdfffc" />
+          return <FontAwesome5 name="dice-two" size={54} color="#fdfffc" />;
         } else if (diceNumber === 3) {
-          return  <FontAwesome5 name="dice-three" size={54} color="#fdfffc" />
+          return <FontAwesome5 name="dice-three" size={54} color="#fdfffc" />;
         } else if (diceNumber === 4) {
-          return <FontAwesome5 name="dice-four" size={54} color="#fdfffc" />
+          return <FontAwesome5 name="dice-four" size={54} color="#fdfffc" />;
         } else if (diceNumber === 5) {
-          return  <FontAwesome5 name="dice-five" size={54} color="#fdfffc" />
+          return <FontAwesome5 name="dice-five" size={54} color="#fdfffc" />;
         } else if (diceNumber === 6) {
-          return <FontAwesome5 name="dice-six" size={54} color="#fdfffc" />
+          return <FontAwesome5 name="dice-six" size={54} color="#fdfffc" />;
         }
+      
     
         return null; // Return null if the diceValue is not 1-6
       }
@@ -198,7 +212,7 @@ export default class Game extends Component{
                 {this.state.turn === YELLOW && <Arrow2></Arrow2>}
                 {this.state.turn === GREEN && <Arrow3></Arrow3>}
                 {this.state.turn === BLUE && <Arrow4></Arrow4>}
-                  <View style={styles.redGotiBox}>
+                <View style={styles.redGotiBox}>
                     <View style={{height:"50%",width:"50%"}}>
                            <RedGoti></RedGoti>
                      </View>
@@ -275,7 +289,7 @@ export default class Game extends Component{
   >
     <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
   </Animated.View>
-    }
+}
 </View>
 </View>
 <View style={styles.greenDice}>
@@ -283,12 +297,13 @@ export default class Game extends Component{
 
 {this.state.turn == GREEN && 
   <Animated.View
-    style={[
+     style={[
 
       {
         transform: [{ rotate: this.state.rollingRotation }],
       },
     ]}
+
   >
     <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
   </Animated.View>
@@ -328,12 +343,16 @@ export default class Game extends Component{
         )
     }
 
-  async  onDiceRoll(){
+  async onDiceRoll(){
 
         const { diceRollTestDataIndex ,diceRollTestData, animateForSelection} =this.state;
+
+
         if(animateForSelection){
             return;
         }
+
+    
         let updatedDiceRollTestDataIndex = diceRollTestDataIndex + 1;
         if(updatedDiceRollTestDataIndex>=diceRollTestData.length){
             updatedDiceRollTestDataIndex = 0;
@@ -348,37 +367,78 @@ export default class Game extends Component{
           } catch (error) {
             console.error('Failed to play the sound', error);
           }
-        // await new Promise(resolve => setTimeout(resolve, 1000));
-        this.rollingValue.setValue(0);
-        Animated.timing(this.rollingValue, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: false,
-        }).start();
-    
-     
-        await new Promise(resolve => setTimeout(resolve, 1000));
-       
-        this.setState({isRolling:true,diceNumber:this.getRandomInt(),diceRollTestDataIndex:updatedDiceRollTestDataIndex})
-        setTimeout(()=>{
+
+
+
+          this.setState({ isRolling: true });
+
+          this.rollingValue.setValue(0);
+          Animated.timing(this.rollingValue, {
+            toValue: 1,
+            duration: 400,
+            useNativeDriver: false,
+          }).start(async () => {
+            // Animation completed, update state and perform additional logic
+            this.setState({ isRolling: false, diceNumber: this.getRandomInt(), diceRollTestDataIndex: updatedDiceRollTestDataIndex });
+        
+            // Delay before additional logic (100ms in your original code)
+            await new Promise(resolve => setTimeout(resolve, 100));
+        
             const { moves, diceNumber, turn } = this.state;
             moves.push(diceNumber);
-            if(diceNumber==6){
-                if(moves.length==3){
-                    this.setState({isRolling:false,moves:[],turn:this.getNextTurn()})
-                }else{
-                    this.setState({isRolling:false,moves:moves});
-                }
-            }else{
-                this.setState({isRolling:false,moves:moves,isWaitingForDiceRoll:false},()=>{
-                    this.updatePlayerPieces(this.state[turn])
-                });
+        
+            if (diceNumber === 6) {
+                let count = this.state.bonusCount + 1
+                this.setState({ moves: moves, isWaitingForDiceRoll: false, bonusCount: count  }, () => {
+                    this.updatePlayerPieces(this.state[turn]);
+                  });
+
+            //   if (moves.length === 3) {
+            //     this.setState({ moves: [], turn: this.getNextTurn() });
+            //   }
+            //    else {
+            //     this.setState({ moves: moves });
+            //   }
+            } else {
+              this.setState({ moves: moves, isWaitingForDiceRoll: false }, () => {
+                this.updatePlayerPieces(this.state[turn]);
+              });
             }
+          });
+        // await new Promise(resolve => setTimeout(resolve, 1000));
+        // this.setState({ isRolling: true });
+        // this.rollingValue.setValue(0);
+        // Animated.timing(this.rollingValue, {
+        //   toValue: 1,
+        //   duration: 1000,
+        //   useNativeDriver: false,
+        // }).start();
+    
+     
+        // await new Promise(resolve => setTimeout(resolve, 1000));
+       
+        // this.setState({isRolling:true,diceNumber:this.getRandomInt(),diceRollTestDataIndex:updatedDiceRollTestDataIndex})
+        // setTimeout(()=>{
+        //     const { moves, diceNumber, turn } = this.state;
+        //     moves.push(diceNumber);
+        //     if(diceNumber==6){
+        //         if(moves.length==3){
+        //             this.setState({isRolling:false,moves:[],turn:this.getNextTurn()})
+        //         }else{
+        //             this.setState({isRolling:false,moves:moves});
+        //         }
+        //     }else{
+        //         this.setState({isRolling:false,moves:moves,isWaitingForDiceRoll:false},()=>{
+        //             this.updatePlayerPieces(this.state[turn])
+        //         });
+        //     }
             
-        },100)
+        // },100)
 
       
-    }
+
+      
+  }
 
     isPlayerFinished(player){
         const { one,two,three,four} = player.pieces;
@@ -593,14 +653,20 @@ export default class Game extends Component{
         let position = parseInt(piece.position.substring(1,piece.position.length));
         let cellAreaIndicator = piece.position.substring(0,1);
 
+
+
+
         if(piece.position==HOME && move==6){
             newPosition = piece.color == RED?R1: piece.color==YELLOW ?Y1: piece.color == GREEN ? G1: piece.color==BLUE ? B1: undefined;
-        }else if(position <=13){
-         if( (cellAreaIndicator == "B" && piece.color == RED) ||
+        }
+        else if(position <=13){
+
+                if((cellAreaIndicator == "B" && piece.color == RED) ||
                 (cellAreaIndicator == "R" && piece.color == YELLOW) ||
                 (cellAreaIndicator == "Y" && piece.color == GREEN) ||
                 (cellAreaIndicator == "G" && piece.color == BLUE) 
-            ){
+            )
+            {
                 if(position + move<=12){
                     newPosition = cellAreaIndicator + (position+move);
                 }else{
@@ -622,7 +688,8 @@ export default class Game extends Component{
                     newPosition = updatedCellAreaIndicator + nextPosition;
                 }
             }
-        }else{
+        }
+        else{
             if(position+move<=19){
                 if(position+move==19){
                     newPosition = FINISHED;
@@ -674,6 +741,8 @@ export default class Game extends Component{
         if(piece.position == R1 || piece.position == R9 || piece.position == Y1 || piece.position == Y9 || piece.position == G1 || piece.position == G9 || piece.position == B1 || piece.position == B9){
             return false;
         } 
+
+
 
         const checkIfPositionMatchesExistingPiece = (piece, player) =>{
             const { one, two, three,four } = player.pieces;
@@ -784,7 +853,7 @@ export default class Game extends Component{
     onPieceSelection = (selectedPiece) =>{
 
         
-        console.log(selectedPiece)
+        // console.log(selectedPiece)
         if(this.state.isWaitingForDiceRoll){
             return;    
         }
@@ -829,7 +898,7 @@ export default class Game extends Component{
 
                 const onMoveSelected = (selectedMove)=>{
                     if(this.isMovePossibleForPosition(selectedPiece.position,selectedMove)){
-                        console.log("Move possible")
+                        // console.log("Move possible")
                         const index = moves.indexOf(parseInt(selectedMove));
                         if(index>-1){
                             moves.splice(index,1);
@@ -837,7 +906,7 @@ export default class Game extends Component{
                         this.movePieceByPosition(selectedPiece,parseInt(selectedMove));
                     }else{
                         ToastAndroid.show("Move not possible",ToastAndroid.LONG);
-                        console.log("Move not possible")
+                        // console.log("Move not possible")
                     }
                 }
 
@@ -848,15 +917,30 @@ export default class Game extends Component{
                 optionTwo? moveOptions.push({text:optionTwo,onPress:()=>{onMoveSelected(optionTwo)}}):undefined;
                 let optionThree = moves.length>2? moves[2].toString(): undefined;
                 optionThree? moveOptions.push({text:optionThree,onPress:()=>{onMoveSelected(optionThree)}}):undefined;
-                console.log(moveOptions)
+                // console.log(moveOptions)
                 Alert.alert("Select your move","",moveOptions,{cancelable:true});
 
             }
 
         }
+
+
+       this.isthereAnyPiecePresent(selectedPiece)
       
 
     }
+
+
+    isthereAnyPiecePresent=(selectedPiece)=>{
+         let position = selectedPiece.position
+         console.log("929",position)   
+
+         const {red, blue, green, yellow}= this.state
+        const {one,two,three,four}= red.pieces
+        console.log("933",one, two, three, four)
+
+    }
+      
 
     isMovePossibleForPosition = (position,move) =>{
         let isMovePossible = false;
@@ -906,7 +990,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#6da6c0",
         position: "absolute",
         top: 100,
-        left: 78,
+        left: 65,
         alignItems: "center",
         justifyContent: "center",
         borderColor: "#f9e7b0",
@@ -928,7 +1012,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#6da6c0",
         position: "absolute",
         top: 100,
-        right: 78,
+        right: 65,
         alignItems: "center",
         justifyContent: "center",
         borderColor: "#f9e7b0",
@@ -950,7 +1034,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#6da6c0",
         position: "absolute",
         bottom: 100,
-        left: 78,
+        left: 65,
         alignItems: "center",
         justifyContent: "center",
         borderColor: "#f9e7b0",
@@ -973,7 +1057,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#6da6c0",
         position: "absolute",
         bottom: 100,
-        right: 78,
+        right: 65,
         alignItems: "center",
         justifyContent: "center",
         borderColor: "#f9e7b0",
@@ -995,7 +1079,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#6da6c0",
         position: "absolute",
         top: 110,
-        left: 24,
+        left: 15,
         alignItems: "center",
         justifyContent: "center",
         borderColor: "#f9e7b0",
@@ -1009,7 +1093,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#6da6c0",
         position: "absolute",
         top: 108,
-        right: 28,
+        right: 17,
         alignItems: "center",
         justifyContent: "center",
         borderColor: "#f9e7b0",
@@ -1025,12 +1109,13 @@ const styles = StyleSheet.create({
         backgroundColor: "#6da6c0",
         position: "absolute",
         bottom: 107,
-        right: 28,
+        right: 17,
         alignItems: "center",
         justifyContent: "center",
         borderColor: "#f9e7b0",
         borderWidth: 1,
         borderRadius: 8,
+   
         // paddingRight: 20
       },
     
@@ -1040,7 +1125,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#6da6c0",
         position: "absolute",
         bottom: 107,
-        left: 24,
+        left: 15,
         alignItems: "center",
         justifyContent: "center",
         borderColor: "#f9e7b0",

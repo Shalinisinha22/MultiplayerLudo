@@ -1,93 +1,122 @@
 import React from 'react';
-import {View,StyleSheet, TouchableOpacity} from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { colors } from '../../util/Colors';
 import { HOME } from '../../util/Constants';
 import RedGoti from '../Goti/RedGoti';
 import BlueGoti from '../Goti/BlueGoti';
 import YellowGoti from '../Goti/YellowGoti';
 import GreenGoti from '../Goti/GreenGoti';
-export default PlayerBox = ({color,customStyle,one,two,three,four,onPieceSelection,animateForSelection}) =>{
+import ReadyRed from '../../../components/Svg/ReadyRed';
+import ReadyGreen from '../../../components/Svg/ReadyGreen';
+import ReadyYellow from '../../../components/Svg/ReadyYellow';
+import ReadyBlue from '../../../components/Svg/ReadyBlue';
 
-    const [isAnimating,setIsAnimating] = React.useState(false);
-    const [backgroundColor,setBackgroundColor] = React.useState(color);
-    const [intervalId,setIntervalId] = React.useState(undefined);
+
+export default PlayerBox = ({ color, customStyle, one, two, three, four, onPieceSelection, animateForSelection }) => {
+
+    const [isAnimating, setIsAnimating] = React.useState(false);
+    const [backgroundColor, setBackgroundColor] = React.useState(color);
+    const [intervalId, setIntervalId] = React.useState(undefined);
     let shouldRenderBackgroundColor = 1;
-    const applyAnimationIfNeeded = () =>{
-        if(animateForSelection){
-            if(!isAnimating){
+    const applyAnimationIfNeeded = () => {
+        if (animateForSelection) {
+            if (!isAnimating) {
                 setIsAnimating(true);
-                setIntervalId(setInterval(()=>{
+                setIntervalId(setInterval(() => {
                     shouldRenderBackgroundColor++;
-                    shouldRenderBackgroundColor%2==0?setBackgroundColor(color):setBackgroundColor(colors.white);
-                },400));
+                    shouldRenderBackgroundColor % 2 == 0 ? setBackgroundColor(color) : setBackgroundColor(color);
+                }, 400));
             }
-        }else{
+        } else {
             clearInterval(intervalId);
-            if(isAnimating){
+            if (isAnimating) {
                 setIsAnimating(false);
                 setBackgroundColor(color);
             }
         }
-        
+
     }
-    const renderPiece = (piece) =>{
-        if(piece.position==HOME){
-            return(
-                <TouchableOpacity style={{flex:1}} onPress={()=>{onPieceSelection(piece)}}>
-                <View style={[styles.circle,{backgroundColor:color,borderRadius:20,} ]}>
-                   
-                      {backgroundColor == "#ec1d27" && <RedGoti></RedGoti>}
-                      {backgroundColor == "#01A147" && <GreenGoti></GreenGoti>}
-                      {backgroundColor == "#ffe01b" && <YellowGoti></YellowGoti>}
-                      {backgroundColor == "#29b6f6" && <BlueGoti></BlueGoti>}
+    const renderPiece = (piece) => {
+        if (piece.position == HOME) {
+
+            return (
+                <TouchableOpacity style={{ flex: 1 }} onPress={() => { onPieceSelection(piece) }}>
+                    <View style={[styles.circle, { backgroundColor: color, borderRadius: 20 }]}>
+
+                        {/* color */}
+
+
+                        {console.log(isAnimating)}
+
+                        {/* <ReadyRed></ReadyRed> */}
+
+                        {backgroundColor == "#ec1d27" ? isAnimating ? <ReadyRed></ReadyRed> : <RedGoti></RedGoti> : null}
+
+                        {/* {backgroundColor == "#ec1d27" && <ReadyRed></ReadyRed>} */}
+                        {backgroundColor == "#01A147" ? isAnimating ? <ReadyGreen></ReadyGreen> : <GreenGoti></GreenGoti> : null&& <GreenGoti></GreenGoti>}
+                        {backgroundColor == "#ffe01b" ? isAnimating ? <ReadyYellow></ReadyYellow> : <YellowGoti></YellowGoti> : null}
+                        {backgroundColor == "#29b6f6" ? isAnimating ? <ReadyBlue></ReadyBlue> : <BlueGoti></BlueGoti> : null}
                     </View>
+
+
+
+
+
                 </TouchableOpacity>
+
+
+
             );
         }
-        return(
-            <TouchableOpacity style={{flex:1}}>
-            <View style={[styles.pieceStyle,{backgroundColor:backgroundColor}]}>
+        return (
+            <TouchableOpacity style={{ flex: 1 }}>
+                <View style={[styles.circle, { backgroundColor: backgroundColor, borderRadius: 20 }]}>
 
-            </View>
+                </View>
             </TouchableOpacity>
         );
     }
     applyAnimationIfNeeded();
-    return(
-      
+    return (
 
-        <View style={[{backgroundColor:color,flex:4},customStyle]}>
+
+        <View style={[{ backgroundColor: color, flex: 4 }]}>
             {/* customStyle */}
-            <View style={[styles.innerContainer,{}]}>
-            <View style={styles.piecesContainer}>
-            {renderPiece(one)}
-            {renderPiece(two)}
-            </View>
-            <View style={styles.piecesContainer}>
-            {renderPiece(three)}
-            {renderPiece(four)}
-            </View>
+            <View style={[styles.innerContainer, {}]}>
+                <View style={[styles.piecesContainer]}>
+
+
+                    {renderPiece(one)}
+                    {renderPiece(two)}
+
+                </View>
+                <View style={styles.piecesContainer}>
+                    {renderPiece(three)}
+                    {renderPiece(four)}
+                </View>
             </View>
         </View>
     )
 }
 
+
+
 const styles = StyleSheet.create({
-    innerContainer:{
-        flex:1,
-        backgroundColor:'#fff',
-        margin:30,
+    innerContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+        margin: 30,
         // borderRadius:20
     },
-    piecesContainer:{
-        flexDirection:'row',
-        flex:1
+    piecesContainer: {
+        flexDirection: 'row',
+        flex: 1
     },
-    pieceStyle:{
-        flex:1,
-        margin:10,
-        borderRadius:20,
-        borderWidth:0.5,
+    pieceStyle: {
+        flex: 1,
+        margin: 10,
+        borderRadius: 20,
+        borderWidth: 0.5,
         borderColor: "#000"
     },
     circle: {
@@ -99,5 +128,5 @@ const styles = StyleSheet.create({
         top: 15,
         left: 10,
         // marginTop: 1,
-      },
+    },
 })
