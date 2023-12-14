@@ -23,6 +23,9 @@ import Arrow4 from '../../../components/Svg/Arrow4';
 
 export default class Game extends Component{
 
+
+
+
     constructor(props){
         super(props);
         const { red, blue, yellow, green } = colors;
@@ -388,23 +391,36 @@ export default class Game extends Component{
             moves.push(diceNumber);
         
             if (diceNumber === 6) {
-                let count = this.state.bonusCount + 1
-                this.setState({ moves: moves, isWaitingForDiceRoll: false, bonusCount: count  }, () => {
-                    this.updatePlayerPieces(this.state[turn]);
-                  });
 
-            //   if (moves.length === 3) {
-            //     this.setState({ moves: [], turn: this.getNextTurn() });
-            //   }
-            //    else {
-            //     this.setState({ moves: moves });
-            //   }
-            } else {
+                // this.setState({ isRolling: false, moves: moves, isWaitingForDiceRoll: true });
+                // // Update the player's pieces based on the obtained moves here if needed
+                this.updatePlayerPieces(this.state[turn]);
+                // // Wait for the player to make a move by interacting with the pieces
+                // // After the player's move, set isWaitingForDiceRoll to false to allow rolling the dice again
+                // this.setState({ isWaitingForDiceRoll: false });
+
+
+                // let count = this.state.bonusCount + 1
+                // this.setState({ moves: moves, isWaitingForDiceRoll: false, bonusCount: count  }, () => {
+                //     this.updatePlayerPieces(this.state[turn]);
+                //   });
+
+
+
+              if (moves.length === 3) {
+                this.setState({ moves: [], turn: this.getNextTurn() });
+              }
+               else {
+                this.setState({ moves: moves });
+              }
+            }
+             else {
               this.setState({ moves: moves, isWaitingForDiceRoll: false }, () => {
                 this.updatePlayerPieces(this.state[turn]);
               });
             }
           });
+          
         // await new Promise(resolve => setTimeout(resolve, 1000));
         // this.setState({ isRolling: true });
         // this.rollingValue.setValue(0);
@@ -718,7 +734,8 @@ export default class Game extends Component{
                 }
               
             })
-        }else{
+        }
+        else{
             this.setState(this.state,()=>{
                 let player = this.state[piece.color]
                 if(this.state.moves.length==1){
