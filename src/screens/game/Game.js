@@ -30,14 +30,16 @@ export default class Game extends Component{
         super(props);
         const { red, blue, yellow, green } = colors;
         const {redName,blueName,yellowName,greenName} = props;
+    
+  
         this.rollingSound = new Audio.Sound();
         this.rollingValue = new Animated.Value(0);
         this.onDiceRoll = this.onDiceRoll.bind(this);
         this.state={
-            red:this.initPlayer(RED,red),
-            yellow:this.initPlayer(YELLOW,yellow),
-            green:this.initPlayer(GREEN,green),
-            blue:this.initPlayer(BLUE,blue),
+            red:this.initPlayer(RED,red, redName),
+            yellow:this.initPlayer(YELLOW,yellow, yellowName),
+            green:this.initPlayer(GREEN,green, greenName),
+            blue:this.initPlayer(BLUE,blue, blueName),
             isRolling: false,
             diceNumber: 1,
             moves:[],
@@ -48,7 +50,7 @@ export default class Game extends Component{
             diceRollTestData:[1,2,3,4,5,6],
             diceRollTestDataIndex:0,
             diceValue:1,
-           rollingRotation: this.rollingValue.interpolate({
+            rollingRotation: this.rollingValue.interpolate({
             inputRange: [0, 1],
             outputRange: ['0deg', '360deg'],
 
@@ -59,6 +61,9 @@ export default class Game extends Component{
       
         
     }
+
+
+
 
   
     componentDidMount() {
@@ -146,12 +151,14 @@ export default class Game extends Component{
       }
 
 
-    initPlayer(playerType,color){
+    initPlayer(playerType,color,playerName){
         return{
             // pieces:playerType == RED ? this.initRedPieces(playerType):null || playerType == YELLOW ? this.initYellowPieces(playerType):null || playerType == GREEN ? this.initGreenPieces(playerType):null || playerType == BLUE ? this.initBluePieces(playerType):null  ,
             pieces:this.initPieces(playerType),
             color:color,
-            player:playerType
+            player:playerType,
+            playerName:playerName
+            
         }
     }
 
@@ -208,8 +215,11 @@ export default class Game extends Component{
     
  
     render(){
+
+        
+ 
         return (
-            <ImageBackground source={require("../../../assets/bj.png")} style={{ flex: 1, alignItems:"center", justifyContent:"center" }} >
+  <ImageBackground source={require("../../../assets/bj.png")} style={{ flex: 1, alignItems:"center", justifyContent:"center" }} >
 
                 {this.state.turn === RED && <Arrow1></Arrow1>}
                 {this.state.turn === YELLOW && <Arrow2></Arrow2>}
@@ -342,7 +352,7 @@ export default class Game extends Component{
                 {this.renderPlayerBox(this.state.green,{borderBottomRightRadius:0})}
                 </View>
                 </View>
-            </ImageBackground>
+   </ImageBackground>
         )
     }
 
@@ -392,35 +402,38 @@ export default class Game extends Component{
         
             if (diceNumber === 6) {
 
+
+                // this.setState({isRolling:false,moves:moves,isWaitingForDiceRoll:true},()=>{
+                //     this.updatePlayerPieces(this.state[turn])})
+
+                //  this.setState({ isWaitingForDiceRoll: false });    
+
                 // this.setState({ isRolling: false, moves: moves, isWaitingForDiceRoll: true });
                 // // Update the player's pieces based on the obtained moves here if needed
-                this.updatePlayerPieces(this.state[turn]);
+                // this.updatePlayerPieces(this.state[turn]);
                 // // Wait for the player to make a move by interacting with the pieces
                 // // After the player's move, set isWaitingForDiceRoll to false to allow rolling the dice again
                 // this.setState({ isWaitingForDiceRoll: false });
 
 
-                // let count = this.state.bonusCount + 1
-                // this.setState({ moves: moves, isWaitingForDiceRoll: false, bonusCount: count  }, () => {
-                //     this.updatePlayerPieces(this.state[turn]);
-                //   });
+           
 
 
 
               if (moves.length === 3) {
-                this.setState({ moves: [], turn: this.getNextTurn() });
+                this.setState({isRolling:false,moves:[],turn:this.getNextTurn()})
               }
                else {
-                this.setState({ moves: moves });
+                this.setState({isRolling:false,moves:moves});
               }
             }
              else {
-              this.setState({ moves: moves, isWaitingForDiceRoll: false }, () => {
-                this.updatePlayerPieces(this.state[turn]);
+                  this.setState({isRolling:false,moves:moves,isWaitingForDiceRoll:false},()=>{
+                    this.updatePlayerPieces(this.state[turn])
               });
             }
           });
-          
+
         // await new Promise(resolve => setTimeout(resolve, 1000));
         // this.setState({ isRolling: true });
         // this.rollingValue.setValue(0);
@@ -812,6 +825,7 @@ export default class Game extends Component{
                 else if(this.playerHasSinglePossibleMove(player)){
                     if(this.playerHasSingleUnfinishedPiece(player)){
                         let singlePossibleMove = this.getSinglePossibleMove(player);
+                        console.log("singlepossiblemove", singlePossibleMove)
                         if(singlePossibleMove){
                             const indexOf = moves.indexOf(singlePossibleMove.move);
                             if(indexOf>-1){
@@ -851,6 +865,7 @@ export default class Game extends Component{
         let hasSix = this.state.moves.filter((move)=>move==6).length>0;
         return(
             <PlayerBox color={player.color}
+            playerName={player.playerName}
                 animateForSelection={this.state.animateForSelection && this.state.turn == player.player && hasSix}
                 one={one}
                 two={two}

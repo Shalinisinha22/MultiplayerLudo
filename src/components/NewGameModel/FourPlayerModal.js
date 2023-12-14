@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {View,ScrollView,Modal, StyleSheet, Text, TextInput, TouchableOpacity,Alert, Dimensions} from 'react-native'
 
 
-export default class NewGameModel extends Component{
+export default class FourPlayerModal extends Component{
     constructor(props){
         super(props)
      console.log(props)

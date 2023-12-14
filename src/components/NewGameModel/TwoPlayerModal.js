@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {View,ScrollView,Modal, StyleSheet, Text, TextInput, TouchableOpacity,Alert, Dimensions} from 'react-native'
 
 
-export default class NewGameModel extends Component{
+export default class TwoPlayerModal extends Component{
     constructor(props){
         super(props)
      console.log(props)
@@ -29,18 +29,12 @@ export default class NewGameModel extends Component{
                     <TextInput style={[styles.nameInputStyle,styles.redInputStyle]}
                         onChangeText={this.props.onRedInput}
                     />
-                    <Text style={{color:'#ffe01b',marginBottom:10}}>Yellow Player Name</Text>
-                    <TextInput style={[styles.nameInputStyle,styles.yellowInputStyle]}
-                        onChangeText={this.props.onYellowInput}
-                    />
+                  
                     <Text style={{color:'#0F0',marginBottom:10}}>Green Player Name</Text>
                     <TextInput style={[styles.nameInputStyle,styles.greenInputStyle]}
                         onChangeText={this.props.onGreenInput}
                     />
-                    <Text style={{color:'#00f',marginBottom:10}}>Blue Player Name</Text>
-                    <TextInput style={[styles.nameInputStyle,styles.blueInputStyle]}
-                        onChangeText={this.props.onBlueInput}
-                    />
+                 
                     <TouchableOpacity style={styles.buttonStyle} onPress={this.props.onCancel}>
                     <Text>Cancel</Text>
                     </TouchableOpacity>
@@ -48,8 +42,6 @@ export default class NewGameModel extends Component{
                     <TouchableOpacity style={styles.buttonStyle} onPress={()=>{
                         let minPlayersCount =0;
                         this.props.red.name!=""?minPlayersCount++:undefined;
-                        this.props.yellow.name!=""?minPlayersCount++:undefined;
-                        this.props.blue.name!=""?minPlayersCount++:undefined;
                         this.props.green.name!=""?minPlayersCount++:undefined;
                         if(minPlayersCount>=2){
                             this.props.onStart();
@@ -80,11 +72,11 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     modalContainer:{
-        marginTop:60,
+        marginTop:190,
         backgroundColor:'#fff',
         width:'90%',
         height:"auto",
-        padding:20,
+        padding:30,
         elevation:5,
         zIndex:5,
         borderRadius:10

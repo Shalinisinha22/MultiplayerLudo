@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {View,ScrollView,Modal, StyleSheet, Text, TextInput, TouchableOpacity,Alert, Dimensions} from 'react-native'
 
 
-export default class NewGameModel extends Component{
+export default class ThreePlayerModal extends Component{
     constructor(props){
         super(props)
      console.log(props)
@@ -37,10 +37,10 @@ export default class NewGameModel extends Component{
                     <TextInput style={[styles.nameInputStyle,styles.greenInputStyle]}
                         onChangeText={this.props.onGreenInput}
                     />
-                    <Text style={{color:'#00f',marginBottom:10}}>Blue Player Name</Text>
+                    {/* <Text style={{color:'#00f',marginBottom:10}}>Blue Player Name</Text>
                     <TextInput style={[styles.nameInputStyle,styles.blueInputStyle]}
                         onChangeText={this.props.onBlueInput}
-                    />
+                    /> */}
                     <TouchableOpacity style={styles.buttonStyle} onPress={this.props.onCancel}>
                     <Text>Cancel</Text>
                     </TouchableOpacity>
@@ -80,11 +80,11 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     modalContainer:{
-        marginTop:60,
+        marginTop:100,
         backgroundColor:'#fff',
         width:'90%',
         height:"auto",
-        padding:20,
+        padding:30,
         elevation:5,
         zIndex:5,
         borderRadius:10

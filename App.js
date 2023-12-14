@@ -7,6 +7,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TimerScreen from './Screens/TimerScreen';
 import LudoBoard from './components/LudoBoard';
 import APP from "./src/App"
+import HomeScreen from './src/screens/Home/HomeScreen';
+import Game from './src/screens/game/Game';
 
 
 const App = () => {
@@ -29,10 +31,11 @@ const App = () => {
           translucent={false}
          />
          <APP></APP>
+         {/* <HomeScreen></HomeScreen> */}
         
         {/* <Stack.Navigator>
-          <Stack.Screen name="LoadingScreen" component={TimerScreen} options={{ headerShown: false }} />
-          <Stack.Screen name="LudoBoard" component={LudoBoard} options={{ headerShown: false }} />
+          <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Game" component={Game} options={{ headerShown: false }} />
         </Stack.Navigator> */}
 
       </SafeAreaView>  

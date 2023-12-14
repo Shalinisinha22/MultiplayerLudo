@@ -12,7 +12,7 @@ import ReadyYellow from '../../../components/Svg/ReadyYellow';
 import ReadyBlue from '../../../components/Svg/ReadyBlue';
 
 
-export default PlayerBox = ({ color, customStyle, one, two, three, four, onPieceSelection, animateForSelection }) => {
+export default PlayerBox = ({ color, customStyle, one, two, three, four, onPieceSelection, animateForSelection,playerName }) => {
 
     const [isAnimating, setIsAnimating] = React.useState(false);
     const [backgroundColor, setBackgroundColor] = React.useState(color);
@@ -50,12 +50,12 @@ export default PlayerBox = ({ color, customStyle, one, two, three, four, onPiece
 
                         {/* <ReadyRed></ReadyRed> */}
 
-                        {backgroundColor == "#ec1d27" ? isAnimating ? <ReadyRed></ReadyRed> : <RedGoti></RedGoti> : null}
+                        { playerName !== "" ? backgroundColor == "#ec1d27"  ? isAnimating ? <ReadyRed></ReadyRed> : <RedGoti></RedGoti> : null:null}
 
                         {/* {backgroundColor == "#ec1d27" && <ReadyRed></ReadyRed>} */}
-                        {backgroundColor == "#01A147" ? isAnimating ? <ReadyGreen></ReadyGreen> : <GreenGoti></GreenGoti> : null&& <GreenGoti></GreenGoti>}
-                        {backgroundColor == "#ffe01b" ? isAnimating ? <ReadyYellow></ReadyYellow> : <YellowGoti></YellowGoti> : null}
-                        {backgroundColor == "#29b6f6" ? isAnimating ? <ReadyBlue></ReadyBlue> : <BlueGoti></BlueGoti> : null}
+                        {playerName !== "" ?backgroundColor == "#01A147"  ? isAnimating ? <ReadyGreen></ReadyGreen> : <GreenGoti></GreenGoti> : null : null}
+                        {playerName !== "" ? backgroundColor == "#ffe01b" ? isAnimating ? <ReadyYellow></ReadyYellow> : <YellowGoti></YellowGoti> : null:null}
+                        {playerName !== "" ?backgroundColor == "#29b6f6" ? isAnimating ? <ReadyBlue></ReadyBlue> : <BlueGoti></BlueGoti> : null:null}
                     </View>
 
 
