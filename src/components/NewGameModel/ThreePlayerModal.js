@@ -26,15 +26,15 @@ export default class ThreePlayerModal extends Component{
                 <View style={styles.modalStyle}>
                     <View style={styles.modalContainer}>
                     <Text style={{color:'#ec1d27',marginBottom:10}}>Red Player Name</Text>
-                    <TextInput style={[styles.nameInputStyle,styles.redInputStyle]}
+                    <TextInput placeholder='Player1' style={[styles.nameInputStyle,styles.redInputStyle]}
                         onChangeText={this.props.onRedInput}
                     />
                     <Text style={{color:'#ffe01b',marginBottom:10}}>Yellow Player Name</Text>
-                    <TextInput style={[styles.nameInputStyle,styles.yellowInputStyle]}
+                    <TextInput placeholder='Player2' style={[styles.nameInputStyle,styles.yellowInputStyle]}
                         onChangeText={this.props.onYellowInput}
                     />
                     <Text style={{color:'#0F0',marginBottom:10}}>Green Player Name</Text>
-                    <TextInput style={[styles.nameInputStyle,styles.greenInputStyle]}
+                    <TextInput placeholder='Player3' style={[styles.nameInputStyle,styles.greenInputStyle]}
                         onChangeText={this.props.onGreenInput}
                     />
                     {/* <Text style={{color:'#00f',marginBottom:10}}>Blue Player Name</Text>
@@ -51,10 +51,10 @@ export default class ThreePlayerModal extends Component{
                         this.props.yellow.name!=""?minPlayersCount++:undefined;
                         this.props.blue.name!=""?minPlayersCount++:undefined;
                         this.props.green.name!=""?minPlayersCount++:undefined;
-                        if(minPlayersCount>=2){
+                        if(minPlayersCount==3){
                             this.props.onStart();
                         }else{
-                            Alert.alert("Minimum 2 Players", "At least 2 players are required to start the game.",
+                            Alert.alert("Minimum 3 Players", "At least 3 players are required to start the game.",
                             [
                                 {text:"Ok"}
                             ]

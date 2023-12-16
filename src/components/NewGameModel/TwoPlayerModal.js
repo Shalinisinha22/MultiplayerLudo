@@ -26,12 +26,12 @@ export default class TwoPlayerModal extends Component{
                 <View style={styles.modalStyle}>
                     <View style={styles.modalContainer}>
                     <Text style={{color:'#ec1d27',marginBottom:10}}>Red Player Name</Text>
-                    <TextInput style={[styles.nameInputStyle,styles.redInputStyle]}
+                    <TextInput placeholder='Player1' style={[styles.nameInputStyle,styles.redInputStyle]}
                         onChangeText={this.props.onRedInput}
                     />
                   
                     <Text style={{color:'#0F0',marginBottom:10}}>Green Player Name</Text>
-                    <TextInput style={[styles.nameInputStyle,styles.greenInputStyle]}
+                    <TextInput placeholder='Player2' style={[styles.nameInputStyle,styles.greenInputStyle]}
                         onChangeText={this.props.onGreenInput}
                     />
                  

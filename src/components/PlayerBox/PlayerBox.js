@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
 import { colors } from '../../util/Colors';
 import { HOME } from '../../util/Constants';
 import RedGoti from '../Goti/RedGoti';
@@ -12,11 +12,27 @@ import ReadyYellow from '../../../components/Svg/ReadyYellow';
 import ReadyBlue from '../../../components/Svg/ReadyBlue';
 
 
-export default PlayerBox = ({ color, customStyle, one, two, three, four, onPieceSelection, animateForSelection,playerName }) => {
+export default PlayerBox = ({ color, customStyle, one, two, three, four, onPieceSelection, animateForSelection, playerName, playerScore }) => {
 
+
+    { 
+        console.log("playerScore", playerScore)
+     }
     const [isAnimating, setIsAnimating] = React.useState(false);
     const [backgroundColor, setBackgroundColor] = React.useState(color);
     const [intervalId, setIntervalId] = React.useState(undefined);
+    const [totalScore, setScore] = useState(0)
+
+    useEffect(() => {
+        let sum = 0
+        for (let i = 0; i < playerScore.length; i++) {
+
+            sum = playerScore[i] + sum
+
+        }
+        setScore(sum)
+
+    })
     let shouldRenderBackgroundColor = 1;
     const applyAnimationIfNeeded = () => {
         if (animateForSelection) {
@@ -41,27 +57,21 @@ export default PlayerBox = ({ color, customStyle, one, two, three, four, onPiece
 
             return (
                 <TouchableOpacity style={{ flex: 1 }} onPress={() => { onPieceSelection(piece) }}>
-                    <View style={[styles.circle, { backgroundColor: color, borderRadius: 20 }]}>
+                    {/* <View style={[styles.circle, { backgroundColor: color, borderRadius: 20 }]}>
 
-                        {/* color */}
+                     
 
 
                         {console.log(isAnimating)}
 
-                        {/* <ReadyRed></ReadyRed> */}
 
                         { playerName !== "" ? backgroundColor == "#ec1d27"  ? isAnimating ? <ReadyRed></ReadyRed> : <RedGoti></RedGoti> : null:null}
 
-                        {/* {backgroundColor == "#ec1d27" && <ReadyRed></ReadyRed>} */}
+                       
                         {playerName !== "" ?backgroundColor == "#01A147"  ? isAnimating ? <ReadyGreen></ReadyGreen> : <GreenGoti></GreenGoti> : null : null}
                         {playerName !== "" ? backgroundColor == "#ffe01b" ? isAnimating ? <ReadyYellow></ReadyYellow> : <YellowGoti></YellowGoti> : null:null}
                         {playerName !== "" ?backgroundColor == "#29b6f6" ? isAnimating ? <ReadyBlue></ReadyBlue> : <BlueGoti></BlueGoti> : null:null}
-                    </View>
-
-
-
-
-
+                    </View> */}
                 </TouchableOpacity>
 
 
@@ -70,20 +80,36 @@ export default PlayerBox = ({ color, customStyle, one, two, three, four, onPiece
         }
         return (
             <TouchableOpacity style={{ flex: 1 }}>
-                <View style={[styles.circle, { backgroundColor: backgroundColor, borderRadius: 20 }]}>
+                {/* <View style={[styles.circle, { backgroundColor: backgroundColor, borderRadius: 20 }]}>
 
-                </View>
+                </View> */}
             </TouchableOpacity>
         );
     }
     applyAnimationIfNeeded();
     return (
-
-
-        <View style={[{ backgroundColor: color, flex: 4 }]}>
+        <View style={[{ backgroundColor: color, flex: 4, borderRadius: 20 }]}>
             {/* customStyle */}
-            <View style={[styles.innerContainer, {}]}>
-                <View style={[styles.piecesContainer]}>
+            <View style={[styles.innerContainer, { backgroundColor: color }]}>
+
+                <View style={{ flex: 1, alignItems: "flex-end", padding: 20 }}>
+                    <Text style={{ fontSize: 20, color: "white", textAlign: "center" }}>Score</Text>
+                    <Text style={{ fontSize: 20, color: "white" }}>{totalScore}</Text>
+                </View>
+
+
+                <View style={{ flex: 3, alignItems: "flex-start" }}>
+                    <Image source={require("../../../assets/user2.png")} style={{ height: 68, width: 80, resizeMode: "contain", elevation: 5 }}></Image>
+                </View>
+
+                <View style={{ flex: 1, height: 5, borderColor: "white", borderWidth: 1, borderRadius: 7, opacity: 0.4 }}>
+
+                </View>
+
+
+                {/* <View style={[styles.piecesContainer]}>
+
+
 
 
                     {renderPiece(one)}
@@ -93,7 +119,23 @@ export default PlayerBox = ({ color, customStyle, one, two, three, four, onPiece
                 <View style={styles.piecesContainer}>
                     {renderPiece(three)}
                     {renderPiece(four)}
+                </View> */}
+
+                {/* {
+                color == "#ec1d27"  &&
+                 <> 
+
+                  <View style={{flex:3, alignItems:"flex-start"}}>
+                <Image source={require("../../../assets/user2.png")} style={{height:68, width:70, resizeMode:"contain", elevation:5}}></Image>
                 </View>
+                <View style={{flex:1, height:5, borderColor:"white", borderWidth:1,borderRadius:8, backgroundColor:"#780000"}}>
+
+                </View></>
+              
+             } */}
+
+
+
             </View>
         </View>
     )
@@ -104,8 +146,9 @@ export default PlayerBox = ({ color, customStyle, one, two, three, four, onPiece
 const styles = StyleSheet.create({
     innerContainer: {
         flex: 1,
-        backgroundColor: '#fff',
-        margin: 30,
+        backgroundColor: "#fff",
+        margin: 0
+        // margin: 30,
         // borderRadius:20
     },
     piecesContainer: {

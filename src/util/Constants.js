@@ -12,8 +12,11 @@ export const FOUR = "four";
 export const HOME = "HOME";
 export const FINISHED = "FINISHED";
 
+
 export const TOP_VERTICAL = "TOP_VERTICAL";
 export const BOTTOM_VERTICAL = "BOTTOM_VERTICAL";
+
+
 
 export const R1 = "R1";
 export const R2 = "R2";

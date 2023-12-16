@@ -20,7 +20,7 @@ class App extends Component{
 
   initState(){
     return {
-      isGameInProgress:false,
+      isGameInProgress:true,
       isStartGameModalVisible:false,
       red:{
         name:''
@@ -41,40 +41,40 @@ class App extends Component{
   render(){
     if(this.state.isGameInProgress){
       return <Game
-        redName = {this.state.red.name}
-        yellowName = {this.state.yellow.name}
-        blueName = {this.state.blue.name}
-        greenName = {this.state.green.name}
+        // redName = {this.state.red.name}
+        // yellowName = {this.state.yellow.name}
+        // blueName = {this.state.blue.name}
+        // greenName = {this.state.green.name}
         />
     }
-    else{
-      return <Home
-          isStartGameModalVisible={this.state.isStartGameModalVisible}
-          onNewGameButtonPress ={()=>{this.setState({isStartGameModalVisible:true})}}
-          onCancel={()=>{this.setState({isStartGameModalVisible:false})}}
-          onStart={()=>{this.setState({isGameInProgress:true,isStartGameModalVisible:false})}}
-          red={this.state.red}
-          blue={this.state.blue}
-          yellow={this.state.yellow}
-          green={this.state.green}
-          onRedInput={(name)=>{
-            this.state.red.name=name;
-            this.setState({})
-          }}
-          onYellowInput={(name)=>{
-            this.state.yellow.name=name;
-            this.setState({})
-          }}
-          onGreenInput={(name)=>{
-            this.state.green.name=name;
-            this.setState({})
-          }}
-          onBlueInput={(name)=>{
-            this.state.blue.name=name;
-            this.setState({})
-          }}
-      />
-    }
+    // else{
+    //   return <Home
+    //       isStartGameModalVisible={this.state.isStartGameModalVisible}
+    //       onNewGameButtonPress ={()=>{this.setState({isStartGameModalVisible:true})}}
+    //       onCancel={()=>{this.setState({isStartGameModalVisible:false})}}
+    //       onStart={()=>{this.setState({isGameInProgress:true,isStartGameModalVisible:false})}}
+    //       red={this.state.red}
+    //       blue={this.state.blue}
+    //       yellow={this.state.yellow}
+    //       green={this.state.green}
+    //       onRedInput={(name)=>{
+    //         this.state.red.name=name;
+    //         this.setState({})
+    //       }}
+    //       onYellowInput={(name)=>{
+    //         this.state.yellow.name=name;
+    //         this.setState({})
+    //       }}
+    //       onGreenInput={(name)=>{
+    //         this.state.green.name=name;
+    //         this.setState({})
+    //       }}
+    //       onBlueInput={(name)=>{
+    //         this.state.blue.name=name;
+    //         this.setState({})
+    //       }}
+    //   />
+    // }
   }
 };
 

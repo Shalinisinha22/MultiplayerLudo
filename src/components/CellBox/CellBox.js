@@ -11,6 +11,7 @@ import ReadyGreen from '../../../components/Svg/ReadyGreen';
 import ReadyYellow from '../../../components/Svg/ReadyYellow';
 import ReadyBlue from '../../../components/Svg/ReadyBlue';
 
+
 export default CellBox = ({backgroundColor,position, onPieceSelection, state,arrow, safe}) =>{
 
     const [highlighColor,setHighlightColor] = React.useState(backgroundColor);

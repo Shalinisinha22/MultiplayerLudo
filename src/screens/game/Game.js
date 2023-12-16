@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import {View,Text,StyleSheet, Dimensions, ToastAndroid, Alert, ImageBackground,TouchableOpacity, Animated, ActivityIndicator, Image} from 'react-native';
+import React, { Component } from 'react';
+import { View, Text, StyleSheet, Dimensions, ToastAndroid, Alert, ImageBackground, TouchableOpacity, Animated, ActivityIndicator, Image } from 'react-native';
 import { colors } from '../../util/Colors';
 import PlayerBox from '../../components/PlayerBox/PlayerBox'
 import VerticalCellsContainer from '../../components/VerticalCellsContainer/VerticalCellsContainer';
 import HorizontalCellsContainer from '../../components/HorizontalCellsContainer/HorizontalCellsContainer';
-import { FINISHED,BLUE, BOTTOM_VERTICAL, FOUR, GREEN, HOME, ONE, RED, THREE, TOP_VERTICAL, TWO, YELLOW, R1, Y1, Y9, G1, G9, B1, B9, R9, R2, R3, R4, R5, Y2, Y3, Y5, G2,G3, G4, G5, B2, B3, B4 } from '../../util/Constants';
+import { FINISHED, BLUE, BOTTOM_VERTICAL, FOUR, GREEN, HOME, ONE, RED, THREE, TOP_VERTICAL, TWO, YELLOW, R1, Y1, Y9, G1, G9, B1, B9, R9, R2, R3, R4, R5, Y2, Y3, Y5, G2, G3, G4, G5, B2, B3, B4 } from '../../util/Constants';
 import RedGoti from '../../components/Goti/RedGoti';
 import YellowGoti from '../../components/Goti/YellowGoti';
 import BlueGoti from '../../components/Goti/BlueGoti';
@@ -21,607 +21,549 @@ import Arrow4 from '../../../components/Svg/Arrow4';
 
 
 
-export default class Game extends Component{
+export default class Game extends Component {
 
 
 
-
-    constructor(props){
+    constructor(props) {
         super(props);
         const { red, blue, yellow, green } = colors;
-        const {redName,blueName,yellowName,greenName} = props;
-    
-  
+        const { redName, blueName, yellowName, greenName } = props;
+
+
         this.rollingSound = new Audio.Sound();
         this.rollingValue = new Animated.Value(0);
         this.onDiceRoll = this.onDiceRoll.bind(this);
-        this.state={
-            red:this.initPlayer(RED,red, redName),
-            yellow:this.initPlayer(YELLOW,yellow, yellowName),
-            green:this.initPlayer(GREEN,green, greenName),
-            blue:this.initPlayer(BLUE,blue, blueName),
+        this.state = {
+            red: this.initPlayer(RED, red, redName),
+            yellow: this.initPlayer(YELLOW, yellow, yellowName),
+            green: this.initPlayer(GREEN, green, greenName),
+            blue: this.initPlayer(BLUE, blue, blueName),
             isRolling: false,
             diceNumber: 1,
-            moves:[],
+            moves: [],
             bonusCount: 0,
-            animateForSelection:false,
-            isWaitingForDiceRoll:true,
-            turn: redName!==""? RED: yellowName!==""? YELLOW:greenName!==""?GREEN:blueName!==""?BLUE:undefined,
-            diceRollTestData:[1,2,3,4,5,6],
-            diceRollTestDataIndex:0,
-            diceValue:1,
+            animateForSelection: false,
+            isWaitingForDiceRoll: true,
+            turn: redName !== "" ? RED : yellowName !== "" ? YELLOW : greenName !== "" ? GREEN : blueName !== "" ? BLUE : undefined,
+            diceRollTestData: [1, 2, 3, 4, 5, 6],
+            diceRollTestDataIndex: 0,
+            diceValue: 1,
+            extraChance: 0,
+            redScore: [],
+            blueScore:[],
+            greenScore:[],
+            yellowScore:[],
             rollingRotation: this.rollingValue.interpolate({
-            inputRange: [0, 1],
-            outputRange: ['0deg', '360deg'],
-
-          })
-           
+                inputRange: [0, 1],
+                outputRange: ['0deg', '360deg'],
           
+
+            })
+
+
         }
-      
-        
+
+
     }
 
 
-
-
-  
     componentDidMount() {
         this.loadSound();
-      }
-    
-      componentWillUnmount() {
+    }
+
+    componentWillUnmount() {
         this.unloadSound();
-      }
-    
-      async loadSound() {
+    }
+
+    async loadSound() {
         try {
-          await this.rollingSound.loadAsync(require('../../../assets/diceSound.mp3'));
-       
+            await this.rollingSound.loadAsync(require('../../../assets/diceSound.mp3'));
+
         } catch (error) {
-          console.error('Error loading sound:', error);
+            console.error('Error loading sound:', error);
         }
-      }
-    
-      async unloadSound() {
+    }
+
+    async unloadSound() {
         try {
-          await this.rollingSound.unloadAsync();
+            await this.rollingSound.unloadAsync();
         } catch (error) {
-          console.error('Error unloading sound:', error);
+            console.error('Error unloading sound:', error);
         }
-      }
+    }
 
     //   rollDice = async () => {
-       
-    
+
+
     //     try {
     //       await this.rollingSound.replayAsync();
     //     } catch (error) {
     //       console.error('Failed to play the sound', error);
     //     }
-    
+
     //     this.rollingValue.setValue(0);
     //     Animated.timing(this.rollingValue, {
     //       toValue: 1,
     //       duration: 1000,
     //       useNativeDriver: false,
     //     }).start();
-    
+
     //     await new Promise(resolve => setTimeout(resolve, 1500));
-    
+
     //     const randomValue = Math.floor(Math.random() * 6) + 1;
     //     this.setState({ diceValue: randomValue });
-    
+
     //     await new Promise(resolve => setTimeout(resolve, 1500));
-    
-     
+
+
     //   };
 
 
 
-      renderDiceIcons() {
+    renderDiceIcons() {
         const { diceNumber, isRolling } = this.state;
 
         if (isRolling) {
-          return <Image rollTime={1000} source={require("../../../assets/DICE2.png")}></Image>
+            return <Image rollTime={1000} source={require("../../../assets/DICE2.png")}></Image>
 
-        //    <FontAwesome5 name="dice-d6" size={54} color="#fdfffc" 
-        //   numDice={1}  // Set the number of dice as needed
-        //   rollTime={1000}
-        //   faceColor="#ff5733"
-        //   dotColor="#ffffff"
-        // />;
-        } 
+            //    <FontAwesome5 name="dice-d6" size={54} color="#fdfffc" 
+            //   numDice={1}  // Set the number of dice as needed
+            //   rollTime={1000}
+            //   faceColor="#ff5733"
+            //   dotColor="#ffffff"
+            // />;
+        }
         if (diceNumber === 1) {
-          return <FontAwesome5 name="dice-one" size={54} color="#fdfffc" />;
+            return <FontAwesome5 name="dice-one" size={54} color="#fdfffc" />;
         } else if (diceNumber === 2) {
-          return <FontAwesome5 name="dice-two" size={54} color="#fdfffc" />;
+            return <FontAwesome5 name="dice-two" size={54} color="#fdfffc" />;
         } else if (diceNumber === 3) {
-          return <FontAwesome5 name="dice-three" size={54} color="#fdfffc" />;
+            return <FontAwesome5 name="dice-three" size={54} color="#fdfffc" />;
         } else if (diceNumber === 4) {
-          return <FontAwesome5 name="dice-four" size={54} color="#fdfffc" />;
+            return <FontAwesome5 name="dice-four" size={54} color="#fdfffc" />;
         } else if (diceNumber === 5) {
-          return <FontAwesome5 name="dice-five" size={54} color="#fdfffc" />;
+            return <FontAwesome5 name="dice-five" size={54} color="#fdfffc" />;
         } else if (diceNumber === 6) {
-          return <FontAwesome5 name="dice-six" size={54} color="#fdfffc" />;
+            return <FontAwesome5 name="dice-six" size={54} color="#fdfffc" />;
         }
-      
-    
+
+
         return null; // Return null if the diceValue is not 1-6
-      }
-
-
-    initPlayer(playerType,color,playerName){
-        return{
-            // pieces:playerType == RED ? this.initRedPieces(playerType):null || playerType == YELLOW ? this.initYellowPieces(playerType):null || playerType == GREEN ? this.initGreenPieces(playerType):null || playerType == BLUE ? this.initBluePieces(playerType):null  ,
-            pieces:this.initPieces(playerType),
-            color:color,
-            player:playerType,
-            playerName:playerName
-            
-        }
     }
-
-    initPieces(playerColor){
-        let time = new Date().getTime();
+    initPlayer(playerType, color, playerName) {
         return {
-            one:{position:HOME,name:ONE,color:playerColor,updateTime:time},
-            two:{position:HOME,name:TWO,color:playerColor,updateTime:time},
-            three:{position:HOME,name:THREE,color:playerColor,updateTime:time},
-            four:{position:HOME,name:FOUR,color:playerColor,updateTime:time}
-        }
-    }
-
-    initRedPieces(playerColor){
-        let time = new Date().getTime();
-        return {
-            one:{position:R1,name:ONE,color:playerColor,updateTime:time},
-            two:{position:R2,name:TWO,color:playerColor,updateTime:time},
-            three:{position:R3,name:THREE,color:playerColor,updateTime:time},
-            four:{position:R4,name:FOUR,color:playerColor,updateTime:time}
-        }
-    }
-    initYellowPieces(playerColor){
-        let time = new Date().getTime();
-        return {
-            one:{position:Y1,name:ONE,color:playerColor,updateTime:time},
-            two:{position:Y2,name:TWO,color:playerColor,updateTime:time},
-            three:{position:Y3,name:THREE,color:playerColor,updateTime:time},
-            four:{position:Y5,name:FOUR,color:playerColor,updateTime:time}
-        }
-    }
-    initGreenPieces(playerColor){
-        let time = new Date().getTime();
-        return {
-            one:{position:G1,name:ONE,color:playerColor,updateTime:time},
-            two:{position:G2,name:TWO,color:playerColor,updateTime:time},
-            three:{position:G3,name:THREE,color:playerColor,updateTime:time},
-            four:{position:G4,name:FOUR,color:playerColor,updateTime:time}
-        }
-    }
-
-    initBluePieces(playerColor){
-        let time = new Date().getTime();
-        return {
-            one:{position:B1,name:ONE,color:playerColor,updateTime:time},
-            two:{position:B2,name:TWO,color:playerColor,updateTime:time},
-            three:{position:B3,name:THREE,color:playerColor,updateTime:time},
-            four:{position:B4,name:FOUR,color:playerColor,updateTime:time}
-        }
-    }
-
-
-   
-    
- 
-    render(){
-
         
- 
+            
+            // pieces:playerType == RED ? this.initRedPieces(playerType):null || playerType == YELLOW ? this.initYellowPieces(playerType):null || playerType == GREEN ? this.initGreenPieces(playerType):null || playerType == BLUE ? this.initBluePieces(playerType):null  ,
+            pieces: this.initPieces(playerType),
+            color: color,
+            player: playerType,
+            playerName: playerName,
+            totalScore: null
+     
+
+       
+
+        }
+    }
+    initPieces(playerColor) {
+        let time = new Date().getTime();
+        return {
+            one: { position: playerColor == RED? R1 :playerColor == YELLOW? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null , name: ONE, color: playerColor, updateTime: time, oneCount: 0 },
+            two: { position:playerColor == RED? R1 :playerColor == YELLOW? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: TWO, color: playerColor, updateTime: time, twoCount: 0 },
+            three: {  position:playerColor == RED? R1 :playerColor == YELLOW? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: THREE, color: playerColor, updateTime: time, threeCount: 0 },
+            four: {  position:playerColor == RED? R1 :playerColor == YELLOW? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: FOUR, color: playerColor, updateTime: time, fourCount: 0 }
+        }
+    }
+
+
+
+
+
+
+    render() {
+
+
+
         return (
-  <ImageBackground source={require("../../../assets/bj.png")} style={{ flex: 1, alignItems:"center", justifyContent:"center" }} >
+            <ImageBackground source={require("../../../assets/bj.png")} style={{ flex: 1, alignItems: "center", justifyContent: "center" }} >
 
                 {this.state.turn === RED && <Arrow1></Arrow1>}
                 {this.state.turn === YELLOW && <Arrow2></Arrow2>}
                 {this.state.turn === GREEN && <Arrow3></Arrow3>}
                 {this.state.turn === BLUE && <Arrow4></Arrow4>}
                 <View style={styles.redGotiBox}>
-                    <View style={{height:"50%",width:"50%"}}>
-                           <RedGoti></RedGoti>
-                     </View>
+                    <View style={{ height: "50%", width: "50%" }}>
+                        <RedGoti></RedGoti>
+                    </View>
 
-                 </View>
+                </View>
 
-<View style={styles.yellowGotiBox}>
+                <View style={styles.yellowGotiBox}>
 
-<View style={{height:"50%",width:"50%"}}>
-<YellowGoti></YellowGoti>
-</View>
+                    <View style={{ height: "50%", width: "50%" }}>
+                        <YellowGoti></YellowGoti>
+                    </View>
 
-</View>
-<View style={styles.blueGotiBox}>
-<View style={{height:"50%",width:"50%"}}>
-<BlueGoti></BlueGoti></View>
-</View>
-<View style={styles.greenGotiBox}>
-<View style={{height:"50%",width:"50%"}}>
-<GreenGoti></GreenGoti>
-</View>
-</View>
+                </View>
+                <View style={styles.blueGotiBox}>
+                    <View style={{ height: "50%", width: "50%" }}>
+                        <BlueGoti></BlueGoti></View>
+                </View>
+                <View style={styles.greenGotiBox}>
+                    <View style={{ height: "50%", width: "50%" }}>
+                        <GreenGoti></GreenGoti>
+                    </View>
+                </View>
+                <View style={styles.redDice}>
 
-<View style={styles.redDice}>
+                    <View style={styles.diceBtn1}>
 
-<View style={styles.diceBtn1}>
+                        {this.state.turn == RED &&
+                            <Animated.View
+                                style={[
 
-{this.state.turn == RED && 
-  <Animated.View
-    style={[
+                                    {
+                                        transform: [{ rotate: this.state.rollingRotation }],
+                                    },
+                                ]}
+                            >
+                                <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
+                            </Animated.View>
+                        }
+                    </View>
 
-      {
-        transform: [{ rotate: this.state.rollingRotation }],
-      },
-    ]}
-  >
-    <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
-  </Animated.View>
-    }
-</View>
+                </View>
+                <View style={styles.yellowDice}>
 
-</View>
+                    <View style={styles.diceBtn2}>
 
-<View style={styles.yellowDice}>
-    
-<View style={styles.diceBtn2}>
+                        {this.state.turn == YELLOW &&
+                            <Animated.View
+                                style={[
 
-{this.state.turn == YELLOW && 
-  <Animated.View
-    style={[
+                                    {
+                                        transform: [{ rotate: this.state.rollingRotation }],
+                                    },
+                                ]}
+                            >
+                                <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
+                            </Animated.View>
+                        }
+                    </View>
 
-      {
-        transform: [{ rotate: this.state.rollingRotation }],
-      },
-    ]}
-  >
-    <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
-  </Animated.View>
-    }
-</View>
+                </View>
+                <View style={styles.blueDice}>
+                    <View style={styles.diceBtn3}>
 
-</View>
-<View style={styles.blueDice}>
-<View style={styles.diceBtn3}>
+                        {this.state.turn == BLUE &&
+                            <Animated.View
+                                style={[
 
-{this.state.turn == BLUE && 
-  <Animated.View
-    style={[
+                                    {
+                                        transform: [{ rotate: this.state.rollingRotation }],
+                                    },
+                                ]}
+                            >
+                                <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
+                            </Animated.View>
+                        }
 
-      {
-        transform: [{ rotate: this.state.rollingRotation }],
-      },
-    ]}
-  >
-    <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
-  </Animated.View>
-}
-</View>
-</View>
-<View style={styles.greenDice}>
-<View style={styles.diceBtn1}>
+                    </View>
+                </View>
+                <View style={styles.greenDice}>
+                    <View style={styles.diceBtn1}>
 
-{this.state.turn == GREEN && 
-  <Animated.View
-     style={[
+                        {this.state.turn == GREEN &&
+                            <Animated.View
+                                style={[
 
-      {
-        transform: [{ rotate: this.state.rollingRotation }],
-      },
-    ]}
+                                    {
+                                        transform: [{ rotate: this.state.rollingRotation }],
+                                    },
+                                ]}
 
-  >
-    <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
-  </Animated.View>
-    }
-</View>
-</View>
+                            >
+                                <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
+                            </Animated.View>
+                        }
+                    </View>
+                </View>
 
                 <View style={styles.gameContainer}>
-                <View style={styles.twoPlayersContainer}>
-                {this.renderPlayerBox(this.state.red,{borderTopLeftRadius:0})}
-                <VerticalCellsContainer position={TOP_VERTICAL}
-                    state={this.state}
-                    onPieceSelection = {(selectedPiece)=>{
-                        this.onPieceSelection(selectedPiece);
-                    }}
-                />
-                {this.renderPlayerBox(this.state.yellow,{borderTopRightRadius:0})}
+
+                    <View style={styles.twoPlayersContainer}>
+                        {this.renderPlayerBox(this.state.red, this.state.redScore, { borderTopLeftRadius: 20 })}
+                        <VerticalCellsContainer position={TOP_VERTICAL}
+                            state={this.state}
+                            onPieceSelection={(selectedPiece) => {
+                                this.onPieceSelection(selectedPiece);
+                            }}
+                        />
+                        {this.renderPlayerBox(this.state.yellow,this.state.yellowScore, { borderTopRightRadius: 20 })}
+                    </View>
+                    <HorizontalCellsContainer state={this.state}
+                        onDiceRoll={() => { this.onDiceRoll() }}
+                        onPieceSelection={(selectedPiece) => {
+                            this.onPieceSelection(selectedPiece);
+                        }}
+                    />
+                    <View style={styles.twoPlayersContainer}>
+                        {this.renderPlayerBox(this.state.blue, this.state.blueScore, { borderBottomLeftRadius: 0 })}
+                        <VerticalCellsContainer position={BOTTOM_VERTICAL}
+                            state={this.state}
+                            onPieceSelection={(selectedPiece) => {
+                                this.onPieceSelection(selectedPiece);
+                            }}
+                        />
+                        {this.renderPlayerBox(this.state.green, this.state.greenScore, { borderBottomRightRadius: 0 })}
+                    </View>
                 </View>
-                <HorizontalCellsContainer state ={this.state}
-                    onDiceRoll={()=>{this.onDiceRoll()}}
-                    onPieceSelection = {(selectedPiece)=>{
-                        this.onPieceSelection(selectedPiece);
-                    }}
-                />
-                <View style={styles.twoPlayersContainer}>
-                {this.renderPlayerBox(this.state.blue,{borderBottomLeftRadius:0})}
-                <VerticalCellsContainer position={BOTTOM_VERTICAL}
-                    state={this.state}
-                    onPieceSelection = {(selectedPiece)=>{
-                        this.onPieceSelection(selectedPiece);
-                    }}
-                />
-                {this.renderPlayerBox(this.state.green,{borderBottomRightRadius:0})}
-                </View>
-                </View>
-   </ImageBackground>
+            </ImageBackground>
         )
     }
 
-  async onDiceRoll(){
+    async onDiceRoll() {
 
-        const { diceRollTestDataIndex ,diceRollTestData, animateForSelection} =this.state;
+        const { diceRollTestDataIndex, diceRollTestData, animateForSelection } = this.state;
 
 
-        if(animateForSelection){
+        if (animateForSelection) {
             return;
         }
 
-    
+
         let updatedDiceRollTestDataIndex = diceRollTestDataIndex + 1;
-        if(updatedDiceRollTestDataIndex>=diceRollTestData.length){
+        if (updatedDiceRollTestDataIndex >= diceRollTestData.length) {
             updatedDiceRollTestDataIndex = 0;
         }
         try {
             if (this.rollingSound) {
-              await this.rollingSound.replayAsync();
+                await this.rollingSound.replayAsync();
 
             } else {
-              console.error('Sound object is not properly initialized');
+                console.error('Sound object is not properly initialized');
             }
-          } catch (error) {
+        } catch (error) {
             console.error('Failed to play the sound', error);
-          }
+        }
 
 
 
-          this.setState({ isRolling: true });
+        this.setState({ isRolling: true });
 
-          this.rollingValue.setValue(0);
-          Animated.timing(this.rollingValue, {
+        this.rollingValue.setValue(0);
+        Animated.timing(this.rollingValue, {
             toValue: 1,
             duration: 400,
             useNativeDriver: false,
-          }).start(async () => {
+        }).start(async () => {
             // Animation completed, update state and perform additional logic
             this.setState({ isRolling: false, diceNumber: this.getRandomInt(), diceRollTestDataIndex: updatedDiceRollTestDataIndex });
-        
+
             // Delay before additional logic (100ms in your original code)
             await new Promise(resolve => setTimeout(resolve, 100));
-        
-            const { moves, diceNumber, turn } = this.state;
+
+            const { moves, diceNumber, turn, extraChance, redScore, yellowScore, greenScore, blueScore } = this.state;
             moves.push(diceNumber);
-        
+
+            // if(turn == "red"){
+            //     redScore.push(diceNumber)
+            //     this.setState({redScore:redScore})
+            // }
+            // if(turn == "yellow"){
+            //     yellowScore.push(diceNumber)
+            //     this.setState({yellowScore: yellowScore})
+            // }
+            // if(turn == "blue"){
+            //     blueScore.push(diceNumber)
+            //     this.setState({blueScore: blueScore})
+            // }
+            // if(turn == "green"){
+            //     greenScore.push(diceNumber)
+            //     this.setState({greenScore: greenScore})
+            // }
+
             if (diceNumber === 6) {
 
 
-                // this.setState({isRolling:false,moves:moves,isWaitingForDiceRoll:true},()=>{
-                //     this.updatePlayerPieces(this.state[turn])})
-
-                //  this.setState({ isWaitingForDiceRoll: false });    
-
-                // this.setState({ isRolling: false, moves: moves, isWaitingForDiceRoll: true });
-                // // Update the player's pieces based on the obtained moves here if needed
-                // this.updatePlayerPieces(this.state[turn]);
-                // // Wait for the player to make a move by interacting with the pieces
-                // // After the player's move, set isWaitingForDiceRoll to false to allow rolling the dice again
-                // this.setState({ isWaitingForDiceRoll: false });
-
-
-           
-
-
-
-              if (moves.length === 3) {
-                this.setState({isRolling:false,moves:[],turn:this.getNextTurn()})
-              }
-               else {
-                this.setState({isRolling:false,moves:moves});
-              }
-            }
-             else {
-                  this.setState({isRolling:false,moves:moves,isWaitingForDiceRoll:false},()=>{
+                this.setState({ isRolling: false, moves: moves, extraChance: extraChance + 1, isWaitingForDiceRoll: false }, () => {
                     this.updatePlayerPieces(this.state[turn])
-              });
+                   
+
+                });
+
             }
-          });
+            else {
+                this.setState({ isRolling: false, moves: moves, isWaitingForDiceRoll: false, extraChance: 0 }, () => {
+                    this.updatePlayerPieces(this.state[turn])
 
-        // await new Promise(resolve => setTimeout(resolve, 1000));
-        // this.setState({ isRolling: true });
-        // this.rollingValue.setValue(0);
-        // Animated.timing(this.rollingValue, {
-        //   toValue: 1,
-        //   duration: 1000,
-        //   useNativeDriver: false,
-        // }).start();
+                });
+            }
+        });
+
     
-     
-        // await new Promise(resolve => setTimeout(resolve, 1000));
-       
-        // this.setState({isRolling:true,diceNumber:this.getRandomInt(),diceRollTestDataIndex:updatedDiceRollTestDataIndex})
-        // setTimeout(()=>{
-        //     const { moves, diceNumber, turn } = this.state;
-        //     moves.push(diceNumber);
-        //     if(diceNumber==6){
-        //         if(moves.length==3){
-        //             this.setState({isRolling:false,moves:[],turn:this.getNextTurn()})
-        //         }else{
-        //             this.setState({isRolling:false,moves:moves});
-        //         }
-        //     }else{
-        //         this.setState({isRolling:false,moves:moves,isWaitingForDiceRoll:false},()=>{
-        //             this.updatePlayerPieces(this.state[turn])
-        //         });
-        //     }
-            
-        // },100)
 
-      
 
-      
-  }
 
-    isPlayerFinished(player){
-        const { one,two,three,four} = player.pieces;
-        return one.position === FINISHED && two.position === FINISHED && three.position === FINISHED && four.position=== FINISHED;
+
     }
-    getNextTurn(){
-        const { turn,yellow,red,green,blue } = this.state;
-        const { yellowName,blueName,greenName,redName } = this.props;
-        this.setState({isWaitingForDiceRoll:true})
-        let isYellowNext = yellowName!= "" && !this.isPlayerFinished(yellow);
-        let isGreenNext = greenName!= "" && !this.isPlayerFinished(green);
-        let isBlueNext = blueName!= "" && !this.isPlayerFinished(blue);
-        let isRedNext = redName!= "" && !this.isPlayerFinished(red);
-        if(this.state.bonusCount>0){
-            this.setState({bonusCount:this.state.bonusCount-1});
-            if(this.isPlayerFinished(this.state[turn])){
+
+    isPlayerFinished(player) {
+        const { one, two, three, four } = player.pieces;
+        return one.position === FINISHED && two.position === FINISHED && three.position === FINISHED && four.position === FINISHED;
+    }
+
+    getNextTurn() {
+        const { turn, yellow, red, green, blue } = this.state;
+        const { yellowName, blueName, greenName, redName } = this.props;
+        this.setState({ isWaitingForDiceRoll: true })
+        let isYellowNext = yellowName != "" && !this.isPlayerFinished(yellow);
+        let isGreenNext = greenName != "" && !this.isPlayerFinished(green);
+        let isBlueNext = blueName != "" && !this.isPlayerFinished(blue);
+        let isRedNext = redName != "" && !this.isPlayerFinished(red);
+        if (this.state.bonusCount > 0) {
+            this.setState({ bonusCount: this.state.bonusCount - 1 });
+            if (this.isPlayerFinished(this.state[turn])) {
                 return turn;
             }
         }
-        switch(turn){
+        switch (turn) {
             case RED:
-            return isYellowNext? YELLOW: isGreenNext? GREEN: isBlueNext? BLUE: undefined;
+                return isYellowNext ? YELLOW : isGreenNext ? GREEN : isBlueNext ? BLUE : undefined;
             case YELLOW:
-            return isGreenNext? GREEN: isBlueNext? BLUE: isRedNext? RED: undefined;
-            case GREEN: 
-            return isBlueNext? BLUE: isRedNext? RED: isYellowNext? YELLOW: undefined;
+                return isGreenNext ? GREEN : isBlueNext ? BLUE : isRedNext ? RED : undefined;
+            case GREEN:
+                return isBlueNext ? BLUE : isRedNext ? RED : isYellowNext ? YELLOW : undefined;
             case BLUE:
-            return isRedNext? RED: isYellowNext? YELLOW: isGreenNext? GREEN: undefined;
+                return isRedNext ? RED : isYellowNext ? YELLOW : isGreenNext ? GREEN : undefined;
             default:
                 return turn;
         }
     }
 
-    playerHasSingleUnfinishedPiece(player){
-        const { one, two, three, four} = player.pieces;
+    playerHasSingleUnfinishedPiece(player) {
+        const { one, two, three, four } = player.pieces;
         let countOfUnfinishedPieces = 0;
-        one.position!=FINISHED? countOfUnfinishedPieces++ : undefined;
-        two.position!=FINISHED? countOfUnfinishedPieces++ : undefined;
-        three.position!=FINISHED? countOfUnfinishedPieces++ : undefined;
-        four.position!=FINISHED? countOfUnfinishedPieces++ : undefined;
+        one.position != FINISHED ? countOfUnfinishedPieces++ : undefined;
+        two.position != FINISHED ? countOfUnfinishedPieces++ : undefined;
+        three.position != FINISHED ? countOfUnfinishedPieces++ : undefined;
+        four.position != FINISHED ? countOfUnfinishedPieces++ : undefined;
         return countOfUnfinishedPieces == 1;
     }
 
 
-    playerHasOptionsForMoves(player){
+    playerHasOptionsForMoves(player) {
         let countMoveOptions = this.getCountMoveOptions(player);
-        return countMoveOptions>1;
+        return countMoveOptions > 1;
     }
 
-    playerHasSinglePossibleMove(player){
+    playerHasSinglePossibleMove(player) {
         let countMoveOptions = this.getCountMoveOptions(player);
-        return countMoveOptions==1;
+        return countMoveOptions == 1;
     }
-    
-    getCountMoveOptions(player){
-        const { one, two , three, four } = player.pieces;
+
+    getCountMoveOptions(player) {
+        const { one, two, three, four } = player.pieces;
         const { moves } = this.state;
-        let hasSix = moves.filter(move=>move==6).length>0
+        let hasSix = moves.filter(move => move == 6).length > 0
 
 
-        const isMovePossibleForPosition = (position) =>{
+        const isMovePossibleForPosition = (position) => {
             // console.log("441",position)
-            if(position===FINISHED){
+            if (position === FINISHED) {
                 return false;
             }
-            if(position === HOME){
-                if(hasSix){
+            if (position === HOME) {
+                if (hasSix) {
                     return true;
                 }
                 return false;
             }
 
             let isMovePossible = false;
-            let positionTocheckFor = parseInt(position.substring(1,position.length))
-    
-            moves.forEach((move)=>{
+            let positionTocheckFor = parseInt(position.substring(1, position.length))
+
+            moves.forEach((move) => {
                 // console.log(move)
-                if(!isMovePossible){
-                   let possiblePossition =  move==1?18: move==2?17: move==3?16: move ==4? 15: move==5? 14: undefined;
-                   if(possiblePossition){
-                       isMovePossible = positionTocheckFor <= possiblePossition;
-                   }else if(move==6 && positionTocheckFor<14){
-                       isMovePossible = true;
-                   }
+                if (!isMovePossible) {
+                    let possiblePossition = move == 1 ? 18 : move == 2 ? 17 : move == 3 ? 16 : move == 4 ? 15 : move == 5 ? 14 : undefined;
+                    if (possiblePossition) {
+                        isMovePossible = positionTocheckFor <= possiblePossition;
+                    } else if (move == 6 && positionTocheckFor < 14) {
+                        isMovePossible = true;
+                    }
                 }
             })
 
             return isMovePossible;
         }
 
-                       
+
         let countOfOptions = 0;
-        isMovePossibleForPosition(one.position)? countOfOptions++ : undefined;
-        isMovePossibleForPosition(two.position)? countOfOptions++ : undefined;
-        isMovePossibleForPosition(three.position)? countOfOptions++ : undefined;
-        isMovePossibleForPosition(four.position)? countOfOptions++ : undefined;
+        isMovePossibleForPosition(one.position) ? countOfOptions++ : undefined;
+        isMovePossibleForPosition(two.position) ? countOfOptions++ : undefined;
+        isMovePossibleForPosition(three.position) ? countOfOptions++ : undefined;
+        isMovePossibleForPosition(four.position) ? countOfOptions++ : undefined;
         return countOfOptions;
     }
 
-    getSinglePossibleMove(player){
-        const { one, two , three, four } = player.pieces;
+    getSinglePossibleMove(player) {
+        const { one, two, three, four } = player.pieces;
         const { moves } = this.state;
-        let hasSix = moves.filter(move=>move==6).length>0
+        let hasSix = moves.filter(move => move == 6).length > 0
 
         let possibleMove = undefined;
-        const isMovePossibleForPosition = (position) =>{
-            if(position===FINISHED){
+        const isMovePossibleForPosition = (position) => {
+            if (position === FINISHED) {
                 return false;
             }
-            if(position === HOME){
-                if(hasSix){
+            if (position === HOME) {
+                if (hasSix) {
                     return true;
                 }
                 return false;
             }
 
             let isMovePossible = false;
-            let positionTocheckFor = parseInt(position.substring(1,position.length))
-            
-            moves.forEach((move)=>{
-                if(!isMovePossible){
-                   let possiblePossition =  move==1?18: move==2?17: move==3?16: move ==4? 15: move==5? 14: undefined;
-                   if(possiblePossition){
-                       isMovePossible = positionTocheckFor <= possiblePossition;
-                       isMovePossible? possibleMove = move: undefined;
-                   }else if(move==6 && positionTocheckFor<14){
-                       isMovePossible = true;
-                       possibleMove = moves;
-                   }
+            let positionTocheckFor = parseInt(position.substring(1, position.length))
+
+            moves.forEach((move) => {
+                if (!isMovePossible) {
+                    let possiblePossition = move == 1 ? 18 : move == 2 ? 17 : move == 3 ? 16 : move == 4 ? 15 : move == 5 ? 14 : undefined;
+                    if (possiblePossition) {
+                        isMovePossible = positionTocheckFor <= possiblePossition;
+                        isMovePossible ? possibleMove = move : undefined;
+                    } else if (move == 6 && positionTocheckFor < 14) {
+                        isMovePossible = true;
+                        possibleMove = moves;
+                    }
                 }
             })
 
             return isMovePossible;
         }
-        
-        if(isMovePossibleForPosition(one.position)){
+
+        if (isMovePossibleForPosition(one.position)) {
             return {
                 move: possibleMove,
                 piece: one
             }
         }
-        if(isMovePossibleForPosition(two.position)){
+        if (isMovePossibleForPosition(two.position)) {
             return {
                 move: possibleMove,
                 piece: two
             }
         }
-        if(isMovePossibleForPosition(three.position)){
+        if (isMovePossibleForPosition(three.position)) {
             return {
                 move: possibleMove,
                 piece: three
             }
         }
-        if(isMovePossibleForPosition(four.position)){
+        if (isMovePossibleForPosition(four.position)) {
             return {
                 move: possibleMove,
                 piece: four
@@ -630,391 +572,431 @@ export default class Game extends Component{
         return undefined;
     }
 
-    getPieceWithPossileMove(player){
-        const { one, two , three, four } = player.pieces;
+    getPieceWithPossileMove(player) {
+        const { one, two, three, four } = player.pieces;
         const { moves } = this.state;
-        let hasSix = moves.filter(move=>move==6).length>0
+        let hasSix = moves.filter(move => move == 6).length > 0
 
-        const isMovePossibleForPosition = (position) =>{
-            if(position===FINISHED){
+        const isMovePossibleForPosition = (position) => {
+            if (position === FINISHED) {
                 return false;
             }
-            if(position === HOME){
-                if(hasSix){
+            if (position === HOME) {
+                if (hasSix) {
                     return true;
                 }
                 return false;
             }
 
             let isMovePossible = false;
-            let positionTocheckFor = parseInt(position.substring(1,position.length))
-            moves.forEach((move)=>{
-                if(!isMovePossible){
-                   let possiblePossition =  move==1?18: move==2?17: move==3?16: move ==4? 15: move==5? 14: undefined;
-                   if(possiblePossition){
-                       isMovePossible = positionTocheckFor <= possiblePossition;
-                   }else if(move==6 && positionTocheckFor<14){
-                       isMovePossible = true;
-                   }
+            let positionTocheckFor = parseInt(position.substring(1, position.length))
+            moves.forEach((move) => {
+                if (!isMovePossible) {
+                    let possiblePossition = move == 1 ? 18 : move == 2 ? 17 : move == 3 ? 16 : move == 4 ? 15 : move == 5 ? 14 : undefined;
+                    if (possiblePossition) {
+                        isMovePossible = positionTocheckFor <= possiblePossition;
+                    } else if (move == 6 && positionTocheckFor < 14) {
+                        isMovePossible = true;
+                    }
                 }
             })
 
             return isMovePossible;
         }
-        
-        if(isMovePossibleForPosition(one.position)){
+
+        if (isMovePossibleForPosition(one.position)) {
             return one;
         }
-        if(isMovePossibleForPosition(two.position)){
+        if (isMovePossibleForPosition(two.position)) {
             return two;
         }
-        if(isMovePossibleForPosition(three.position)){
+        if (isMovePossibleForPosition(three.position)) {
             return three;
         }
-        if(isMovePossibleForPosition(four.position)){
+        if (isMovePossibleForPosition(four.position)) {
             return four;
         }
         return undefined;
     }
 
-    movePieceByPosition(piece, move){
-        let newPosition = "";
-        let position = parseInt(piece.position.substring(1,piece.position.length));
-        let cellAreaIndicator = piece.position.substring(0,1);
+  
 
-
-
-
-        if(piece.position==HOME && move==6){
-            newPosition = piece.color == RED?R1: piece.color==YELLOW ?Y1: piece.color == GREEN ? G1: piece.color==BLUE ? B1: undefined;
-        }
-        else if(position <=13){
-
-                if((cellAreaIndicator == "B" && piece.color == RED) ||
-                (cellAreaIndicator == "R" && piece.color == YELLOW) ||
-                (cellAreaIndicator == "Y" && piece.color == GREEN) ||
-                (cellAreaIndicator == "G" && piece.color == BLUE) 
-            )
-            {
-                if(position + move<=12){
-                    newPosition = cellAreaIndicator + (position+move);
-                }else{
-                    let updatedPosition = (position + move + 1);
-                    if(updatedPosition == 19){
-                        newPosition = FINISHED;
-                    }
-                    else{
-                       let updatedCellAreaIndicator = cellAreaIndicator == "R" ? "Y" : cellAreaIndicator == "Y"? "G" : cellAreaIndicator == "G"? "B": cellAreaIndicator == "B"? "R": undefined;
-                       newPosition = updatedCellAreaIndicator + updatedPosition;
-                    }
-                }
-            }else{
-                if(position + move<=13){
-                    newPosition = cellAreaIndicator + (position+move);
-                }else{
-                    let nextPosition = (position + move ) - 13
-                    let updatedCellAreaIndicator = cellAreaIndicator == "R" ? "Y" : cellAreaIndicator == "Y"? "G" : cellAreaIndicator == "G"? "B": cellAreaIndicator == "B"? "R": undefined;
-                    newPosition = updatedCellAreaIndicator + nextPosition;
-                }
-            }
-        }
-        else{
-            if(position+move<=19){
-                if(position+move==19){
-                    newPosition = FINISHED;
-                }else{
-                    newPosition = cellAreaIndicator + (position + move);
-                }
-            }
-        }
-        if(newPosition!=""){
-            piece.position = newPosition;
-            piece.updateTime = new Date().getTime();
-        }
-
-        if(this.didGetBonusWithNewPosition(piece) && !this.isPlayerFinished(this.state[piece.color])){
-            let count = this.state.bonusCount + 1;
-            this.setState({bonusCount:count},()=>{
-                console.log("count",count)
-                let player = this.state[piece.color]
-                 console.log("moves", this.state.moves)
-                if(this.state.moves.length==1){
-                    // this.setState({animateForSelection:false,moves:this.state.moves})
-                    this.updatePlayerPieces(player)
-                }
-                else if(this.state.moves.length==0 || this.isPlayerFinished(player)){
-                    this.setState({animateForSelection:false,moves:[]})
-                }
-              
-            })
-        }
-        else{
-            this.setState(this.state,()=>{
-                let player = this.state[piece.color]
-                if(this.state.moves.length==1){
-                    this.updatePlayerPieces(player)
-                 
-                }else if(this.state.moves.length==0 || this.isPlayerFinished(player)){
-                    this.setState({animateForSelection:false,moves:[], turn: this.getNextTurn()})
-                }
-            })
-    
-        }
-        
-    }
-
-    didGetBonusWithNewPosition(piece)
-    {
-        if(piece.position==FINISHED){
+    didGetBonusWithNewPosition(piece) {
+        if (piece.position == FINISHED) {
             return true;
         }
-        if(piece.position == R1 || piece.position == R9 || piece.position == Y1 || piece.position == Y9 || piece.position == G1 || piece.position == G9 || piece.position == B1 || piece.position == B9){
+
+        if (this.state.extraChance >= 1) {
+            return true;
+        }
+        if (piece.position == R1 || piece.position == R9 || piece.position == Y1 || piece.position == Y9 || piece.position == G1 || piece.position == G9 || piece.position == B1 || piece.position == B9) {
             return false;
-        } 
+        }
 
 
 
-        const checkIfPositionMatchesExistingPiece = (piece, player) =>{
-            const { one, two, three,four } = player.pieces;
+        const checkIfPositionMatchesExistingPiece = (piece, player) => {
+            const { one, two, three, four } = player.pieces;
             let positionMatched = false;
-            if(piece.position==one.position){
-                one.position = HOME;
+            if (piece.position == one.position) {
+                one.position = player.color == "red" ? R1 :  player.color == "yellow" ? Y1 :  player.color == "green" ? G1 :  player.color == "blue"? B1 :null ;
                 positionMatched = true;
             }
-            if(piece.position==two.position){
-                two.position = HOME;
+            if (piece.position == two.position) {
+                two.position =player.color == "red" ? R1 :  player.color == "yellow" ? Y1 :  player.color == "green" ? G1 :  player.color == "blue"? B1 :null ;
                 positionMatched = true;
             }
-            if(piece.position==three.position){
-                three.position = HOME;
+            if (piece.position == three.position) {
+                three.position = player.color == "red" ? R1 :  player.color == "yellow" ? Y1 :  player.color == "green" ? G1 :  player.color == "blue"? B1 :null ;
                 positionMatched = true;
             }
-            if(piece.position==four.position){
-                four.position = HOME;
+            if (piece.position == four.position) {
+                four.position =  player.color == "red" ? R1 :  player.color == "yellow" ? Y1 :  player.color == "green" ? G1 :  player.color == "blue"? B1 :null ;
                 positionMatched = true;
             }
             return positionMatched;
         }
-        const { red, blue, yellow, green} = this.state;
-        if(piece.color !=red.player && checkIfPositionMatchesExistingPiece(piece,red)){
+        const { red, blue, yellow, green } = this.state;
+        if (piece.color != red.player && checkIfPositionMatchesExistingPiece(piece, red)) {
             return true;
         }
 
-        if(piece.color !=yellow.player && checkIfPositionMatchesExistingPiece(piece,yellow)){
+        if (piece.color != yellow.player && checkIfPositionMatchesExistingPiece(piece, yellow)) {
             return true;
         }
 
-        if(piece.color !=green.player && checkIfPositionMatchesExistingPiece(piece,green)){
+        if (piece.color != green.player && checkIfPositionMatchesExistingPiece(piece, green)) {
             return true;
         }
 
-        if(piece.color !=blue.player && checkIfPositionMatchesExistingPiece(piece,blue)){
+        if (piece.color != blue.player && checkIfPositionMatchesExistingPiece(piece, blue)) {
             return true;
         }
         return false;
     }
 
-    updatePlayerPieces(player){
+    updatePlayerPieces(player) {
         const { moves } = this.state;
-        if(moves.length>=1){
-            if(!this.isPlayerFinished(player)){
+        if (moves.length >= 1) {
+            if (!this.isPlayerFinished(player)) {
 
-                if(this.playerHasOptionsForMoves(player)){
-                    this.setState({animateForSelection:true});
+                if (this.playerHasOptionsForMoves(player)) {
+                    this.setState({ animateForSelection: true });
                 }
-                else if(this.playerHasSinglePossibleMove(player)){
-                    if(this.playerHasSingleUnfinishedPiece(player)){
+                else if (this.playerHasSinglePossibleMove(player)) {
+                    if (this.playerHasSingleUnfinishedPiece(player)) {
                         let singlePossibleMove = this.getSinglePossibleMove(player);
                         console.log("singlepossiblemove", singlePossibleMove)
-                        if(singlePossibleMove){
+                        if (singlePossibleMove) {
                             const indexOf = moves.indexOf(singlePossibleMove.move);
-                            if(indexOf>-1){
-                                moves.splice(indexOf,1);
+                            if (indexOf > -1) {
+                                moves.splice(indexOf, 1);
                             }
-                            this.movePieceByPosition(singlePossibleMove.piece,singlePossibleMove.move);
+                            this.movePieceByPosition(singlePossibleMove.piece, singlePossibleMove.move);
                         }
-                    }else{
-                        if(moves.length==1){
+                    } else {
+                        if (moves.length == 1) {
                             let piece = this.getPieceWithPossileMove(player);
                             this.movePieceByPosition(piece, moves.shift());
-                        }else{
-                            this.setState({animateForSelection:true})
+                        } else {
+                            this.setState({ animateForSelection: true })
                         }
                     }
                 }
-                else{
-                    this.setState({turn:this.getNextTurn(),moves:[],animateForSelection:false})        
+                else {
+                    this.setState(
+                        (prevState) => {
+                            const updatedPlayer = { ...prevState[player.player] };
+                            updatedPlayer.diceValues.push(...moves);
+                            return { [player.player]: updatedPlayer };
+                        }
+                    );
+                    this.setState({ turn: this.getNextTurn(), moves: [], animateForSelection: false, })
                 }
-            }else{
-                this.setState({turn:this.getNextTurn(),moves:[],animateForSelection:false})    
+            } 
+            else {
+                this.setState({ turn: this.getNextTurn(), moves: [], animateForSelection: false })
             }
         }
-        else{
-            this.setState({turn:this.getNextTurn(),animateForSelection:false})
+        else {
+            this.setState({ turn: this.getNextTurn(), animateForSelection: false })
         }
     }
-    getRandomInt(){
+    getRandomInt() {
         let randomInt = Math.floor(Math.random() * Math.floor(6));
         return randomInt + 1;
         // const {diceRollTestData,diceRollTestDataIndex} = this.state;
         // return diceRollTestData[diceRollTestDataIndex];
     }
-    renderPlayerBox(player,customStyle){
-        const {one,two,three,four} = player.pieces;
-        customStyle.opacity = this.state.turn == player.player? 1:0.6;
-        let hasSix = this.state.moves.filter((move)=>move==6).length>0;
-        return(
-            <PlayerBox color={player.color}
-            playerName={player.playerName}
-                animateForSelection={this.state.animateForSelection && this.state.turn == player.player && hasSix}
-                one={one}
-                two={two}
-                three={three}
-                four={four}
-                customStyle={customStyle}
-                onPieceSelection = {(selectedPiece)=>{
-                    if(this.state.turn == player.player){
-                        this.onPieceSelection(selectedPiece);
-                    }
-                }}
-            />
-        )
-    }
+   
 
 
-    onPieceSelection = (selectedPiece) =>{
+    onPieceSelection = (selectedPiece) => {
 
-        
+
         // console.log(selectedPiece)
-        if(this.state.isWaitingForDiceRoll){
-            return;    
+        if (this.state.isWaitingForDiceRoll) {
+            return;
         }
 
         const { moves } = this.state;
         const player = this.state[selectedPiece.color];
         const { one, two, three, four } = player.pieces;
 
-        if(moves.length==1){
-            if(selectedPiece.position == HOME && moves[0]!=6){
+        if (moves.length == 1) {
+            if (selectedPiece.position == HOME && moves[0] != 6) {
                 return;
             }
-            this.movePieceByPosition(selectedPiece,moves.shift());
+            this.movePieceByPosition(selectedPiece, moves.shift());
         }
-        
-        else if(moves.length>1){
-            if(selectedPiece.position==HOME){
+
+        else if (moves.length > 1) {
+            if (selectedPiece.position == HOME) {
                 moves.shift();
-                selectedPiece.position = selectedPiece.color== RED? R1 : selectedPiece.color== YELLOW ? Y1 : selectedPiece.color == GREEN ? G1 : selectedPiece.color == BLUE? B1: undefined;
+                selectedPiece.position = selectedPiece.color == RED ? R1 : selectedPiece.color == YELLOW ? Y1 : selectedPiece.color == GREEN ? G1 : selectedPiece.color == BLUE ? B1 : undefined;
                 selectedPiece.updateTime = new Date().getTime();
-                this.setState(this.state,()=>{
-                    if(moves.length==1){
-                        if(!this.playerHasOptionsForMoves(player)){
-                            this.movePieceByPosition(selectedPiece,moves.shift());
-                        }else{
-                            const isActivePiece = (piece) => piece.position!=HOME && piece.position!=FINISHED;
+                this.setState(this.state, () => {
+                    if (moves.length == 1) {
+                        if (!this.playerHasOptionsForMoves(player)) {
+                            this.movePieceByPosition(selectedPiece, moves.shift());
+                        } else {
+                            const isActivePiece = (piece) => piece.position != HOME && piece.position != FINISHED;
                             let activePieces = [];
-                            isActivePiece(one)?activePieces.push(one): undefined;
-                            isActivePiece(two)?activePieces.push(two): undefined;
-                            isActivePiece(three)?activePieces.push(three):undefined;
-                            isActivePiece(four)?activePieces.push(four):undefined;
-                            let isSamePositionForAllActivePieces = activePieces.every((activePiece)=>activePiece.position==activePieces[0].position);
-                            if(isSamePositionForAllActivePieces){
-                                this.movePieceByPosition(selectedPiece,moves.shift());
+                            isActivePiece(one) ? activePieces.push(one) : undefined;
+                            isActivePiece(two) ? activePieces.push(two) : undefined;
+                            isActivePiece(three) ? activePieces.push(three) : undefined;
+                            isActivePiece(four) ? activePieces.push(four) : undefined;
+                            let isSamePositionForAllActivePieces = activePieces.every((activePiece) => activePiece.position == activePieces[0].position);
+                            if (isSamePositionForAllActivePieces) {
+                                this.movePieceByPosition(selectedPiece, moves.shift());
                             }
-                        }  
+                        }
                     }
                 })
             }
 
-            else{
+            else {
 
-                const onMoveSelected = (selectedMove)=>{
-                    if(this.isMovePossibleForPosition(selectedPiece.position,selectedMove)){
+                const onMoveSelected = (selectedMove) => {
+                    if (this.isMovePossibleForPosition(selectedPiece.position, selectedMove)) {
                         // console.log("Move possible")
                         const index = moves.indexOf(parseInt(selectedMove));
-                        if(index>-1){
-                            moves.splice(index,1);
+                        if (index > -1) {
+                            moves.splice(index, 1);
                         }
-                        this.movePieceByPosition(selectedPiece,parseInt(selectedMove));
-                    }else{
-                        ToastAndroid.show("Move not possible",ToastAndroid.LONG);
+                        this.movePieceByPosition(selectedPiece, parseInt(selectedMove));
+                    } else {
+                        ToastAndroid.show("Move not possible", ToastAndroid.LONG);
                         // console.log("Move not possible")
                     }
                 }
 
-                let moveOptions =[];
-                let optionOne  = moves[0].toString();
-                moveOptions.push({text:optionOne,onPress:()=>{onMoveSelected(optionOne)}});
-                let optionTwo = moves.length>1? moves[1].toString(): undefined;
-                optionTwo? moveOptions.push({text:optionTwo,onPress:()=>{onMoveSelected(optionTwo)}}):undefined;
-                let optionThree = moves.length>2? moves[2].toString(): undefined;
-                optionThree? moveOptions.push({text:optionThree,onPress:()=>{onMoveSelected(optionThree)}}):undefined;
+                let moveOptions = [];
+                let optionOne = moves[0].toString();
+                moveOptions.push({ text: optionOne, onPress: () => { onMoveSelected(optionOne) } });
+                let optionTwo = moves.length > 1 ? moves[1].toString() : undefined;
+                optionTwo ? moveOptions.push({ text: optionTwo, onPress: () => { onMoveSelected(optionTwo) } }) : undefined;
+                let optionThree = moves.length > 2 ? moves[2].toString() : undefined;
+                optionThree ? moveOptions.push({ text: optionThree, onPress: () => { onMoveSelected(optionThree) } }) : undefined;
                 // console.log(moveOptions)
-                Alert.alert("Select your move","",moveOptions,{cancelable:true});
+                Alert.alert("Select your move", "", moveOptions, { cancelable: true });
 
             }
 
         }
 
 
-       this.isthereAnyPiecePresent(selectedPiece)
-      
+        // this.isthereAnyPiecePresent(selectedPiece)
+
 
     }
 
 
-    isthereAnyPiecePresent=(selectedPiece)=>{
-         let position = selectedPiece.position
-         console.log("929",position)   
+ 
 
-         const {red, blue, green, yellow}= this.state
-        const {one,two,three,four}= red.pieces
-        console.log("933",one, two, three, four)
-
-    }
-      
-
-    isMovePossibleForPosition = (position,move) =>{
+    isMovePossibleForPosition = (position, move) => {
         let isMovePossible = false;
-        let positionTocheckFor = parseInt(position.substring(1,position.length))
+        let positionTocheckFor = parseInt(position.substring(1, position.length))
 
-        let possiblePossition =  move==1?18: move==2?17: move==3?16: move ==4? 15: move==5? 14: undefined;
-        if(possiblePossition){
+        let possiblePossition = move == 1 ? 18 : move == 2 ? 17 : move == 3 ? 16 : move == 4 ? 15 : move == 5 ? 14 : undefined;
+        if (possiblePossition) {
             isMovePossible = positionTocheckFor <= possiblePossition;
-        }else if(move==6 && positionTocheckFor<14){
+        } else if (move == 6 && positionTocheckFor < 14) {
             isMovePossible = true;
         }
-        
+
         return isMovePossible;
     }
-}
+
+
+    movePieceByPosition(piece, move) {
+
+        const {redScore, yellowScore, blueScore, greenScore} = this.state
+        let newPosition = "";
+        let position = parseInt(piece.position.substring(1, piece.position.length));
+        let cellAreaIndicator = piece.position.substring(0, 1);
+
+
+
+
+        if (piece.position == HOME && move == 6) {
+            newPosition = piece.color == RED ? R1 : piece.color == YELLOW ? Y1 : piece.color == GREEN ? G1 : piece.color == BLUE ? B1 : undefined;
+        }
+        else if (position <= 13) {
+
+            if ((cellAreaIndicator == "B" && piece.color == RED) ||
+                (cellAreaIndicator == "R" && piece.color == YELLOW) ||
+                (cellAreaIndicator == "Y" && piece.color == GREEN) ||
+                (cellAreaIndicator == "G" && piece.color == BLUE)
+            ) {
+                if (position + move <= 12) {
+                    newPosition = cellAreaIndicator + (position + move);
+                } else {
+                    let updatedPosition = (position + move + 1);
+                    if (updatedPosition == 19) {
+                        newPosition = FINISHED;
+                    }
+                    else {
+                        let updatedCellAreaIndicator = cellAreaIndicator == "R" ? "Y" : cellAreaIndicator == "Y" ? "G" : cellAreaIndicator == "G" ? "B" : cellAreaIndicator == "B" ? "R" : undefined;
+                        newPosition = updatedCellAreaIndicator + updatedPosition;
+                    }
+                }
+            } else {
+                if (position + move <= 13) {
+                    newPosition = cellAreaIndicator + (position + move);
+                } else {
+                    let nextPosition = (position + move) - 13
+                    let updatedCellAreaIndicator = cellAreaIndicator == "R" ? "Y" : cellAreaIndicator == "Y" ? "G" : cellAreaIndicator == "G" ? "B" : cellAreaIndicator == "B" ? "R" : undefined;
+                    newPosition = updatedCellAreaIndicator + nextPosition;
+                }
+            }
+        }
+        else {
+            if (position + move <= 19) {
+                if (position + move == 19) {
+                    newPosition = FINISHED;
+                } else {
+                    newPosition = cellAreaIndicator + (position + move);
+                }
+            }
+        }
+        if (newPosition != "") {
+            piece.position = newPosition;
+            piece.updateTime = new Date().getTime();
+            // piece.diceValue = piece.diceValue + move;
+
+          
+
+
+            if(piece.color == "red"){
+                redScore.push(move)
+                this.setState({redScore:redScore})
+            }
+            if(piece.color == "yellow"){
+                yellowScore.push(move)
+                this.setState({yellowScore: yellowScore})
+            }
+            if(piece.color == "blue"){
+                blueScore.push(move)
+                this.setState({blueScore: blueScore})
+            }
+            if(piece.color == "green"){
+                greenScore.push(move)
+                this.setState({greenScore: greenScore})
+            }
+    
+
+
+        }
+
+        if (this.didGetBonusWithNewPosition(piece) && !this.isPlayerFinished(this.state[piece.color])) {
+            let count = this.state.bonusCount + 1;
+            this.setState({ bonusCount: count }, () => {
+                console.log("count", count)
+                let player = this.state[piece.color]
+                console.log("moves", this.state.moves)
+                if (this.state.moves.length == 1) {
+                    // this.setState({animateForSelection:false,moves:this.state.moves})
+                    this.updatePlayerPieces(player)
+                }
+                else if (this.state.moves.length == 0 || this.isPlayerFinished(player)) {
+                    this.setState({ animateForSelection: false, moves: [] })
+                }
+
+            })
+        }
+        else {
+            this.setState(this.state, () => {
+                let player = this.state[piece.color]
+                if (this.state.moves.length == 1) {
+                    this.updatePlayerPieces(player)
+
+                } else if (this.state.moves.length == 0 || this.isPlayerFinished(player)) {
+                    this.setState({ animateForSelection: false, moves: [], turn: this.getNextTurn() })
+                }
+            })
+
+        }
+
+
+        }
+
+
+
+        renderPlayerBox(player, playerScore,customStyle) {
+            const { one, two, three, four } = player.pieces;
+            customStyle.opacity = this.state.turn == player.player ? 1 : 0.6;
+            let hasSix = this.state.moves.filter((move) => move == 6).length > 0;
+            return (
+                <PlayerBox color={player.color}
+                    playerName={player.playerName}
+                    animateForSelection={this.state.animateForSelection && this.state.turn == player.player && hasSix}
+                    one={one}
+                    two={two}
+                    three={three}
+                    four={four}
+                    customStyle={customStyle}
+                    playerScore ={playerScore} 
+                    movesHistory={player.diceValue} 
+                    onPieceSelection={(selectedPiece) => {
+                        if (this.state.turn == player.player) {
+                            this.onPieceSelection(selectedPiece);
+                        }
+                    }}
+                />
+            )
+        }
+
+    }
+  
+
 
 const styles = StyleSheet.create({
-    container:{
+    container: {
         // width:'100%',
         // height:'100%',
         // // backgroundColor:'#ff0',
-        justifyContent:'center',
-        alignContent:'center',
-        alignItems:'center'
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center'
     },
-    gameContainer:{
-        width:Dimensions.get('screen').width,
-        height:Dimensions.get('screen').width,
-       
+    gameContainer: {
+        width: Dimensions.get('screen').width,
+        height: Dimensions.get('screen').width,
+
         // borderColor:'#999',
         // borderRadius:20,
-        elevation:5,
-        backgroundColor:'#fff',
-        alignSelf:'center'
+        elevation: 5,
+        backgroundColor: '#fff',
+        alignSelf: 'center'
     },
-    twoPlayersContainer:{
-        flex:4,
-        flexDirection:'row'
+    twoPlayersContainer: {
+        flex: 4,
+        flexDirection: 'row'
     },
-    horizontalCellsContainer:{
-        flex:3,
-        backgroundColor:'#fff'
+    horizontalCellsContainer: {
+        flex: 3,
+        backgroundColor: '#fff'
     },
     redDice: {
         height: 75,
@@ -1028,16 +1010,16 @@ const styles = StyleSheet.create({
         borderColor: "#f9e7b0",
         borderWidth: 1,
         borderRadius: 8
-      },
-    
-      diceBtn1: {
+    },
+
+    diceBtn1: {
         height: 65,
         width: 65,
         backgroundColor: "#ffc3c3",
         borderRadius: 10,
         alignItems: "center",
         justifyContent: "center"
-      },
+    },
     yellowDice: {
         height: 75,
         width: 75,
@@ -1050,17 +1032,17 @@ const styles = StyleSheet.create({
         borderColor: "#f9e7b0",
         borderWidth: 1,
         borderRadius: 8
-      },
-    
-      diceBtn2: {
+    },
+
+    diceBtn2: {
         height: 65,
         width: 65,
         backgroundColor: "#ffc3c3",
         borderRadius: 10,
         alignItems: "center",
         justifyContent: "center"
-      },
-      blueDice: {
+    },
+    blueDice: {
         height: 75,
         width: 75,
         backgroundColor: "#6da6c0",
@@ -1072,18 +1054,18 @@ const styles = StyleSheet.create({
         borderColor: "#f9e7b0",
         borderWidth: 1,
         borderRadius: 8
-      },
-    
-      diceBtn3: {
+    },
+
+    diceBtn3: {
         height: 65,
         width: 65,
         backgroundColor: "#ffc3c3",
         borderRadius: 10,
         alignItems: "center",
         justifyContent: "center"
-      },
-    
-      greenDice: {
+    },
+
+    greenDice: {
         height: 75,
         width: 75,
         backgroundColor: "#6da6c0",
@@ -1095,16 +1077,16 @@ const styles = StyleSheet.create({
         borderColor: "#f9e7b0",
         borderWidth: 1,
         borderRadius: 8
-      },
-    
-      diceBtn4: {
+    },
+
+    diceBtn4: {
         height: 65,
         width: 65,
         backgroundColor: "#ffc3c3",
         borderRadius: 10,
         alignItems: "center",
         justifyContent: "center"
-      },
+    },
     redGotiBox: {
         height: 55,
         width: 62,
@@ -1118,8 +1100,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 8,
         // paddingRight: 25
-      },
-      yellowGotiBox: {
+    },
+    yellowGotiBox: {
         height: 55,
         width: 62,
         backgroundColor: "#6da6c0",
@@ -1132,10 +1114,10 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 8,
         // paddingRight: 20
-      },
-    
-    
-      greenGotiBox: {
+    },
+
+
+    greenGotiBox: {
         height: 55,
         width: 62,
         backgroundColor: "#6da6c0",
@@ -1147,11 +1129,11 @@ const styles = StyleSheet.create({
         borderColor: "#f9e7b0",
         borderWidth: 1,
         borderRadius: 8,
-   
+
         // paddingRight: 20
-      },
-    
-      blueGotiBox: {
+    },
+
+    blueGotiBox: {
         height: 55,
         width: 62,
         backgroundColor: "#6da6c0",
@@ -1164,6 +1146,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 8,
         // paddingRight: 20
-      },
+    },
 })
+
 //  {"color": "yellow", "name": "one", "position": "G7", "updateTime": 1702364699116}
