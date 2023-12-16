@@ -20,7 +20,6 @@ export default CellBox = ({backgroundColor,position, onPieceSelection, state,arr
     
     let shouldRenderBackgroundColor = 1;
 
-   
 
     const applyAnimationIfNeeded = () =>{
 
@@ -46,13 +45,11 @@ export default CellBox = ({backgroundColor,position, onPieceSelection, state,arr
         }
     }
 
-
     const shouldAnimateForSelection = () =>{
         const { red, blue, yellow, green,turn } = state;
         const playerToCheckFor = turn == RED? red: turn ==YELLOW? yellow: turn == GREEN? green: turn == BLUE?blue: undefined;
         return positionMatchesPlayerPosition(playerToCheckFor) && isMovePossibleFromCurrentPosition();
     }
-
 
     const positionMatchesPlayerPosition = (playerToCheckFor) =>{
         const { one, two, three, four } = playerToCheckFor.pieces;
@@ -61,7 +58,6 @@ export default CellBox = ({backgroundColor,position, onPieceSelection, state,arr
         three.position == position ||
         four.position == position;
     }
-
 
     const shouldRenderPiece = ()=>{
         const { red,yellow, blue, green} = state;
@@ -89,7 +85,6 @@ export default CellBox = ({backgroundColor,position, onPieceSelection, state,arr
     
     }
 
-    
 
     const getPieceColor = () =>{
         const { red, yellow, blue, green } = state;

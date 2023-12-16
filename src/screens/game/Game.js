@@ -151,6 +151,7 @@ export default class Game extends Component {
 
         return null; // Return null if the diceValue is not 1-6
     }
+
     initPlayer(playerType, color, playerName) {
         return {
         
@@ -167,19 +168,16 @@ export default class Game extends Component {
 
         }
     }
+
     initPieces(playerColor) {
         let time = new Date().getTime();
         return {
-            one: { position: playerColor == RED? R1 :playerColor == YELLOW? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null , name: ONE, color: playerColor, updateTime: time, oneCount: 0 },
-            two: { position:playerColor == RED? R1 :playerColor == YELLOW? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: TWO, color: playerColor, updateTime: time, twoCount: 0 },
-            three: {  position:playerColor == RED? R1 :playerColor == YELLOW? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: THREE, color: playerColor, updateTime: time, threeCount: 0 },
-            four: {  position:playerColor == RED? R1 :playerColor == YELLOW? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: FOUR, color: playerColor, updateTime: time, fourCount: 0 }
+            one: { position: playerColor == RED? R1 :playerColor == YELLOW? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null , name: ONE, color: playerColor, updateTime: time, oneCount: [] },
+            two: { position:playerColor == RED? R1 :playerColor == YELLOW? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: TWO, color: playerColor, updateTime: time, twoCount: [] },
+            three: {  position:playerColor == RED? R1 :playerColor == YELLOW? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: THREE, color: playerColor, updateTime: time, threeCount: [] },
+            four: {  position:playerColor == RED? R1 :playerColor == YELLOW? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: FOUR, color: playerColor, updateTime: time, fourCount: [] }
         }
     }
-
-
-
-
 
 
     render() {
@@ -466,12 +464,13 @@ export default class Game extends Component {
 
     getCountMoveOptions(player) {
         const { one, two, three, four } = player.pieces;
+        console.log(one, two,three, four)
         const { moves } = this.state;
         let hasSix = moves.filter(move => move == 6).length > 0
 
 
         const isMovePossibleForPosition = (position) => {
-            // console.log("441",position)
+            console.log("475",position)
             if (position === FINISHED) {
                 return false;
             }
@@ -486,7 +485,7 @@ export default class Game extends Component {
             let positionTocheckFor = parseInt(position.substring(1, position.length))
 
             moves.forEach((move) => {
-                // console.log(move)
+                console.log("489",move)
                 if (!isMovePossible) {
                     let possiblePossition = move == 1 ? 18 : move == 2 ? 17 : move == 3 ? 16 : move == 4 ? 15 : move == 5 ? 14 : undefined;
                     if (possiblePossition) {
@@ -618,7 +617,6 @@ export default class Game extends Component {
         }
         return undefined;
     }
-
   
 
     didGetBonusWithNewPosition(piece) {
@@ -637,21 +635,27 @@ export default class Game extends Component {
 
         const checkIfPositionMatchesExistingPiece = (piece, player) => {
             const { one, two, three, four } = player.pieces;
+            console.log("FINAL PLAYER", one)
             let positionMatched = false;
             if (piece.position == one.position) {
-                one.position = player.color == "red" ? R1 :  player.color == "yellow" ? Y1 :  player.color == "green" ? G1 :  player.color == "blue"? B1 :null ;
+                one.position = one.color == "red" ? R1 :  one.color == "yellow" ? Y1 :  one.color == "green" ? G1 :  one.color == "blue"? B1 :null ;
+                console.log("643", one.oneCount)
+                one.oneCount.splice(0, one.oneCount.length)
                 positionMatched = true;
             }
             if (piece.position == two.position) {
-                two.position =player.color == "red" ? R1 :  player.color == "yellow" ? Y1 :  player.color == "green" ? G1 :  player.color == "blue"? B1 :null ;
+                two.position = two.color == "red" ? R1 :  two.color == "yellow" ? Y1 :  two.color == "green" ? G1 :  two.color == "blue"? B1 :null ;
+                two.twoCount.splice(0, two.twoCount.length)
                 positionMatched = true;
             }
             if (piece.position == three.position) {
-                three.position = player.color == "red" ? R1 :  player.color == "yellow" ? Y1 :  player.color == "green" ? G1 :  player.color == "blue"? B1 :null ;
+                three.position = three.color == "red" ? R1 :  three.color == "yellow" ? Y1 :  three.color == "green" ? G1 :  three.color == "blue"? B1 :null ;
+                three.threeCount.splice(0, three.threeCount.length)
                 positionMatched = true;
             }
             if (piece.position == four.position) {
-                four.position =  player.color == "red" ? R1 :  player.color == "yellow" ? Y1 :  player.color == "green" ? G1 :  player.color == "blue"? B1 :null ;
+                four.position =  four.color == "red" ? R1 :  four.color == "yellow" ? Y1 :  four.color == "green" ? G1 :  four.color == "blue"? B1 :null ;
+                four.fourCount.splice(0,four.fourCount.length)
                 positionMatched = true;
             }
             return positionMatched;
@@ -677,6 +681,8 @@ export default class Game extends Component {
 
     updatePlayerPieces(player) {
         const { moves } = this.state;
+        console.log("685",player)
+        console.log("685",moves)
         if (moves.length >= 1) {
             if (!this.isPlayerFinished(player)) {
 
@@ -703,6 +709,7 @@ export default class Game extends Component {
                         }
                     }
                 }
+
                 else {
                     this.setState(
                         (prevState) => {
@@ -711,9 +718,16 @@ export default class Game extends Component {
                             return { [player.player]: updatedPlayer };
                         }
                     );
+
+                    
+                  
                     this.setState({ turn: this.getNextTurn(), moves: [], animateForSelection: false, })
                 }
+
+
+
             } 
+
             else {
                 this.setState({ turn: this.getNextTurn(), moves: [], animateForSelection: false })
             }
@@ -722,6 +736,8 @@ export default class Game extends Component {
             this.setState({ turn: this.getNextTurn(), animateForSelection: false })
         }
     }
+
+
     getRandomInt() {
         let randomInt = Math.floor(Math.random() * Math.floor(6));
         return randomInt + 1;
@@ -812,7 +828,6 @@ export default class Game extends Component {
     }
 
 
- 
 
     isMovePossibleForPosition = (position, move) => {
         let isMovePossible = false;
@@ -885,8 +900,28 @@ export default class Game extends Component {
             piece.updateTime = new Date().getTime();
             // piece.diceValue = piece.diceValue + move;
 
-          
+     
 
+          if(piece.name == "one"){
+             piece.oneCount.push(move)
+            
+          }
+          if(piece.name == "two"){
+            piece.twoCount.push(move)
+           
+         }
+         if(piece.name == "three"){
+            piece.threeCount.push(move)
+           
+         }
+         if(piece.name == "four"){
+            piece.fourCount.push(move)   
+         }
+           
+
+          {
+            console.log(piece)
+          }
 
             if(piece.color == "red"){
                 redScore.push(move)
@@ -939,7 +974,7 @@ export default class Game extends Component {
         }
 
 
-        }
+    }
 
 
 
@@ -957,7 +992,7 @@ export default class Game extends Component {
                     four={four}
                     customStyle={customStyle}
                     playerScore ={playerScore} 
-                    movesHistory={player.diceValue} 
+                    // movesHistory={player.diceValue} 
                     onPieceSelection={(selectedPiece) => {
                         if (this.state.turn == player.player) {
                             this.onPieceSelection(selectedPiece);

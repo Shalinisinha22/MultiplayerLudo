@@ -10,7 +10,7 @@ import ReadyRed from '../../../components/Svg/ReadyRed';
 import ReadyGreen from '../../../components/Svg/ReadyGreen';
 import ReadyYellow from '../../../components/Svg/ReadyYellow';
 import ReadyBlue from '../../../components/Svg/ReadyBlue';
-
+import { Entypo } from '@expo/vector-icons';
 
 export default PlayerBox = ({ color, customStyle, one, two, three, four, onPieceSelection, animateForSelection, playerName, playerScore }) => {
 
@@ -22,15 +22,43 @@ export default PlayerBox = ({ color, customStyle, one, two, three, four, onPiece
     const [backgroundColor, setBackgroundColor] = React.useState(color);
     const [intervalId, setIntervalId] = React.useState(undefined);
     const [totalScore, setScore] = useState(0)
+    const [oneScore, setOneScore] = useState(0)
+    const [twoScore, setTwoScore] = useState(0)
+    const [threeScore, setThreeScore] = useState(0)
+    const [fourScore, setFourScore] = useState(0)
 
     useEffect(() => {
         let sum = 0
-        for (let i = 0; i < playerScore.length; i++) {
+        let onePoint=0
+        let twoPoint=0
+        let threePoint=0
+        let fourPoint=0
+        // for (let i = 0; i < playerScore.length; i++) {
 
-            sum = playerScore[i] + sum
+        //     sum = playerScore[i] + sum
 
+        // }
+        for ( let i =0 ; i<one.oneCount.length;i++){
+           onePoint = one.oneCount[i] + onePoint
         }
+        for ( let i = 0 ; i<two.twoCount.length;i++){
+            twoPoint = two.twoCount[i] + twoPoint
+         }
+         for ( let i = 0 ; i<three.threeCount.length;i++){
+            threePoint = three.threeCount[i] + threePoint
+         }
+         for ( let i = 0 ; i<four.fourCount.length;i++){
+            fourPoint = four.fourCount[i] + fourPoint
+         }
+
+         sum = onePoint + twoPoint + threePoint + fourPoint
+         console.log(onePoint,"onepoint", twoPoint, "twoPoint", threePoint, "threePoint", fourPoint, "fourPoint")
         setScore(sum)
+        setOneScore(onePoint)
+        setTwoScore(twoPoint)
+        setThreeScore(threePoint)
+        setFourScore(fourPoint)
+        
 
     })
     let shouldRenderBackgroundColor = 1;
@@ -97,13 +125,16 @@ export default PlayerBox = ({ color, customStyle, one, two, three, four, onPiece
                     <Text style={{ fontSize: 20, color: "white" }}>{totalScore}</Text>
                 </View>
 
-
                 <View style={{ flex: 3, alignItems: "flex-start" }}>
-                    <Image source={require("../../../assets/user2.png")} style={{ height: 68, width: 80, resizeMode: "contain", elevation: 5 }}></Image>
+                    <Image source={require("../../../assets/user2.png")} style={{ height: 68, width: 80, resizeMode: "contain"}}></Image>  
                 </View>
 
-                <View style={{ flex: 1, height: 5, borderColor: "white", borderWidth: 1, borderRadius: 7, opacity: 0.4 }}>
-
+                <View style={{ flex: 1, height: 5, borderColor: "white", borderWidth: 1, borderRadius: 7, flexDirection:"row", alignItems:"flex-end" }}>
+                    <View style={{flex:1, flexDirection:"row", alignItems:"flex-end",paddingLeft:75}}>
+                      <Entypo name="heart" size={20} color="white" />
+                      <Entypo name="heart" size={20} color="white" />
+                      <Entypo name="heart" size={20} color="white" />
+                    </View>
                 </View>
 
 

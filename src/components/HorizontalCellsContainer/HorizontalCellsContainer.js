@@ -58,6 +58,10 @@ export default HorizontalCellsContainer = ({
   return (
     <View style={styles.container}>
       <Dice
+        redPlayer ={state.red}
+        yellowPlayer ={state.yellow}
+        greenPlayer = {state.green}
+        bluePlayer ={state.blue}
         isRolling={state.isRolling}
         turn={state.turn}
         diceNumber={state.diceNumber}
