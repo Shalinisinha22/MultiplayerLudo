@@ -16,6 +16,7 @@ import Arrow1 from '../../../components/Svg/Arrow1';
 import Arrow2 from '../../../components/Svg/Arrow2';
 import Arrow3 from '../../../components/Svg/Arrow3';
 import Arrow4 from '../../../components/Svg/Arrow4';
+import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 
 
 
@@ -45,21 +46,24 @@ export default class Game extends Component {
             bonusCount: 0,
             animateForSelection: false,
             isWaitingForDiceRoll: true,
-            turn: redName !== "" ? RED : yellowName !== "" ? YELLOW : greenName !== "" ? GREEN : blueName !== "" ? BLUE : undefined,
+            turn:blueName !== "" ? BLUE: redName !== "" ? RED : yellowName !== "" ? YELLOW : greenName !== "" ? GREEN  : undefined,
+            // turn: redName !== "" ? RED : yellowName !== "" ? YELLOW : greenName !== "" ? GREEN : blueName !== "" ? BLUE : undefined,
             diceRollTestData: [1, 2, 3, 4, 5, 6],
             diceRollTestDataIndex: 0,
             diceValue: 1,
             extraChance: 0,
             redScore: [],
-            blueScore:[],
-            greenScore:[],
-            yellowScore:[],
+            blueScore: [],
+            greenScore: [],
+            yellowScore: [],
             rollingRotation: this.rollingValue.interpolate({
                 inputRange: [0, 1],
                 outputRange: ['0deg', '360deg'],
-          
 
-            })
+
+            }),
+
+        
 
 
         }
@@ -67,14 +71,16 @@ export default class Game extends Component {
 
     }
 
-
     componentDidMount() {
         this.loadSound();
     }
 
+
     componentWillUnmount() {
         this.unloadSound();
+
     }
+
 
     async loadSound() {
         try {
@@ -154,17 +160,17 @@ export default class Game extends Component {
 
     initPlayer(playerType, color, playerName) {
         return {
-        
-            
+
+
             // pieces:playerType == RED ? this.initRedPieces(playerType):null || playerType == YELLOW ? this.initYellowPieces(playerType):null || playerType == GREEN ? this.initGreenPieces(playerType):null || playerType == BLUE ? this.initBluePieces(playerType):null  ,
             pieces: this.initPieces(playerType),
             color: color,
             player: playerType,
             playerName: playerName,
             totalScore: null
-     
 
-       
+
+
 
         }
     }
@@ -172,12 +178,22 @@ export default class Game extends Component {
     initPieces(playerColor) {
         let time = new Date().getTime();
         return {
-            one: { position: playerColor == RED? R1 :playerColor == YELLOW? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null , name: ONE, color: playerColor, updateTime: time, oneCount: [] },
-            two: { position:playerColor == RED? R1 :playerColor == YELLOW? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: TWO, color: playerColor, updateTime: time, twoCount: [] },
-            three: {  position:playerColor == RED? R1 :playerColor == YELLOW? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: THREE, color: playerColor, updateTime: time, threeCount: [] },
-            four: {  position:playerColor == RED? R1 :playerColor == YELLOW? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: FOUR, color: playerColor, updateTime: time, fourCount: [] }
+            one: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: ONE, color: playerColor, updateTime: time, oneCount: [] },
+            two: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: TWO, color: playerColor, updateTime: time, twoCount: [] },
+            three: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: THREE, color: playerColor, updateTime: time, threeCount: [] },
+            four: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: FOUR, color: playerColor, updateTime: time, fourCount: [] }
         }
     }
+
+    // initPieces(playerColor) {
+    //     let time = new Date().getTime();
+    //     return {
+    //         one: { position: FINISHED , name: ONE, color: playerColor, updateTime: time, oneCount: [] },
+    //         two: { position:FINISHED, name: TWO, color: playerColor, updateTime: time, twoCount: [] },
+    //         three: {  position:FINISHED, name: THREE, color: playerColor, updateTime: time, threeCount: [] },
+    //         four: {  position:playerColor == RED? R1 :playerColor == YELLOW? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: FOUR, color: playerColor, updateTime: time, fourCount: [] }
+    //     }
+    // }
 
 
     render() {
@@ -186,18 +202,17 @@ export default class Game extends Component {
 
         return (
             <ImageBackground source={require("../../../assets/bj.png")} style={{ flex: 1, alignItems: "center", justifyContent: "center" }} >
-
                 {this.state.turn === RED && <Arrow1></Arrow1>}
                 {this.state.turn === YELLOW && <Arrow2></Arrow2>}
                 {this.state.turn === GREEN && <Arrow3></Arrow3>}
                 {this.state.turn === BLUE && <Arrow4></Arrow4>}
+
                 <View style={styles.redGotiBox}>
                     <View style={{ height: "50%", width: "50%" }}>
                         <RedGoti></RedGoti>
                     </View>
 
                 </View>
-
                 <View style={styles.yellowGotiBox}>
 
                     <View style={{ height: "50%", width: "50%" }}>
@@ -289,6 +304,11 @@ export default class Game extends Component {
                     </View>
                 </View>
 
+                {/* <View style={{position:"absolute", top: 90, left: 60,}}>
+
+             
+                </View> */}
+
                 <View style={styles.gameContainer}>
 
                     <View style={styles.twoPlayersContainer}>
@@ -299,7 +319,7 @@ export default class Game extends Component {
                                 this.onPieceSelection(selectedPiece);
                             }}
                         />
-                        {this.renderPlayerBox(this.state.yellow,this.state.yellowScore, { borderTopRightRadius: 20 })}
+                        {this.renderPlayerBox(this.state.yellow, this.state.yellowScore, { borderTopRightRadius: 20 })}
                     </View>
                     <HorizontalCellsContainer state={this.state}
                         onDiceRoll={() => { this.onDiceRoll() }}
@@ -318,6 +338,7 @@ export default class Game extends Component {
                         {this.renderPlayerBox(this.state.green, this.state.greenScore, { borderBottomRightRadius: 0 })}
                     </View>
                 </View>
+
             </ImageBackground>
         )
     }
@@ -326,11 +347,9 @@ export default class Game extends Component {
 
         const { diceRollTestDataIndex, diceRollTestData, animateForSelection } = this.state;
 
-
         if (animateForSelection) {
             return;
         }
-
 
         let updatedDiceRollTestDataIndex = diceRollTestDataIndex + 1;
         if (updatedDiceRollTestDataIndex >= diceRollTestData.length) {
@@ -366,29 +385,13 @@ export default class Game extends Component {
             const { moves, diceNumber, turn, extraChance, redScore, yellowScore, greenScore, blueScore } = this.state;
             moves.push(diceNumber);
 
-            // if(turn == "red"){
-            //     redScore.push(diceNumber)
-            //     this.setState({redScore:redScore})
-            // }
-            // if(turn == "yellow"){
-            //     yellowScore.push(diceNumber)
-            //     this.setState({yellowScore: yellowScore})
-            // }
-            // if(turn == "blue"){
-            //     blueScore.push(diceNumber)
-            //     this.setState({blueScore: blueScore})
-            // }
-            // if(turn == "green"){
-            //     greenScore.push(diceNumber)
-            //     this.setState({greenScore: greenScore})
-            // }
+
 
             if (diceNumber === 6) {
 
 
                 this.setState({ isRolling: false, moves: moves, extraChance: extraChance + 1, isWaitingForDiceRoll: false }, () => {
                     this.updatePlayerPieces(this.state[turn])
-                   
 
                 });
 
@@ -399,9 +402,12 @@ export default class Game extends Component {
 
                 });
             }
+
+
+
         });
 
-    
+
 
 
 
@@ -413,14 +419,19 @@ export default class Game extends Component {
         return one.position === FINISHED && two.position === FINISHED && three.position === FINISHED && four.position === FINISHED;
     }
 
+
     getNextTurn() {
+
         const { turn, yellow, red, green, blue } = this.state;
         const { yellowName, blueName, greenName, redName } = this.props;
         this.setState({ isWaitingForDiceRoll: true })
+
         let isYellowNext = yellowName != "" && !this.isPlayerFinished(yellow);
         let isGreenNext = greenName != "" && !this.isPlayerFinished(green);
         let isBlueNext = blueName != "" && !this.isPlayerFinished(blue);
         let isRedNext = redName != "" && !this.isPlayerFinished(red);
+
+
         if (this.state.bonusCount > 0) {
             this.setState({ bonusCount: this.state.bonusCount - 1 });
             if (this.isPlayerFinished(this.state[turn])) {
@@ -440,6 +451,7 @@ export default class Game extends Component {
                 return turn;
         }
     }
+
 
     playerHasSingleUnfinishedPiece(player) {
         const { one, two, three, four } = player.pieces;
@@ -464,13 +476,13 @@ export default class Game extends Component {
 
     getCountMoveOptions(player) {
         const { one, two, three, four } = player.pieces;
-        console.log(one, two,three, four)
+        console.log(one, two, three, four)
         const { moves } = this.state;
         let hasSix = moves.filter(move => move == 6).length > 0
 
 
         const isMovePossibleForPosition = (position) => {
-            console.log("475",position)
+            console.log("475", position)
             if (position === FINISHED) {
                 return false;
             }
@@ -485,7 +497,7 @@ export default class Game extends Component {
             let positionTocheckFor = parseInt(position.substring(1, position.length))
 
             moves.forEach((move) => {
-                console.log("489",move)
+                console.log("489", move)
                 if (!isMovePossible) {
                     let possiblePossition = move == 1 ? 18 : move == 2 ? 17 : move == 3 ? 16 : move == 4 ? 15 : move == 5 ? 14 : undefined;
                     if (possiblePossition) {
@@ -512,8 +524,8 @@ export default class Game extends Component {
         const { one, two, three, four } = player.pieces;
         const { moves } = this.state;
         let hasSix = moves.filter(move => move == 6).length > 0
-
         let possibleMove = undefined;
+
         const isMovePossibleForPosition = (position) => {
             if (position === FINISHED) {
                 return false;
@@ -536,7 +548,7 @@ export default class Game extends Component {
                         isMovePossible ? possibleMove = move : undefined;
                     } else if (move == 6 && positionTocheckFor < 14) {
                         isMovePossible = true;
-                        possibleMove = moves;
+                        possibleMove = move;
                     }
                 }
             })
@@ -617,16 +629,14 @@ export default class Game extends Component {
         }
         return undefined;
     }
-  
+
 
     didGetBonusWithNewPosition(piece) {
         if (piece.position == FINISHED) {
             return true;
         }
 
-        if (this.state.extraChance >= 1) {
-            return true;
-        }
+
         if (piece.position == R1 || piece.position == R9 || piece.position == Y1 || piece.position == Y9 || piece.position == G1 || piece.position == G9 || piece.position == B1 || piece.position == B9) {
             return false;
         }
@@ -638,28 +648,30 @@ export default class Game extends Component {
             console.log("FINAL PLAYER", one)
             let positionMatched = false;
             if (piece.position == one.position) {
-                one.position = one.color == "red" ? R1 :  one.color == "yellow" ? Y1 :  one.color == "green" ? G1 :  one.color == "blue"? B1 :null ;
+                one.position = one.color == "red" ? R1 : one.color == "yellow" ? Y1 : one.color == "green" ? G1 : one.color == "blue" ? B1 : null;
                 console.log("643", one.oneCount)
                 one.oneCount.splice(0, one.oneCount.length)
                 positionMatched = true;
             }
             if (piece.position == two.position) {
-                two.position = two.color == "red" ? R1 :  two.color == "yellow" ? Y1 :  two.color == "green" ? G1 :  two.color == "blue"? B1 :null ;
+                two.position = two.color == "red" ? R1 : two.color == "yellow" ? Y1 : two.color == "green" ? G1 : two.color == "blue" ? B1 : null;
                 two.twoCount.splice(0, two.twoCount.length)
                 positionMatched = true;
             }
             if (piece.position == three.position) {
-                three.position = three.color == "red" ? R1 :  three.color == "yellow" ? Y1 :  three.color == "green" ? G1 :  three.color == "blue"? B1 :null ;
+                three.position = three.color == "red" ? R1 : three.color == "yellow" ? Y1 : three.color == "green" ? G1 : three.color == "blue" ? B1 : null;
                 three.threeCount.splice(0, three.threeCount.length)
                 positionMatched = true;
             }
             if (piece.position == four.position) {
-                four.position =  four.color == "red" ? R1 :  four.color == "yellow" ? Y1 :  four.color == "green" ? G1 :  four.color == "blue"? B1 :null ;
-                four.fourCount.splice(0,four.fourCount.length)
+                four.position = four.color == "red" ? R1 : four.color == "yellow" ? Y1 : four.color == "green" ? G1 : four.color == "blue" ? B1 : null;
+                four.fourCount.splice(0, four.fourCount.length)
                 positionMatched = true;
             }
             return positionMatched;
         }
+
+
         const { red, blue, yellow, green } = this.state;
         if (piece.color != red.player && checkIfPositionMatchesExistingPiece(piece, red)) {
             return true;
@@ -676,13 +688,18 @@ export default class Game extends Component {
         if (piece.color != blue.player && checkIfPositionMatchesExistingPiece(piece, blue)) {
             return true;
         }
+
+        if (this.state.extraChance >= 1) {
+            return true;
+        }
         return false;
     }
 
+
     updatePlayerPieces(player) {
         const { moves } = this.state;
-        console.log("685",player)
-        console.log("685",moves)
+        console.log("685", player)
+        console.log("685", moves)
         if (moves.length >= 1) {
             if (!this.isPlayerFinished(player)) {
 
@@ -693,6 +710,7 @@ export default class Game extends Component {
                     if (this.playerHasSingleUnfinishedPiece(player)) {
                         let singlePossibleMove = this.getSinglePossibleMove(player);
                         console.log("singlepossiblemove", singlePossibleMove)
+
                         if (singlePossibleMove) {
                             const indexOf = moves.indexOf(singlePossibleMove.move);
                             if (indexOf > -1) {
@@ -719,14 +737,14 @@ export default class Game extends Component {
                         }
                     );
 
-                    
-                  
+
+
                     this.setState({ turn: this.getNextTurn(), moves: [], animateForSelection: false, })
                 }
 
 
 
-            } 
+            }
 
             else {
                 this.setState({ turn: this.getNextTurn(), moves: [], animateForSelection: false })
@@ -744,7 +762,7 @@ export default class Game extends Component {
         // const {diceRollTestData,diceRollTestDataIndex} = this.state;
         // return diceRollTestData[diceRollTestDataIndex];
     }
-   
+
 
 
     onPieceSelection = (selectedPiece) => {
@@ -846,9 +864,10 @@ export default class Game extends Component {
 
     movePieceByPosition(piece, move) {
 
-        const {redScore, yellowScore, blueScore, greenScore} = this.state
+        const { redScore, yellowScore, blueScore, greenScore } = this.state
         let newPosition = "";
         let position = parseInt(piece.position.substring(1, piece.position.length));
+        console.log("856", position)
         let cellAreaIndicator = piece.position.substring(0, 1);
 
 
@@ -900,46 +919,46 @@ export default class Game extends Component {
             piece.updateTime = new Date().getTime();
             // piece.diceValue = piece.diceValue + move;
 
-     
 
-          if(piece.name == "one"){
-             piece.oneCount.push(move)
-            
-          }
-          if(piece.name == "two"){
-            piece.twoCount.push(move)
-           
-         }
-         if(piece.name == "three"){
-            piece.threeCount.push(move)
-           
-         }
-         if(piece.name == "four"){
-            piece.fourCount.push(move)   
-         }
-           
 
-          {
-            console.log(piece)
-          }
+            if (piece.name == "one") {
+                piece.oneCount.push(move)
 
-            if(piece.color == "red"){
+            }
+            if (piece.name == "two") {
+                piece.twoCount.push(move)
+
+            }
+            if (piece.name == "three") {
+                piece.threeCount.push(move)
+
+            }
+            if (piece.name == "four") {
+                piece.fourCount.push(move)
+            }
+
+
+            {
+                console.log(piece)
+            }
+
+            if (piece.color == "red") {
                 redScore.push(move)
-                this.setState({redScore:redScore})
+                this.setState({ redScore: redScore })
             }
-            if(piece.color == "yellow"){
+            if (piece.color == "yellow") {
                 yellowScore.push(move)
-                this.setState({yellowScore: yellowScore})
+                this.setState({ yellowScore: yellowScore })
             }
-            if(piece.color == "blue"){
+            if (piece.color == "blue") {
                 blueScore.push(move)
-                this.setState({blueScore: blueScore})
+                this.setState({ blueScore: blueScore })
             }
-            if(piece.color == "green"){
+            if (piece.color == "green") {
                 greenScore.push(move)
-                this.setState({greenScore: greenScore})
+                this.setState({ greenScore: greenScore })
             }
-    
+
 
 
         }
@@ -978,32 +997,33 @@ export default class Game extends Component {
 
 
 
-        renderPlayerBox(player, playerScore,customStyle) {
-            const { one, two, three, four } = player.pieces;
-            customStyle.opacity = this.state.turn == player.player ? 1 : 0.6;
-            let hasSix = this.state.moves.filter((move) => move == 6).length > 0;
-            return (
-                <PlayerBox color={player.color}
-                    playerName={player.playerName}
-                    animateForSelection={this.state.animateForSelection && this.state.turn == player.player && hasSix}
-                    one={one}
-                    two={two}
-                    three={three}
-                    four={four}
-                    customStyle={customStyle}
-                    playerScore ={playerScore} 
-                    // movesHistory={player.diceValue} 
-                    onPieceSelection={(selectedPiece) => {
-                        if (this.state.turn == player.player) {
-                            this.onPieceSelection(selectedPiece);
-                        }
-                    }}
-                />
-            )
-        }
-
+    renderPlayerBox(player, playerScore, customStyle) {
+        const { one, two, three, four } = player.pieces;
+        customStyle.opacity = this.state.turn == player.player ? 1 : 0.6;
+        let hasSix = this.state.moves.filter((move) => move == 6).length > 0;
+        return (
+            <PlayerBox color={player.color}
+                playerName={player.playerName}
+                animateForSelection={this.state.animateForSelection && this.state.turn == player.player && hasSix}
+                one={one}
+                two={two}
+                three={three}
+                four={four}
+                customStyle={customStyle}
+                playerScore={playerScore}
+                getNextTurn= {this.getNextTurn}
+                // movesHistory={player.diceValue} 
+                onPieceSelection={(selectedPiece) => {
+                    if (this.state.turn == player.player) {
+                        this.onPieceSelection(selectedPiece);
+                    }
+                }}
+            />
+        )
     }
-  
+
+}
+
 
 
 const styles = StyleSheet.create({

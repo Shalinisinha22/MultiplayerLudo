@@ -262,9 +262,7 @@ export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, r
 
 </View>
 
-
-
-    )
+ )
 }
 
 const styles = StyleSheet.create({

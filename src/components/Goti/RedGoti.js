@@ -11,10 +11,10 @@ console.log("9", props.position)
 return (
 
 
-  props.position == FINISHED ?  
+  props.position == FINISHED  ?  
    <View style={{height:15,width:15, flex:1}}>
            
-  <Svg
+     <Svg
    xmlns="http://www.w3.org/2000/svg"
    xmlSpace="preserve"
    x="0%"
@@ -236,10 +236,11 @@ return (
      strokeWidth={0.901}
      d="M11.92 2.7c2.25 0 4.07 1.82 4.07 4.07s-1.82 4.08-4.07 4.08-4.07-1.83-4.07-4.08S9.67 2.7 11.92 2.7z"
    />
-  </Svg>
- </View>                   
+     </Svg>
+   </View>                   
  
- :
+ :   
+
 
 <View style={[{height:40,width:40,position:"absolute", top:-13,right:-8},]}>
        
@@ -472,7 +473,7 @@ return (
 
   
 
-
+ 
  
 )
 

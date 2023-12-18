@@ -11,6 +11,7 @@ import ReadyGreen from '../../../components/Svg/ReadyGreen';
 import ReadyYellow from '../../../components/Svg/ReadyYellow';
 import ReadyBlue from '../../../components/Svg/ReadyBlue';
 import { Entypo } from '@expo/vector-icons';
+import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 
 export default PlayerBox = ({ color, customStyle, one, two, three, four, onPieceSelection, animateForSelection, playerName, playerScore }) => {
 
@@ -119,23 +120,43 @@ export default PlayerBox = ({ color, customStyle, one, two, three, four, onPiece
         <View style={[{ backgroundColor: color, flex: 4, borderRadius: 20 }]}>
             {/* customStyle */}
             <View style={[styles.innerContainer, { backgroundColor: color }]}>
-
-                <View style={{ flex: 1, alignItems: "flex-end", padding: 20 }}>
-                    <Text style={{ fontSize: 20, color: "white", textAlign: "center" }}>Score</Text>
-                    <Text style={{ fontSize: 20, color: "white" }}>{totalScore}</Text>
-                </View>
-
-                <View style={{ flex: 3, alignItems: "flex-start" }}>
-                    <Image source={require("../../../assets/user2.png")} style={{ height: 68, width: 80, resizeMode: "contain"}}></Image>  
-                </View>
-
-                <View style={{ flex: 1, height: 5, borderColor: "white", borderWidth: 1, borderRadius: 7, flexDirection:"row", alignItems:"flex-end" }}>
-                    <View style={{flex:1, flexDirection:"row", alignItems:"flex-end",paddingLeft:75}}>
-                      <Entypo name="heart" size={20} color="white" />
-                      <Entypo name="heart" size={20} color="white" />
-                      <Entypo name="heart" size={20} color="white" />
+                {
+                    playerName && 
+                    <>
+                    <View style={{ flex: 1, alignItems: "flex-end", padding: 20 }}>
+                    <CountdownCircleTimer
+                      isPlaying
+                      duration={15}
+                      colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+                      colorsTime={[7, 5, 2, 0]}
+                      size={50}
+                      strokeWidth={5}
+                      strokeLinecap='square'
+                      
+                 >
+                   {({ remainingTime }) => 
+                   
+                   <Text style={{color:"white"}}>{remainingTime}</Text>}
+              </CountdownCircleTimer>
+            
+                        <Text style={{ fontSize: 20, color: "white", textAlign: "center" }}>Score</Text>
+                        <Text style={{ fontSize: 20, color: "white" }}>{totalScore}</Text>
                     </View>
-                </View>
+    
+                    <View style={{ flex: 3, alignItems: "flex-start" }}>
+                        <Image source={require("../../../assets/user2.png")} style={{ height: 68, width: 80, resizeMode: "contain"}}></Image>  
+                    </View>
+    
+                    <View style={{ flex: 1, height: 5, borderColor: "white", borderWidth: 1, borderRadius: 7, flexDirection:"row", alignItems:"flex-end" }}>
+                        <View style={{flex:1, flexDirection:"row", alignItems:"flex-end",paddingLeft:75}}>
+                          <Entypo name="heart" size={20} color="white" />
+                          <Entypo name="heart" size={20} color="white" />
+                          <Entypo name="heart" size={20} color="white" />
+                        </View>
+                    </View>
+                    </>
+                }
+
 
 
                 {/* <View style={[styles.piecesContainer]}>

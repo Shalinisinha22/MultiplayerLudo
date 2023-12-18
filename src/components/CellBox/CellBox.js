@@ -12,7 +12,7 @@ import ReadyYellow from '../../../components/Svg/ReadyYellow';
 import ReadyBlue from '../../../components/Svg/ReadyBlue';
 
 
-export default CellBox = ({backgroundColor,position, onPieceSelection, state,arrow, safe}) =>{
+export default CellBox = ({backgroundColor, position, onPieceSelection, state,arrow, safe}) =>{
 
     const [highlighColor,setHighlightColor] = React.useState(backgroundColor);
     const [isAnimating,setIsAnimating] = React.useState(false);
@@ -51,7 +51,8 @@ export default CellBox = ({backgroundColor,position, onPieceSelection, state,arr
         return positionMatchesPlayerPosition(playerToCheckFor) && isMovePossibleFromCurrentPosition();
     }
 
-    const positionMatchesPlayerPosition = (playerToCheckFor) =>{
+    const positionMatchesPlayerPosition = (playerToCheckFor) =>
+    {
         const { one, two, three, four } = playerToCheckFor.pieces;
         return one.position == position ||
         two.position == position ||
@@ -193,12 +194,12 @@ export default CellBox = ({backgroundColor,position, onPieceSelection, state,arr
                   {shouldRenderPiece() && 
                         <>
 
-                             { getPieceColor() == "#ec1d27" ? isAnimating ? <ReadyRed></ReadyRed> :<RedGoti></RedGoti>:null}
+                             { getPieceColor() == "#ec1d27" && state.red.playerName ? isAnimating ? <ReadyRed></ReadyRed> :<RedGoti positions ={state.red.pieces.one.position}></RedGoti>:null}
                              {/* { getPieceColor() == "#ec1d27" && <RedGoti></RedGoti>} */}
 
-                             {getPieceColor() == "#01A147" ? isAnimating ? <ReadyGreen></ReadyGreen> : <GreenGoti></GreenGoti>:null}
-                             {getPieceColor() == "#ffe01b" ? isAnimating ? <ReadyYellow></ReadyYellow> : <YellowGoti></YellowGoti>:null}
-                             {getPieceColor() == "#29b6f6" ? isAnimating ? <ReadyBlue></ReadyBlue> : <BlueGoti></BlueGoti>:null}
+                             {getPieceColor() == "#01A147" && state.green.playerName ? isAnimating ? <ReadyGreen></ReadyGreen> : <GreenGoti></GreenGoti>:null}
+                             {getPieceColor() == "#ffe01b" && state.yellow.playerName ? isAnimating ? <ReadyYellow></ReadyYellow> : <YellowGoti></YellowGoti>:null}
+                             {getPieceColor() == "#29b6f6" && state.blue.playerName ? isAnimating ? <ReadyBlue></ReadyBlue> : <BlueGoti></BlueGoti>:null}
                         </>
                   }
         </TouchableOpacity>

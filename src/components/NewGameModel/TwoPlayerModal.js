@@ -20,19 +20,17 @@ export default class TwoPlayerModal extends Component{
         >
            
             <ScrollView>
-                {/* {
-                    this.props.playerCount
-                } */}
+         
                 <View style={styles.modalStyle}>
                     <View style={styles.modalContainer}>
-                    <Text style={{color:'#ec1d27',marginBottom:10}}>Red Player Name</Text>
-                    <TextInput placeholder='Player1' style={[styles.nameInputStyle,styles.redInputStyle]}
-                        onChangeText={this.props.onRedInput}
+                    <Text style={{color:'#00f',marginBottom:10}}>Blue Player Name</Text>
+                    <TextInput style={[styles.nameInputStyle,styles.blueInputStyle]}
+                        onChangeText={this.props.onBlueInput}
                     />
                   
-                    <Text style={{color:'#0F0',marginBottom:10}}>Green Player Name</Text>
-                    <TextInput placeholder='Player2' style={[styles.nameInputStyle,styles.greenInputStyle]}
-                        onChangeText={this.props.onGreenInput}
+                  <Text style={{color:'#ffe01b',marginBottom:10}}>Yellow Player Name</Text>
+                    <TextInput style={[styles.nameInputStyle,styles.yellowInputStyle]}
+                        onChangeText={this.props.onYellowInput}
                     />
                  
                     <TouchableOpacity style={styles.buttonStyle} onPress={this.props.onCancel}>
@@ -41,9 +39,9 @@ export default class TwoPlayerModal extends Component{
 
                     <TouchableOpacity style={styles.buttonStyle} onPress={()=>{
                         let minPlayersCount =0;
-                        this.props.red.name!=""?minPlayersCount++:undefined;
-                        this.props.green.name!=""?minPlayersCount++:undefined;
-                        if(minPlayersCount>=2){
+                        this.props.blue.name!=""?minPlayersCount++:undefined;
+                        this.props.yellow.name!=""?minPlayersCount++:undefined;
+                        if(minPlayersCount == 2){
                             this.props.onStart();
                         }else{
                             Alert.alert("Minimum 2 Players", "At least 2 players are required to start the game.",
