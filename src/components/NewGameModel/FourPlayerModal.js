@@ -28,19 +28,19 @@ export default class FourPlayerModal extends Component{
 
                     <Text style={{color:'#00f',marginBottom:10}}>Blue Player Name</Text>
                     <TextInput  style={[styles.nameInputStyle,styles.blueInputStyle]}
-                        onChangeText={this.props.onBlueInput}
+                        onChangeText={this.props.onBlueInput} placeholder='Enter Player1 Name'
                     />
                     <Text style={{color:'#ec1d27',marginBottom:10}}>Red Player Name</Text>
                     <TextInput  style={[styles.nameInputStyle,styles.redInputStyle]}
-                        onChangeText={this.props.onRedInput}
+                        onChangeText={this.props.onRedInput} placeholder='Enter Player2 Name'
                     />
                     <Text style={{color:'#ffe01b',marginBottom:10}}>Yellow Player Name</Text>
                     <TextInput  style={[styles.nameInputStyle,styles.yellowInputStyle]}
-                        onChangeText={this.props.onYellowInput}
+                        onChangeText={this.props.onYellowInput} placeholder='Enter Player3 Name'
                     />
                     <Text style={{color:'#0F0',marginBottom:10}}>Green Player Name</Text>
                     <TextInput  style={[styles.nameInputStyle,styles.greenInputStyle]}
-                        onChangeText={this.props.onGreenInput}
+                        onChangeText={this.props.onGreenInput} placeholder='Enter Player4 Name'
                     />
                
                     <TouchableOpacity style={styles.buttonStyle} onPress={this.props.onCancel}>
@@ -48,6 +48,8 @@ export default class FourPlayerModal extends Component{
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.buttonStyle} onPress={()=>{
+
+                        
                         let minPlayersCount =0;
                         this.props.red.name!=""?minPlayersCount++:undefined;
                         this.props.yellow.name!=""?minPlayersCount++:undefined;

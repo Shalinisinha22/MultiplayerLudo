@@ -13,12 +13,12 @@ import ReadyBlue from '../../../components/Svg/ReadyBlue';
 import { Entypo } from '@expo/vector-icons';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 
-export default PlayerBox = ({ color, customStyle, one, two, three, four, onPieceSelection, animateForSelection, playerName, playerScore }) => {
+export default PlayerBox = ({ color, customStyle, lifeline, one, two, three, four, onPieceSelection, animateForSelection, playerName, playerScore, timer }) => {
 
 
-    { 
-        console.log("playerScore", playerScore)
-     }
+    {
+        console.log("lifeline", lifeline)
+    }
     const [isAnimating, setIsAnimating] = React.useState(false);
     const [backgroundColor, setBackgroundColor] = React.useState(color);
     const [intervalId, setIntervalId] = React.useState(undefined);
@@ -30,36 +30,36 @@ export default PlayerBox = ({ color, customStyle, one, two, three, four, onPiece
 
     useEffect(() => {
         let sum = 0
-        let onePoint=0
-        let twoPoint=0
-        let threePoint=0
-        let fourPoint=0
+        let onePoint = 0
+        let twoPoint = 0
+        let threePoint = 0
+        let fourPoint = 0
         // for (let i = 0; i < playerScore.length; i++) {
 
         //     sum = playerScore[i] + sum
 
         // }
-        for ( let i =0 ; i<one.oneCount.length;i++){
-           onePoint = one.oneCount[i] + onePoint
+        for (let i = 0; i < one.oneCount.length; i++) {
+            onePoint = one.oneCount[i] + onePoint
         }
-        for ( let i = 0 ; i<two.twoCount.length;i++){
+        for (let i = 0; i < two.twoCount.length; i++) {
             twoPoint = two.twoCount[i] + twoPoint
-         }
-         for ( let i = 0 ; i<three.threeCount.length;i++){
+        }
+        for (let i = 0; i < three.threeCount.length; i++) {
             threePoint = three.threeCount[i] + threePoint
-         }
-         for ( let i = 0 ; i<four.fourCount.length;i++){
+        }
+        for (let i = 0; i < four.fourCount.length; i++) {
             fourPoint = four.fourCount[i] + fourPoint
-         }
+        }
 
-         sum = onePoint + twoPoint + threePoint + fourPoint
-         console.log(onePoint,"onepoint", twoPoint, "twoPoint", threePoint, "threePoint", fourPoint, "fourPoint")
+        sum = onePoint + twoPoint + threePoint + fourPoint
+        console.log(onePoint, "onepoint", twoPoint, "twoPoint", threePoint, "threePoint", fourPoint, "fourPoint")
         setScore(sum)
         setOneScore(onePoint)
         setTwoScore(twoPoint)
         setThreeScore(threePoint)
         setFourScore(fourPoint)
-        
+
 
     })
     let shouldRenderBackgroundColor = 1;
@@ -121,39 +121,63 @@ export default PlayerBox = ({ color, customStyle, one, two, three, four, onPiece
             {/* customStyle */}
             <View style={[styles.innerContainer, { backgroundColor: color }]}>
                 {
-                    playerName && 
+                    playerName &&
                     <>
-                    <View style={{ flex: 1, alignItems: "flex-end", padding: 20 }}>
-                    <CountdownCircleTimer
-                      isPlaying
-                      duration={15}
-                      colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-                      colorsTime={[7, 5, 2, 0]}
-                      size={50}
-                      strokeWidth={5}
-                      strokeLinecap='square'
-                      
-                 >
-                   {({ remainingTime }) => 
-                   
-                   <Text style={{color:"white"}}>{remainingTime}</Text>}
-              </CountdownCircleTimer>
-            
-                        <Text style={{ fontSize: 20, color: "white", textAlign: "center" }}>Score</Text>
-                        <Text style={{ fontSize: 20, color: "white" }}>{totalScore}</Text>
-                    </View>
-    
-                    <View style={{ flex: 3, alignItems: "flex-start" }}>
-                        <Image source={require("../../../assets/user2.png")} style={{ height: 68, width: 80, resizeMode: "contain"}}></Image>  
-                    </View>
-    
-                    <View style={{ flex: 1, height: 5, borderColor: "white", borderWidth: 1, borderRadius: 7, flexDirection:"row", alignItems:"flex-end" }}>
-                        <View style={{flex:1, flexDirection:"row", alignItems:"flex-end",paddingLeft:75}}>
-                          <Entypo name="heart" size={20} color="white" />
-                          <Entypo name="heart" size={20} color="white" />
-                          <Entypo name="heart" size={20} color="white" />
+                        <View style={{ flex: 1, alignItems: "flex-end", padding: 20 }}>
+
+                            {
+                                timer && <CountdownCircleTimer
+                                    isPlaying
+                                    duration={15}
+                                    colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+                                    colorsTime={[7, 5, 2, 0]}
+                                    size={50}
+                                    strokeWidth={5}
+                                    strokeLinecap='square'
+
+                                >
+                                    {({ remainingTime }) =>
+
+                                        <Text style={{ color: "white" }}>{remainingTime}</Text>}
+                                </CountdownCircleTimer>
+                            }
+
+
+                            <Text style={{ fontSize: 20, color: "white", textAlign: "center" }}>Score</Text>
+                            <Text style={{ fontSize: 20, color: "white" }}>{totalScore}</Text>
                         </View>
-                    </View>
+
+                        <View style={{ flex: 3, alignItems: "flex-start" }}>
+                            <Image source={require("../../../assets/user2.png")} style={{ height: 68, width: 80, resizeMode: "contain" }}></Image>
+                        </View>
+
+                        <View style={{ flex: 1, height: 5, borderColor: "white", borderWidth: 1, borderRadius: 7, flexDirection: "row", alignItems: "flex-end" }}>
+                            <View style={{ flex: 1, flexDirection: "row", alignItems: "flex-end", paddingLeft: 75 }}>
+
+                                {
+                                    lifeline == 3 ? <>
+                                            <Entypo name="heart" size={20} color="white" />
+                                <Entypo name="heart" size={20} color="white" />
+                                <Entypo name="heart" size={20} color="white" />
+                                    </> : lifeline == 2 ?  <>
+                                    <Entypo name="heart" size={20} color="white" />
+                                <Entypo name="heart" size={20} color="white" />
+                                <Entypo name="heart-outlined" size={20} color="white" />
+                                    </>    :
+                                    
+                                    lifeline == 1 ? <> 
+                                     <Entypo name="heart" size={20} color="white" />
+                                     <Entypo name="heart-outlined" size={20} color="white" />
+                                     <Entypo name="heart-outlined" size={20} color="white" />
+                                     </>  :null
+                             
+                                }
+                             
+                                {/* <Entypo name="heart" size={20} color="white" />
+                                <Entypo name="heart" size={20} color="white" />
+                                <Entypo name="heart" size={20} color="white" /> */}
+                            </View>
+                        </View>
                     </>
                 }
 
