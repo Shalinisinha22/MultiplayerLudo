@@ -23,6 +23,8 @@ export default Home = ({
 
     const handleTwo = () => {
       setSelectedPlayers(2);
+      onBlueInput('Player 1')
+      onYellowInput('Player 2')
 
     onNewGameButtonPress()
  
@@ -30,11 +32,18 @@ export default Home = ({
   
     const handleThree = () => {
       setSelectedPlayers(3);
+      onBlueInput('Player 1')
+      onRedInput('Player 2')
+      onYellowInput('Player 3')
       onNewGameButtonPress()
     };
   
     const handleFour = () => {
       setSelectedPlayers(4);
+      onBlueInput('Player 1')
+      onRedInput('Player 2')
+      onYellowInput('Player 3')
+      onGreenInput('Player 4')
       onNewGameButtonPress()
     };
 

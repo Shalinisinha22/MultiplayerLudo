@@ -6,7 +6,7 @@ import { FINISHED, R1 } from "../../util/Constants";
 
 const RedGoti = (props) => {
 
-console.log("9", props.position)
+// console.log("9", props.position)
 
 return (
 

@@ -13,7 +13,7 @@ export default class TwoPlayerModal extends Component {
 
 
 
-        console.log(props)
+        // console.log(props)
 
     }
 
@@ -33,12 +33,12 @@ export default class TwoPlayerModal extends Component {
                     <View style={styles.modalContainer}>
                         <Text style={{ color: '#00f', marginBottom: 10 }}>Blue Player Name</Text>
                         <TextInput style={[styles.nameInputStyle,styles.blueInputStyle]}
-                        onChangeText={this.props.onBlueInput} placeholder='Enter Player1 Name'
+                        onChangeText={this.props.onBlueInput} placeholder='Player 1'
                     />
 
                         <Text style={{ color: '#ffe01b', marginBottom: 10 }}>Yellow Player Name</Text>
                         <TextInput  style={[styles.nameInputStyle,styles.yellowInputStyle]}
-                        onChangeText={this.props.onYellowInput} placeholder='Enter Player2 Name' ></TextInput>
+                        onChangeText={this.props.onYellowInput} placeholder='Player 2' ></TextInput>
 
                         <TouchableOpacity style={styles.buttonStyle} onPress={this.props.onCancel}>
                             <Text>Cancel</Text>

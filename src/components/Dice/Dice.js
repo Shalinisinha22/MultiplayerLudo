@@ -12,7 +12,7 @@ import GreenGoti from '../Goti/GreenGoti';
 export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, redPlayer, yellowPlayer, greenPlayer, bluePlayer}) => {
     // const [diceValue, setDiceValue] = useState(1);
 
-    console.log("12", redPlayer.pieces)
+    // console.log("12", redPlayer.pieces)
   
     const rollingSound = useRef(new Audio.Sound());
     const rollingValue = useRef(new Animated.Value(0)).current;

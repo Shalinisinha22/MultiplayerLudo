@@ -5,7 +5,7 @@ import {View,ScrollView,Modal, StyleSheet, Text, TextInput, TouchableOpacity,Ale
 export default class ThreePlayerModal extends Component{
     constructor(props){
         super(props)
-     console.log(props)
+    //  console.log(props)
 
     }
 
@@ -28,15 +28,15 @@ export default class ThreePlayerModal extends Component{
 
                     <Text style={{color:'#00f',marginBottom:10}}>Blue Player Name</Text>
                     <TextInput style={[styles.nameInputStyle,styles.blueInputStyle]}
-                        onChangeText={this.props.onBlueInput} placeholder='Enter Player1 Name'
+                        onChangeText={this.props.onBlueInput} placeholder='Player 1'
                     />
                     <Text style={{color:'#ec1d27',marginBottom:10}}>Red Player Name</Text>
                     <TextInput  style={[styles.nameInputStyle,styles.redInputStyle]}
-                        onChangeText={this.props.onRedInput} placeholder='Enter Player2 Name'
+                        onChangeText={this.props.onRedInput} placeholder='Player 2'
                     />
                     <Text style={{color:'#ffe01b',marginBottom:10}}>Yellow Player Name</Text>
                     <TextInput  style={[styles.nameInputStyle,styles.yellowInputStyle]}
-                        onChangeText={this.props.onYellowInput} placeholder='Enter Player3 Name'
+                        onChangeText={this.props.onYellowInput} placeholder='Player 3'
                     />
                   
                     {/* <Text style={{color:'#00f',marginBottom:10}}>Blue Player Name</Text>

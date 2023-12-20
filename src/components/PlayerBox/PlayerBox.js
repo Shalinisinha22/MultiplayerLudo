@@ -16,9 +16,9 @@ import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 export default PlayerBox = ({ color, customStyle, lifeline, one, two, three, four, onPieceSelection, animateForSelection, playerName, playerScore, timer }) => {
 
 
-    {
-        console.log("lifeline", lifeline)
-    }
+    // {
+    //     console.log("lifeline", lifeline)
+    // }
     const [isAnimating, setIsAnimating] = React.useState(false);
     const [backgroundColor, setBackgroundColor] = React.useState(color);
     const [intervalId, setIntervalId] = React.useState(undefined);
@@ -53,7 +53,7 @@ export default PlayerBox = ({ color, customStyle, lifeline, one, two, three, fou
         }
 
         sum = onePoint + twoPoint + threePoint + fourPoint
-        console.log(onePoint, "onepoint", twoPoint, "twoPoint", threePoint, "threePoint", fourPoint, "fourPoint")
+        // console.log(onePoint, "onepoint", twoPoint, "twoPoint", threePoint, "threePoint", fourPoint, "fourPoint")
         setScore(sum)
         setOneScore(onePoint)
         setTwoScore(twoPoint)
