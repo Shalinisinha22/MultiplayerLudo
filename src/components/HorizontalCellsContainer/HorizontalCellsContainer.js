@@ -30,7 +30,7 @@ export default HorizontalCellsContainer = ({
       <View style={{ flex: 6, flexDirection: "row" }}>
         {positionsArray.map((cellPosition) => {
           return (
-            <View style={styles.cellContainer} key={cellPosition}>
+            <View style={[styles.cellContainer]} key={cellPosition}>
               <CellBox
                 backgroundColor={getCellBackgroundColor(cellPosition)}
                 arrow ={getCellArrow(cellPosition)}
@@ -96,10 +96,12 @@ const styles = StyleSheet.create({
   rowsContainer: {
     flex: 1,
     flexDirection: "row",
+
   },
   cellContainer: {
     flex: 1,
     borderColor: "black",
     borderWidth: 1,
+  
   },
 });

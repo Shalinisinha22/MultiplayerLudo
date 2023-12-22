@@ -45,6 +45,7 @@ class App extends Component{
         yellowName = {this.state.yellow.name}
         blueName = {this.state.blue.name}
         greenName = {this.state.green.name}
+        onEnd={()=>{this.setState({isGameInProgress:false})}}
         />
     }
     else{

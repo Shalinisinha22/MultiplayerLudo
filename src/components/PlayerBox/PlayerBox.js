@@ -12,13 +12,14 @@ import ReadyYellow from '../../../components/Svg/ReadyYellow';
 import ReadyBlue from '../../../components/Svg/ReadyBlue';
 import { Entypo } from '@expo/vector-icons';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
+import BlinkView from 'react-native-blink-view'
 
 export default PlayerBox = ({ color, customStyle, lifeline, one, two, three, four, onPieceSelection, animateForSelection, playerName, playerScore, timer }) => {
 
 
-    // {
-    //     console.log("lifeline", lifeline)
-    // }
+    {
+        console.log("color", color)
+    }
     const [isAnimating, setIsAnimating] = React.useState(false);
     const [backgroundColor, setBackgroundColor] = React.useState(color);
     const [intervalId, setIntervalId] = React.useState(undefined);
@@ -27,6 +28,8 @@ export default PlayerBox = ({ color, customStyle, lifeline, one, two, three, fou
     const [twoScore, setTwoScore] = useState(0)
     const [threeScore, setThreeScore] = useState(0)
     const [fourScore, setFourScore] = useState(0)
+
+    const [isBlinking, setBlinking] = useState(true)
 
     useEffect(() => {
         let sum = 0
@@ -117,28 +120,34 @@ export default PlayerBox = ({ color, customStyle, lifeline, one, two, three, fou
     }
     applyAnimationIfNeeded();
     return (
-        <View style={[{ backgroundColor: color, flex: 4, borderRadius: 20 }]}>
+
+
+        <View style={[{ backgroundColor: color, flex: 4, } ]}>
             {/* customStyle */}
-            <View style={[styles.innerContainer, { backgroundColor: color }]}>
+
+            {/* <BlinkView style={[styles.innerContainer, { backgroundColor: color ,borderTopLeftRadius: 20}]} blinking={isBlinking?true:false} delay={2000}> */}
+            <View style={[styles.innerContainer, { backgroundColor: color ,borderTopLeftRadius: 20}]}>
                 {
                     playerName &&
                     <>
                         <View style={{ flex: 1, alignItems: "flex-end", padding: 20 }}>
 
                             {
-                                timer && <CountdownCircleTimer
+                                timer && 
+                                <CountdownCircleTimer
                                     isPlaying
                                     duration={15}
-                                    colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-                                    colorsTime={[7, 5, 2, 0]}
+                                    // colors={[color == '#ec1d27' ? "#780000" : color == '#29b6f6' ? '#0582ca' : color == '#01A147' ? '#004b23' : color == '#ffe01b' ? '#fdc500' : null]}
+                                    colors={color == '#ec1d27'?['#780000', '#780000']: color == '#29b6f6'?['#0582ca', '#0582ca']: color == '#01A147'?['#004b23', '#004b23']:color == '#ffe01b'?['#fdc500', '#fdc500']:null }
+                                    // colorsTime={[7, 5, 2, 0]}
                                     size={50}
                                     strokeWidth={5}
                                     strokeLinecap='square'
 
-                                >
+                                   >
                                     {({ remainingTime }) =>
 
-                                        <Text style={{ color: "white" }}>{remainingTime}</Text>}
+                                        <Text style={{ color: "white" }}>{remainingTime} sec</Text>}
                                 </CountdownCircleTimer>
                             }
 
@@ -148,31 +157,32 @@ export default PlayerBox = ({ color, customStyle, lifeline, one, two, three, fou
                         </View>
 
                         <View style={{ flex: 3, alignItems: "flex-start" }}>
-                            <Image source={require("../../../assets/user2.png")} style={{ height: 68, width: 80, resizeMode: "contain" }}></Image>
-                        </View>
+                            <Image source={require("../../../assets/user2.png")} style={{ height: 90, width: 85, resizeMode: "contain" }}></Image>
+                           </View>
 
-                        <View style={{ flex: 1, height: 5, borderColor: "white", borderWidth: 1, borderRadius: 7, flexDirection: "row", alignItems: "flex-end" }}>
-                            <View style={{ flex: 1, flexDirection: "row", alignItems: "flex-end", paddingLeft: 75 }}>
-
+                        <View style={{ flex: 1.2, height: 5, backgroundColor: color == '#ec1d27' ? "#780000" : color == '#29b6f6' ? '#0582ca' : color == '#01A147' ? '#004b23' : color == '#ffe01b' ? '#fdc500' : null, flexDirection: "row", alignItems: "flex-end",borderTopLeftRadius:5,borderTopRightRadius:5 }}>
+                          <Text style={{color:"white",fontSize:12, flex:1, margin:4}}>+91 99***999</Text>
+                            <View style={{ flex: 1, flexDirection: "row", alignItems: "flex-end" }}>
+                        
                                 {
                                     lifeline == 3 ? <>
+                                        <Entypo name="heart" size={20} color="white" />
+                                        <Entypo name="heart" size={20} color="white" />
+                                        <Entypo name="heart" size={20} color="white" />
+                                    </> : lifeline == 2 ? <>
+                                        <Entypo name="heart" size={20} color="white" />
+                                        <Entypo name="heart" size={20} color="white" />
+                                        <Entypo name="heart-outlined" size={20} color="white" />
+                                    </> :
+
+                                        lifeline == 1 ? <>
                                             <Entypo name="heart" size={20} color="white" />
-                                <Entypo name="heart" size={20} color="white" />
-                                <Entypo name="heart" size={20} color="white" />
-                                    </> : lifeline == 2 ?  <>
-                                    <Entypo name="heart" size={20} color="white" />
-                                <Entypo name="heart" size={20} color="white" />
-                                <Entypo name="heart-outlined" size={20} color="white" />
-                                    </>    :
-                                    
-                                    lifeline == 1 ? <> 
-                                     <Entypo name="heart" size={20} color="white" />
-                                     <Entypo name="heart-outlined" size={20} color="white" />
-                                     <Entypo name="heart-outlined" size={20} color="white" />
-                                     </>  :null
-                             
+                                            <Entypo name="heart-outlined" size={20} color="white" />
+                                            <Entypo name="heart-outlined" size={20} color="white" />
+                                        </> : null
+
                                 }
-                             
+
                                 {/* <Entypo name="heart" size={20} color="white" />
                                 <Entypo name="heart" size={20} color="white" />
                                 <Entypo name="heart" size={20} color="white" /> */}
@@ -213,6 +223,7 @@ export default PlayerBox = ({ color, customStyle, lifeline, one, two, three, fou
 
 
             </View>
+            {/* </BlinkView> */}
         </View>
     )
 }

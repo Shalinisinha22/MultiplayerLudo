@@ -4,7 +4,7 @@ import { colors } from '../../util/Colors';
 import PlayerBox from '../../components/PlayerBox/PlayerBox'
 import VerticalCellsContainer from '../../components/VerticalCellsContainer/VerticalCellsContainer';
 import HorizontalCellsContainer from '../../components/HorizontalCellsContainer/HorizontalCellsContainer';
-import { FINISHED, BLUE, BOTTOM_VERTICAL, FOUR, GREEN, HOME, ONE, RED, THREE, TOP_VERTICAL, TWO, YELLOW, R1, Y1, Y9, G1, G9, B1, B9, R9, R2, R3, R4, R5, Y2, Y3, Y5, G2, G3, G4, G5, B2, B3, B4 } from '../../util/Constants';
+import { FINISHED, BLUE, BOTTOM_VERTICAL, FOUR, GREEN, HOME, ONE, RED, THREE, TOP_VERTICAL, TWO, YELLOW, R1, Y1, Y9, G1, G9, B1, B9, R9, R2, R3, R4, R5, Y2, Y3, Y5, G2, G3, G4, G5, B2, B3, B4, B15 } from '../../util/Constants';
 import RedGoti from '../../components/Goti/RedGoti';
 import YellowGoti from '../../components/Goti/YellowGoti';
 import BlueGoti from '../../components/Goti/BlueGoti';
@@ -27,6 +27,7 @@ export default class Game extends Component {
         super(props);
         const { red, blue, yellow, green } = colors;
         const { redName, blueName, yellowName, greenName } = props;
+      
         this.rollingSound = new Audio.Sound();
         this.rollingValue = new Animated.Value(0);
         this.onDiceRoll = this.onDiceRoll.bind(this);
@@ -112,7 +113,59 @@ export default class Game extends Component {
                     [this.state.turn]: null
                 }
             }));
+
+                      if (turn == BLUE) {
+
+                            if (this.state.blueHeart > 1) {
+                                this.setState({
+                                    blueHeart: this.state.blueHeart - 1
+                                })
+                            }
+                            else if (this.state.blueHeart <= 1){
+                             this.props.onEnd()
+                            }
+            
+                        }
+                        if (turn == YELLOW) {
+            
+                            if (this.state.yellowHeart > 1) {
+                                this.setState({
+                                    yellowHeart: this.state.yellowHeart - 1
+                                })
+                            }
+                            else if (this.state.yellowHeart <= 1){
+                                this.props.onEnd()
+                               }
+            
+                        }
+                        if (turn == RED) {
+            
+                            if (this.state.redHeart > 1) {
+                                this.setState({
+                                    redHeart: this.state.redHeart - 1
+                                })
+            
+                            }
+                            else if (this.state.redHeart <= 1){
+                                this.props.onEnd()
+                               }
+            
+                        }
+                       
+            
+                        if (turn == GREEN) {
+                            if (this.state.greenHeart > 1) {
+                                this.setState({
+                                    greenHeart: this.state.greenHeart - 1
+                                })
+                            }
+                            else if (this.state.greenHeart <= 1){
+                                this.props.onEnd()
+                               }
+
+            
         }
+    }
     
         // Get the next player
         const nextPlayer = this.getNextTurn();
@@ -135,6 +188,8 @@ export default class Game extends Component {
             // Handle the game end or next round logic here
         }
     }
+
+
 
 
 
@@ -199,17 +254,17 @@ export default class Game extends Component {
             // />;
         }
         if (diceNumber === 1) {
-            return <FontAwesome5 name="dice-one" size={54} color="#fdfffc" />;
+            return <FontAwesome5 name="dice-one" size={58} color="#fdfffc" />;
         } else if (diceNumber === 2) {
-            return <FontAwesome5 name="dice-two" size={54} color="#fdfffc" />;
+            return <FontAwesome5 name="dice-two" size={58} color="#fdfffc" />;
         } else if (diceNumber === 3) {
-            return <FontAwesome5 name="dice-three" size={54} color="#fdfffc" />;
+            return <FontAwesome5 name="dice-three" size={58} color="#fdfffc" />;
         } else if (diceNumber === 4) {
-            return <FontAwesome5 name="dice-four" size={54} color="#fdfffc" />;
+            return <FontAwesome5 name="dice-four" size={58} color="#fdfffc" />;
         } else if (diceNumber === 5) {
-            return <FontAwesome5 name="dice-five" size={54} color="#fdfffc" />;
+            return <FontAwesome5 name="dice-five" size={58} color="#fdfffc" />;
         } else if (diceNumber === 6) {
-            return <FontAwesome5 name="dice-six" size={54} color="#fdfffc" />;
+            return <FontAwesome5 name="dice-six" size={58} color="#fdfffc" />;
         }
 
 
@@ -236,16 +291,16 @@ export default class Game extends Component {
         let time = new Date().getTime();
         return {
             one: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: ONE, color: playerColor, updateTime: time, oneCount: [] },
-            two: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: TWO, color: playerColor, updateTime: time, twoCount: [] },
-            three: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: THREE, color: playerColor, updateTime: time, threeCount: [] },
-            four: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: FOUR, color: playerColor, updateTime: time, fourCount: [] }
+            two: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ?  B1 : null, name: TWO, color: playerColor, updateTime: time, twoCount: [] },
+            three: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ?  B1 : null, name: THREE, color: playerColor, updateTime: time, threeCount: [] },
+            four: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ?  B1 : null, name: FOUR, color: playerColor, updateTime: time, fourCount: [] }
         }
     }
 
     // initPieces(playerColor) {
     //     let time = new Date().getTime();
     //     return {
-    //         one: { position: FINISHED , name: ONE, color: playerColor, updateTime: time, oneCount: [] },
+    //         one: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null , name: ONE, color: playerColor, updateTime: time, oneCount: [] },
     //         two: { position:FINISHED, name: TWO, color: playerColor, updateTime: time, twoCount: [] },
     //         three: {  position:FINISHED, name: THREE, color: playerColor, updateTime: time, threeCount: [] },
     //         four: {  position:playerColor == RED? R1 :playerColor == YELLOW? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: FOUR, color: playerColor, updateTime: time, fourCount: [] }
@@ -259,11 +314,11 @@ export default class Game extends Component {
 
         return (
             <ImageBackground source={require("../../../assets/bj.png")} style={{ flex: 1, alignItems: "center", justifyContent: "center" }} >
-                {this.state.turn === RED && <Arrow1></Arrow1>}
+                {/* {this.state.turn === RED && <Arrow1></Arrow1>}
                 {this.state.turn === YELLOW && <Arrow2></Arrow2>}
                 {this.state.turn === GREEN && <Arrow3></Arrow3>}
-                {this.state.turn === BLUE && <Arrow4></Arrow4>}
-
+                {this.state.turn === BLUE && <Arrow4></Arrow4>} */}
+{/* 
                 <View style={styles.redGotiBox}>
                     <View style={{ height: "50%", width: "50%" }}>
                         <RedGoti></RedGoti>
@@ -285,8 +340,8 @@ export default class Game extends Component {
                     <View style={{ height: "50%", width: "50%" }}>
                         <GreenGoti></GreenGoti>
                     </View>
-                </View>
-                <View style={styles.redDice}>
+                </View> */}
+                {/* <View style={styles.redDice}>
 
                     <View style={styles.diceBtn1}>
 
@@ -323,26 +378,27 @@ export default class Game extends Component {
                         }
                     </View>
 
-                </View>
-                <View style={styles.blueDice}>
-                    <View style={styles.diceBtn3}>
-
-                        {this.state.turn == BLUE &&
+                </View> */}
+                {/* <View style={styles.blueDice}> */}
+                    <View style={[styles.diceBtn3, {backgroundColor:this.state.turn == BLUE ? "#0582ca" : this.state.turn == RED ? "#780000" : this.state.turn == YELLOW ? "#fdc500" : this.state.turn== GREEN ? "#004b23": "red",    borderWidth: 8,
+    borderColor: 'rgba(0,0,0,0.2)',}]}>
+                        {/* {this.state.turn == BLUE && */}
                             <Animated.View
                                 style={[
 
                                     {
                                         transform: [{ rotate: this.state.rollingRotation }],
+                                        backgroundColor:this.state.turn == BLUE ? "#0582ca" : this.state.turn == RED ? "#780000" : this.state.turn == YELLOW ? "#fdc500" : this.state.turn== GREEN ? "#004b23": null
                                     },
                                 ]}
                             >
                                 <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
                             </Animated.View>
-                        }
+                        {/* } */}
 
                     </View>
-                </View>
-                <View style={styles.greenDice}>
+                {/* </View> */}
+                {/* <View style={styles.greenDice}>
                     <View style={styles.diceBtn1}>
 
                         {this.state.turn == GREEN &&
@@ -359,7 +415,7 @@ export default class Game extends Component {
                             </Animated.View>
                         }
                     </View>
-                </View>
+                </View> */}
 
                 {/* <View style={{position:"absolute", top: 90, left: 60,}}>
 
@@ -404,7 +460,7 @@ export default class Game extends Component {
     async onDiceRoll() {
 
          const {timers, turn} = this.state
-        if (timers[turn]) {
+         if (timers[turn]) {
             clearTimeout(timers[turn]);
             this.setState(prevState => ({
                 timers: {
@@ -413,11 +469,6 @@ export default class Game extends Component {
                 }
             }));
         }
-
-     
-
-
-
 
         const { diceRollTestDataIndex, diceRollTestData, animateForSelection } = this.state;
 
@@ -466,7 +517,10 @@ export default class Game extends Component {
 
 
                 this.setState({ isRolling: false, moves: moves, extraChance: extraChance + 1, isWaitingForDiceRoll: false }, () => {
-                    this.updatePlayerPieces(this.state[turn])
+
+                    this.updatePlayerPieces(this.state[turn]
+                        
+                        )
 
                 });
 
@@ -777,6 +831,9 @@ export default class Game extends Component {
 
 
     didGetBonusWithNewPosition(piece) {
+        let flag= false
+
+
         if (piece.position == FINISHED) {
             return true;
         }
@@ -816,6 +873,8 @@ export default class Game extends Component {
             return positionMatched;
         }
 
+     
+
 
         const { red, blue, yellow, green } = this.state;
         if (piece.color != red.player && checkIfPositionMatchesExistingPiece(piece, red)) {
@@ -832,13 +891,17 @@ export default class Game extends Component {
 
         if (piece.color != blue.player && checkIfPositionMatchesExistingPiece(piece, blue)) {
             return true;
+            
         }
 
         if (this.state.extraChance >= 1) {
-            return true;
+           return true;
         }
+
+
         return false;
     }
+
 
 
     updatePlayerPieces(player) {
@@ -854,10 +917,11 @@ export default class Game extends Component {
                 else if (this.playerHasSinglePossibleMove(player)) {
                     if (this.playerHasSingleUnfinishedPiece(player)) {
                         let singlePossibleMove = this.getSinglePossibleMove(player);
-                        // console.log("singlepossiblemove", singlePossibleMove)
+                        console.log("singlepossiblemove", singlePossibleMove)
 
                         if (singlePossibleMove) {
                             const indexOf = moves.indexOf(singlePossibleMove.move);
+                            console.log(indexOf)
                             if (indexOf > -1) {
                                 moves.splice(indexOf, 1);
                             }
@@ -1000,7 +1064,7 @@ export default class Game extends Component {
 
 
 
-    isMovePossibleForPosition = (position, move) => {
+      isMovePossibleForPosition = (position, move) => {
         let isMovePossible = false;
         let positionTocheckFor = parseInt(position.substring(1, position.length))
 
@@ -1065,6 +1129,11 @@ export default class Game extends Component {
                 } else {
                     newPosition = cellAreaIndicator + (position + move);
                 }
+            }
+
+            else{
+                newPosition = cellAreaIndicator + position
+                return;
             }
         }
         if (newPosition != "") {
@@ -1199,10 +1268,9 @@ const styles = StyleSheet.create({
     gameContainer: {
         width: Dimensions.get('screen').width,
         height: Dimensions.get('screen').width,
-
         // borderColor:'#999',
         // borderRadius:20,
-        elevation: 5,
+        elevation: 8,
         backgroundColor: '#fff',
         alignSelf: 'center'
     },
@@ -1263,8 +1331,8 @@ const styles = StyleSheet.create({
         width: 75,
         backgroundColor: "#6da6c0",
         position: "absolute",
-        bottom: 100,
-        left: 65,
+        bottom: "10%",
+        left: "40%",
         alignItems: "center",
         justifyContent: "center",
         borderColor: "#f9e7b0",
@@ -1273,10 +1341,13 @@ const styles = StyleSheet.create({
     },
 
     diceBtn3: {
-        height: 65,
-        width: 65,
-        backgroundColor: "#ffc3c3",
-        borderRadius: 10,
+        height: 95,
+        width: 95,
+        position: "absolute",
+        bottom: "10%",
+        left: "40%",
+        // backgroundColor: "#ffc3c3",
+        borderRadius: 50,
         alignItems: "center",
         justifyContent: "center"
     },
@@ -1345,8 +1416,7 @@ const styles = StyleSheet.create({
         borderColor: "#f9e7b0",
         borderWidth: 1,
         borderRadius: 8,
-
-        // paddingRight: 20
+     // paddingRight: 20
     },
 
     blueGotiBox: {
@@ -1361,7 +1431,7 @@ const styles = StyleSheet.create({
         borderColor: "#f9e7b0",
         borderWidth: 1,
         borderRadius: 8,
-        // paddingRight: 20
+    // paddingRight: 20
     },
 })
 

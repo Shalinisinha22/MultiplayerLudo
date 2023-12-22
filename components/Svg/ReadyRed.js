@@ -1,5 +1,13 @@
 import * as React from "react"
-import Svg, { Defs, LinearGradient, Stop, Path } from "react-native-svg"
+// import Svg, { Defs, LinearGradient, Stop, Path } from "react-native-svg"
+import Svg, {
+  Defs,
+  RadialGradient,
+  LinearGradient,
+  Stop,
+  Path,
+  Ellipse,
+} from "react-native-svg"
 import { View } from "react-native"
 import * as Animatable from 'react-native-animatable';
 const ReadyRed = (props) => (
@@ -7,7 +15,7 @@ const ReadyRed = (props) => (
 
 
    
-  <Animatable.View style={[{height:40,width:40,position:"absolute", top:-13,right:-8},]}
+  <Animatable.View style={[{height:30,width:30,position:"absolute", top:-10, right:-3},]}
    
      animation="fadeIn"// Specify the animation name
     easing="ease-in-out"
@@ -16,7 +24,32 @@ const ReadyRed = (props) => (
 
     
    >
-   <Svg
+
+<Svg
+    xmlns="http://www.w3.org/2000/svg"
+    id="Layer_1"
+    data-name="Layer 1"
+    viewBox="0 0 988.09 1064.42"
+    {...props}
+  >
+    <Defs></Defs>
+    <Path
+      d="M917.32 1064.42h-604.8c-55.54 0-89.37-61.15-59.85-108.2l19-30.32c83.47-40.84 209-66.8 349.3-66.8 130.45 0 248 22.43 331 58.35l24.57 37.83c30.55 47-3.17 109.14-59.22 109.14Z"
+      className="cls-1"
+    />
+    <Path
+      d="M983.7 955.18c-83-51.7-200.56-84-331-84-140.35 0-265.83 37.34-349.31 96.12l202.89-465.1c-82.13-44.57-137.87-131.39-137.87-231.19 0-145.28 118.11-263 263.8-263S896 125.77 896 271.05c0 92.94-48.34 174.62-121.31 221.41Z"
+      style={{
+        fill: "#ff1515",
+      }}
+      transform="translate(-31.91 -8)"
+    />
+    <Path
+      d="M839.09 151c-45.35-27.21-455.1.18-464.17-2.85s3-36.28 3-36.28c-6.92 4.9-12.76 12.49-17.66 21.95 0 0-109.33-152-360.28-97.54 0 0 154.2 60.47 27.21 120.94 0 0 217-35.19 318.86 18.6-5.56 24.94-8.43 53.18-9.83 78.76-112.5 11.31-206.23-88.29-206.23-88.29 15.1 84.71-48.36 96.76-48.36 96.76 48.74 65 218.63 23.31 253.68 13.85-.85 32.05 12.39 55.69 12.39 55.69C486.79 396.08 826.09 399 826.09 399c84.66-99.78 13-248 13-248Zm-433.94 39.48c51.4 63.5 163.27 87.69 163.27 87.69-181.41 87.68-163.27-87.69-163.27-87.69Zm214.1 86.57c81.66-2.18 168.92-76.23 168.92-76.23-40.78 197.32-168.92 76.23-168.92 76.23Z"
+      className="cls-1"
+    />
+  </Svg>
+   {/* <Svg
     xmlns="http://www.w3.org/2000/svg"
     xmlSpace="preserve"
     x="0%"
@@ -239,7 +272,7 @@ const ReadyRed = (props) => (
       strokeWidth={0.901}
       d="M11.92 2.7c2.25 0 4.07 1.82 4.07 4.07s-1.82 4.08-4.07 4.08-4.07-1.83-4.07-4.08S9.67 2.7 11.92 2.7z"
     />
-   </Svg>
+   </Svg> */}
 
   </Animatable.View>
 )

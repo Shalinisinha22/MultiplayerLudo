@@ -18,6 +18,8 @@ const YellowGoti = (props) => (
    duration={1000} // Animation duration in milliseconds
  >
 
+  
+
    
 <Svg
    xmlns="http://www.w3.org/2000/svg"

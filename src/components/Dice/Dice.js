@@ -166,19 +166,19 @@ export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, r
   borderBottomWidth: 38,
   borderLeftColor: "transparent",
   borderRightColor: "transparent",
-  borderBottomColor: "#ec1d27",
+  borderBottomColor: "#780000",
   transform: [{ rotate: "90deg" }],
   top:19,
   left:-19.5
  }}>
 
-  <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-39,right:-20}}>
+  <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-39,right:-18}}>
   {redPlayer.pieces.one.position == FINISHED && <RedGoti position ={redPlayer.pieces.one.position}></RedGoti>}
-  {redPlayer.pieces.two.position == FINISHED && <RedGoti  position ={redPlayer.pieces.one.position}></RedGoti>}
+  {redPlayer.pieces.two.position == FINISHED && <RedGoti  position ={redPlayer.pieces.two.position}></RedGoti>}
   </View>
-  <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-25,right:-20}}>
-  {redPlayer.pieces.three.position == FINISHED && <RedGoti  position ={redPlayer.pieces.one.position}></RedGoti>}
-  {redPlayer.pieces.four.position == FINISHED && <RedGoti  position ={redPlayer.pieces.one.position}></RedGoti>}
+  <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-25,right:-16}}>
+  {redPlayer.pieces.three.position == FINISHED && <RedGoti  position ={redPlayer.pieces.three.position}></RedGoti>}
+  {redPlayer.pieces.four.position == FINISHED && <RedGoti  position ={redPlayer.pieces.four.position}></RedGoti>}
   </View>
 
 
@@ -194,18 +194,18 @@ export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, r
   borderBottomWidth: 38,
   borderLeftColor: "transparent",
   borderRightColor: "transparent",
-  borderBottomColor: "#01A147",
+  borderBottomColor: "#004b23",
   transform: [{ rotate: "-90deg" }],
   top:-19,
   right:-20
  }}>
- <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-39,right:-20}}>
+ <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-39,right:-18}}>
 {greenPlayer.pieces.one.position == FINISHED && <GreenGoti position ={greenPlayer.pieces.one.position}></GreenGoti>}
-{greenPlayer.pieces.two.position == FINISHED && <GreenGoti position ={greenPlayer.pieces.one.position}></GreenGoti>}
+{greenPlayer.pieces.two.position == FINISHED && <GreenGoti position ={greenPlayer.pieces.two.position}></GreenGoti>}
 </View>
-<View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-25,right:-20}}>
-{greenPlayer.pieces.three.position == FINISHED && <GreenGoti position ={greenPlayer.pieces.one.position}></GreenGoti>}
-{greenPlayer.pieces.four.position == FINISHED && <GreenGoti position ={greenPlayer.pieces.one.position}></GreenGoti>}
+<View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-25,right:-16}}>
+{greenPlayer.pieces.three.position == FINISHED && <GreenGoti position ={greenPlayer.pieces.three.position}></GreenGoti>}
+{greenPlayer.pieces.four.position == FINISHED && <GreenGoti position ={greenPlayer.pieces.four.position}></GreenGoti>}
 </View>
 </View>
 
@@ -219,18 +219,18 @@ export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, r
   borderBottomWidth: 39.5,
   borderLeftColor: "transparent",
   borderRightColor: "transparent",
-  borderBottomColor: "#29b6f6",
+  borderBottomColor: "#0582ca",
   // transform: [{ rotate: "0deg" }],
   top:-39,
   left:0
  }}>
- <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-39,right:-20}}>
+ <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-39,right:-18}}>
 {bluePlayer.pieces.one.position == FINISHED && <BlueGoti position ={bluePlayer.pieces.one.position}></BlueGoti>}
-{bluePlayer.pieces.two.position == FINISHED && <BlueGoti position ={bluePlayer.pieces.one.position}></BlueGoti>}
+{bluePlayer.pieces.two.position == FINISHED && <BlueGoti position ={bluePlayer.pieces.two.position}></BlueGoti>}
 </View>
-<View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-25,right:-20}}>
-{bluePlayer.pieces.three.position == FINISHED && <BlueGoti position ={bluePlayer.pieces.one.position}></BlueGoti>}
-{bluePlayer.pieces.four.position == FINISHED && <BlueGoti position ={bluePlayer.pieces.one.position}></BlueGoti>}
+<View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-25,right:-16}}>
+{bluePlayer.pieces.three.position == FINISHED && <BlueGoti position ={bluePlayer.pieces.three.position}></BlueGoti>}
+{bluePlayer.pieces.four.position == FINISHED && <BlueGoti position ={bluePlayer.pieces.four.position}></BlueGoti>}
 </View>
 </View>
 
@@ -244,18 +244,18 @@ export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, r
   borderBottomWidth: 39,
   borderLeftColor: "transparent",
   borderRightColor: "transparent",
-  borderBottomColor: "#ffe01b",
+  borderBottomColor: "#fdc500",
   transform: [{ rotate: "-180deg" }],
   top:-115.5,
   left:-1
  }}>
-   <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-39,right:-20}}>
+   <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-39,right:-13}}>
 {yellowPlayer.pieces.one.position == FINISHED && <YellowGoti position ={yellowPlayer.pieces.one.position}></YellowGoti>}
-{yellowPlayer.pieces.two.position == FINISHED && <YellowGoti position ={yellowPlayer.pieces.one.position}></YellowGoti>}
+{yellowPlayer.pieces.two.position == FINISHED && <YellowGoti position ={yellowPlayer.pieces.two.position}></YellowGoti>}
 </View>
-<View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-25,right:-20}}>
-{yellowPlayer.pieces.three.position == FINISHED && <YellowGoti position ={yellowPlayer.pieces.one.position}></YellowGoti>}
-{yellowPlayer.pieces.four.position == FINISHED && <YellowGoti position ={yellowPlayer.pieces.one.position}></YellowGoti>}
+<View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-25,right:-13}}>
+{yellowPlayer.pieces.three.position == FINISHED && <YellowGoti position ={yellowPlayer.pieces.three.position}></YellowGoti>}
+{yellowPlayer.pieces.four.position == FINISHED && <YellowGoti position ={yellowPlayer.pieces.four.position}></YellowGoti>}
 </View>
 </View>
 

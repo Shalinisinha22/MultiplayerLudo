@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {View , StyleSheet, TouchableOpacity, ToastAndroid } from 'react-native';
 import { colors } from '../../util/Colors';
-import { BLUE, GREEN, RED, YELLOW } from '../../util/Constants';
+import { BLUE, G1, G8, GREEN, R1, RED, Y1, YELLOW } from '../../util/Constants';
 import RedGoti from '../Goti/RedGoti';
 import YellowGoti from '../Goti/YellowGoti';
 import BlueGoti from '../Goti/BlueGoti';
@@ -10,6 +10,7 @@ import ReadyRed from '../../../components/Svg/ReadyRed';
 import ReadyGreen from '../../../components/Svg/ReadyGreen';
 import ReadyYellow from '../../../components/Svg/ReadyYellow';
 import ReadyBlue from '../../../components/Svg/ReadyBlue';
+
 
 
 export default CellBox = ({backgroundColor, position, onPieceSelection, state,arrow, safe}) =>{
@@ -120,8 +121,8 @@ export default CellBox = ({backgroundColor, position, onPieceSelection, state,ar
             }
         })
      
-    
         return colorToReturn;
+
     }
 
     const getPiece  = () =>{
@@ -168,7 +169,6 @@ export default CellBox = ({backgroundColor, position, onPieceSelection, state,ar
 
 
         <TouchableOpacity style={[styles.container,{backgroundColor:color}]}
-
             onPress={()=>{
                 if(isMovePossibleFromCurrentPosition()){
                     let piece = getPiece();
@@ -180,28 +180,35 @@ export default CellBox = ({backgroundColor, position, onPieceSelection, state,ar
         >
            {arrow}
            {safe}
-
-
            {/* {shouldRenderPiece() && 
                    <View style={[styles.pieceStyle,{backgroundColor:getPieceColor()}]}>
                        { state.turn == RED && <RedGoti></RedGoti>}
                       {state.turn == GREEN && <GreenGoti></GreenGoti>}
                       {state.turn == YELLOW && <YellowGoti></YellowGoti>}
                       {state.turn == BLUE && <BlueGoti></BlueGoti>} */}
+   
+
+
+      {shouldRenderPiece() && 
+              
+                        <>
 
                   
 
-                  {shouldRenderPiece() && 
-                        <>
 
-                             { getPieceColor() == "#ec1d27" && state.red.playerName ? isAnimating ? <ReadyRed></ReadyRed> :<RedGoti positions ={state.red.pieces.one.position}></RedGoti>:null}
+                             { getPieceColor() == "#ec1d27" && state.red.playerName ? isAnimating ? <ReadyRed></ReadyRed> :
+                                  <RedGoti positions ={state.red.pieces}></RedGoti>:null
+                             } 
                              {/* { getPieceColor() == "#ec1d27" && <RedGoti></RedGoti>} */}
-
-                             {getPieceColor() == "#01A147" && state.green.playerName ? isAnimating ? <ReadyGreen></ReadyGreen> : <GreenGoti></GreenGoti>:null}
-                             {getPieceColor() == "#ffe01b" && state.yellow.playerName ? isAnimating ? <ReadyYellow></ReadyYellow> : <YellowGoti></YellowGoti>:null}
-                             {getPieceColor() == "#29b6f6" && state.blue.playerName ? isAnimating ? <ReadyBlue></ReadyBlue> : <BlueGoti></BlueGoti>:null}
+                             {getPieceColor() == "#01A147" && state.green.playerName ? isAnimating ? <ReadyGreen></ReadyGreen> : <GreenGoti positions ={state.green.pieces}></GreenGoti>:null}
+                             {getPieceColor() == "#ffe01b" && state.yellow.playerName ? isAnimating ? <ReadyYellow></ReadyYellow> : <YellowGoti positions ={state.yellow.pieces}></YellowGoti>:null}
+                             {getPieceColor() == "#29b6f6" && state.blue.playerName ? isAnimating ? <ReadyBlue></ReadyBlue> : <BlueGoti positions ={state.blue.pieces}></BlueGoti>:null}
                         </>
                   }
+      
+                  
+
+               
         </TouchableOpacity>
 
 
