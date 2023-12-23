@@ -27,7 +27,7 @@ export default class Game extends Component {
         super(props);
         const { red, blue, yellow, green } = colors;
         const { redName, blueName, yellowName, greenName } = props;
-      
+
         this.rollingSound = new Audio.Sound();
         this.rollingValue = new Animated.Value(0);
         this.onDiceRoll = this.onDiceRoll.bind(this);
@@ -51,7 +51,7 @@ export default class Game extends Component {
             blueScore: [],
             greenScore: [],
             yellowScore: [],
-            rollingRotation:this.rollingValue.interpolate({
+            rollingRotation: this.rollingValue.interpolate({
                 inputRange: [0, 1],
                 outputRange: ['0deg', '360deg'],
 
@@ -69,7 +69,7 @@ export default class Game extends Component {
             greenHeart: 3,
             yellowHeart: 3,
             counter: 0,
-            timerScreen : false
+            timerScreen: false
 
         }
 
@@ -78,18 +78,18 @@ export default class Game extends Component {
 
     componentDidMount() {
 
-           this.loadSound();
-           this.displayTimer()
-          
+        this.loadSound();
+        this.displayTimer()
+
     }
 
 
-    displayTimer(){
-        const {turn } = this.state;
+    displayTimer() {
+        const { turn } = this.state;
         const timerId = setTimeout(() => {
             this.moveToNextPlayer();
         }, 15000);  // 15 seconds
-    
+
         // Store the timerId in the state
         this.setState(prevState => ({
             timers: {
@@ -103,7 +103,7 @@ export default class Game extends Component {
 
     moveToNextPlayer() {
         const { turn, timers } = this.state;
-        
+
         // Clear the current player's timer
         if (timers[turn]) {
             clearTimeout(timers[turn]);
@@ -114,76 +114,76 @@ export default class Game extends Component {
                 }
             }));
 
-                      if (turn == BLUE) {
+            if (turn == BLUE) {
 
-                            if (this.state.blueHeart > 1) {
-                                this.setState({
-                                    blueHeart: this.state.blueHeart - 1
-                                })
-                            }
-                            else if (this.state.blueHeart <= 1){
-                             this.props.onEnd()
-                            }
-            
-                        }
-                        if (turn == YELLOW) {
-            
-                            if (this.state.yellowHeart > 1) {
-                                this.setState({
-                                    yellowHeart: this.state.yellowHeart - 1
-                                })
-                            }
-                            else if (this.state.yellowHeart <= 1){
-                                this.props.onEnd()
-                               }
-            
-                        }
-                        if (turn == RED) {
-            
-                            if (this.state.redHeart > 1) {
-                                this.setState({
-                                    redHeart: this.state.redHeart - 1
-                                })
-            
-                            }
-                            else if (this.state.redHeart <= 1){
-                                this.props.onEnd()
-                               }
-            
-                        }
-                       
-            
-                        if (turn == GREEN) {
-                            if (this.state.greenHeart > 1) {
-                                this.setState({
-                                    greenHeart: this.state.greenHeart - 1
-                                })
-                            }
-                            else if (this.state.greenHeart <= 1){
-                                this.props.onEnd()
-                               }
+                if (this.state.blueHeart > 1) {
+                    this.setState({
+                        blueHeart: this.state.blueHeart - 1
+                    })
+                }
+                else if (this.state.blueHeart <= 1) {
+                    this.props.onEnd()
+                }
 
-            
+            }
+            if (turn == YELLOW) {
+
+                if (this.state.yellowHeart > 1) {
+                    this.setState({
+                        yellowHeart: this.state.yellowHeart - 1
+                    })
+                }
+                else if (this.state.yellowHeart <= 1) {
+                    this.props.onEnd()
+                }
+
+            }
+            if (turn == RED) {
+
+                if (this.state.redHeart > 1) {
+                    this.setState({
+                        redHeart: this.state.redHeart - 1
+                    })
+
+                }
+                else if (this.state.redHeart <= 1) {
+                    this.props.onEnd()
+                }
+
+            }
+
+
+            if (turn == GREEN) {
+                if (this.state.greenHeart > 1) {
+                    this.setState({
+                        greenHeart: this.state.greenHeart - 1
+                    })
+                }
+                else if (this.state.greenHeart <= 1) {
+                    this.props.onEnd()
+                }
+
+
+            }
         }
-    }
-    
+
         // Get the next player
         const nextPlayer = this.getNextTurn();
-    
+
         // Update the current turn in the state
         if (nextPlayer) {
 
-         
+
             this.setState({
                 turn: nextPlayer,
-                
+
             });
 
 
 
             this.displayTimer()
 
-       
+
         } else {
             // Handle the game end or next round logic here
         }
@@ -291,9 +291,9 @@ export default class Game extends Component {
         let time = new Date().getTime();
         return {
             one: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: ONE, color: playerColor, updateTime: time, oneCount: [] },
-            two: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ?  B1 : null, name: TWO, color: playerColor, updateTime: time, twoCount: [] },
-            three: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ?  B1 : null, name: THREE, color: playerColor, updateTime: time, threeCount: [] },
-            four: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ?  B1 : null, name: FOUR, color: playerColor, updateTime: time, fourCount: [] }
+            two: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: TWO, color: playerColor, updateTime: time, twoCount: [] },
+            three: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: THREE, color: playerColor, updateTime: time, threeCount: [] },
+            four: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: FOUR, color: playerColor, updateTime: time, fourCount: [] }
         }
     }
 
@@ -318,7 +318,7 @@ export default class Game extends Component {
                 {this.state.turn === YELLOW && <Arrow2></Arrow2>}
                 {this.state.turn === GREEN && <Arrow3></Arrow3>}
                 {this.state.turn === BLUE && <Arrow4></Arrow4>} */}
-{/* 
+                {/* 
                 <View style={styles.redGotiBox}>
                     <View style={{ height: "50%", width: "50%" }}>
                         <RedGoti></RedGoti>
@@ -380,23 +380,25 @@ export default class Game extends Component {
 
                 </View> */}
                 {/* <View style={styles.blueDice}> */}
-                    <View style={[styles.diceBtn3, {backgroundColor:this.state.turn == BLUE ? "#0582ca" : this.state.turn == RED ? "#780000" : this.state.turn == YELLOW ? "#fdc500" : this.state.turn== GREEN ? "#004b23": "red",    borderWidth: 8,
-    borderColor: 'rgba(0,0,0,0.2)',}]}>
-                        {/* {this.state.turn == BLUE && */}
-                            <Animated.View
-                                style={[
+                <View style={[styles.diceBtn3, {
+                    backgroundColor: this.state.turn == BLUE ? "#0582ca" : this.state.turn == RED ? "#780000" : this.state.turn == YELLOW ? "#fdc500" : this.state.turn == GREEN ? "#004b23" : "red", borderWidth: 8,
+                    borderColor: 'rgba(0,0,0,0.2)',
+                }]}>
+                    {/* {this.state.turn == BLUE && */}
+                    <Animated.View
+                        style={[
 
-                                    {
-                                        transform: [{ rotate: this.state.rollingRotation }],
-                                        backgroundColor:this.state.turn == BLUE ? "#0582ca" : this.state.turn == RED ? "#780000" : this.state.turn == YELLOW ? "#fdc500" : this.state.turn== GREEN ? "#004b23": null
-                                    },
-                                ]}
-                            >
-                                <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
-                            </Animated.View>
-                        {/* } */}
+                            {
+                                transform: [{ rotate: this.state.rollingRotation }],
+                                backgroundColor: this.state.turn == BLUE ? "#0582ca" : this.state.turn == RED ? "#780000" : this.state.turn == YELLOW ? "#fdc500" : this.state.turn == GREEN ? "#004b23" : null
+                            },
+                        ]}
+                    >
+                        <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
+                    </Animated.View>
+                    {/* } */}
 
-                    </View>
+                </View>
                 {/* </View> */}
                 {/* <View style={styles.greenDice}>
                     <View style={styles.diceBtn1}>
@@ -459,8 +461,8 @@ export default class Game extends Component {
 
     async onDiceRoll() {
 
-         const {timers, turn} = this.state
-         if (timers[turn]) {
+        const { timers, turn } = this.state
+        if (timers[turn]) {
             clearTimeout(timers[turn]);
             this.setState(prevState => ({
                 timers: {
@@ -519,8 +521,8 @@ export default class Game extends Component {
                 this.setState({ isRolling: false, moves: moves, extraChance: extraChance + 1, isWaitingForDiceRoll: false }, () => {
 
                     this.updatePlayerPieces(this.state[turn]
-                        
-                        )
+
+                    )
 
                 });
 
@@ -600,12 +602,12 @@ export default class Game extends Component {
     //             moves: [],
     //             animateForSelection: false,
     //         });
-            
+
     //         this.setTimer()
 
 
     //     } else {
-         
+
     //         console.log("game end")
     //     }
 
@@ -831,7 +833,7 @@ export default class Game extends Component {
 
 
     didGetBonusWithNewPosition(piece) {
-        let flag= false
+        let flag = false
 
 
         if (piece.position == FINISHED) {
@@ -873,7 +875,7 @@ export default class Game extends Component {
             return positionMatched;
         }
 
-     
+
 
 
         const { red, blue, yellow, green } = this.state;
@@ -891,11 +893,11 @@ export default class Game extends Component {
 
         if (piece.color != blue.player && checkIfPositionMatchesExistingPiece(piece, blue)) {
             return true;
-            
+
         }
 
         if (this.state.extraChance >= 1) {
-           return true;
+            return true;
         }
 
 
@@ -975,16 +977,16 @@ export default class Game extends Component {
 
 
     onPieceSelection = (selectedPiece) => {
-    //   const {timers, turn} = this.state
-    //     if (timers[turn]) {
-    //         clearTimeout(timers[turn]);
-    //         this.setState(prevState => ({
-    //             timers: {
-    //                 ...prevState.timers,
-    //                 [this.state.turn]: null
-    //             }
-    //         }));
-    //     }
+        //   const {timers, turn} = this.state
+        //     if (timers[turn]) {
+        //         clearTimeout(timers[turn]);
+        //         this.setState(prevState => ({
+        //             timers: {
+        //                 ...prevState.timers,
+        //                 [this.state.turn]: null
+        //             }
+        //         }));
+        //     }
         // console.log(selectedPiece)
         if (this.state.isWaitingForDiceRoll) {
             return;
@@ -1064,7 +1066,7 @@ export default class Game extends Component {
 
 
 
-      isMovePossibleForPosition = (position, move) => {
+    isMovePossibleForPosition = (position, move) => {
         let isMovePossible = false;
         let positionTocheckFor = parseInt(position.substring(1, position.length))
 
@@ -1131,7 +1133,7 @@ export default class Game extends Component {
                 }
             }
 
-            else{
+            else {
                 newPosition = cellAreaIndicator + position
                 return;
             }
@@ -1140,7 +1142,7 @@ export default class Game extends Component {
             piece.position = newPosition;
             piece.updateTime = new Date().getTime();
 
-            
+
 
 
 
@@ -1211,16 +1213,16 @@ export default class Game extends Component {
                     this.updatePlayerPieces(player)
 
                 } else if (this.state.moves.length == 0 || this.isPlayerFinished(player)) {
-                    this.setState({ animateForSelection: false, moves: [], turn: this.getNextTurn() }, ()=>{
+                    this.setState({ animateForSelection: false, moves: [], turn: this.getNextTurn() }, () => {
                         this.displayTimer()
                     })
-                   
+
                 }
             })
 
         }
 
-     
+
     }
 
 
@@ -1416,7 +1418,7 @@ const styles = StyleSheet.create({
         borderColor: "#f9e7b0",
         borderWidth: 1,
         borderRadius: 8,
-     // paddingRight: 20
+        // paddingRight: 20
     },
 
     blueGotiBox: {
@@ -1431,7 +1433,7 @@ const styles = StyleSheet.create({
         borderColor: "#f9e7b0",
         borderWidth: 1,
         borderRadius: 8,
-    // paddingRight: 20
+        // paddingRight: 20
     },
 })
 

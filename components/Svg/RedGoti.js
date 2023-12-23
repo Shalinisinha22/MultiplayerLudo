@@ -7,15 +7,12 @@ const RedGoti = ({ onPress, isMoved, ...props }) => {
 
 
 
-
-
-
-
 return (
 
   props.player === "red"  && props.dicevalue == 6
        
      ? 
+ 
      <Animatable.View 
      style={{height:66, width:66, paddingLeft:25}}
       animation="fadeIn"// Specify the animation name
@@ -259,8 +256,6 @@ return (
  
   }}
 >
-
-  
 
    <Svg
     xmlns="http://www.w3.org/2000/svg"

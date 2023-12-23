@@ -125,7 +125,7 @@ export default PlayerBox = ({ color, customStyle, lifeline, one, two, three, fou
         <View style={[{ backgroundColor: color, flex: 4, } ]}>
             {/* customStyle */}
 
-            {/* <BlinkView style={[styles.innerContainer, { backgroundColor: color ,borderTopLeftRadius: 20}]} blinking={isBlinking?true:false} delay={2000}> */}
+      
             <View style={[styles.innerContainer, { backgroundColor: color ,borderTopLeftRadius: 20}]}>
                 {
                     playerName &&
@@ -138,26 +138,34 @@ export default PlayerBox = ({ color, customStyle, lifeline, one, two, three, fou
                                     isPlaying
                                     duration={15}
                                     // colors={[color == '#ec1d27' ? "#780000" : color == '#29b6f6' ? '#0582ca' : color == '#01A147' ? '#004b23' : color == '#ffe01b' ? '#fdc500' : null]}
-                                    colors={color == '#ec1d27'?['#780000', '#780000']: color == '#29b6f6'?['#0582ca', '#0582ca']: color == '#01A147'?['#004b23', '#004b23']:color == '#ffe01b'?['#fdc500', '#fdc500']:null }
-                                    // colorsTime={[7, 5, 2, 0]}
+                              
+                                       colors={['#008000', '#F7B801', '#A30000', '#A30000']}
+                                    // colors={color == '#ec1d27'?['#780000', '#780000']: color == '#29b6f6'?['#0582ca', '#0582ca']: color == '#01A147'?['#004b23', '#004b23']:color == '#ffe01b'?['#fdc500', '#fdc500']:null }
+                                    colorsTime={[7, 5, 2, 0]}
                                     size={50}
-                                    strokeWidth={5}
+                                    strokeWidth={3}
                                     strokeLinecap='square'
 
                                    >
                                     {({ remainingTime }) =>
 
-                                        <Text style={{ color: "white" }}>{remainingTime} sec</Text>}
+                                   <Text style={{ color: "white" }}>{remainingTime} sec</Text>}
+
                                 </CountdownCircleTimer>
                             }
 
 
-                            <Text style={{ fontSize: 20, color: "white", textAlign: "center" }}>Score</Text>
+                            <Text style={{ fontSize: 16, color: "white", textAlign: "center" }}>Score</Text>
                             <Text style={{ fontSize: 20, color: "white" }}>{totalScore}</Text>
-                        </View>
+                          </View>
 
                         <View style={{ flex: 3, alignItems: "flex-start" }}>
-                            <Image source={require("../../../assets/user2.png")} style={{ height: 90, width: 85, resizeMode: "contain" }}></Image>
+                     {
+                        timer ?<BlinkView  style={{flex:1}} blinking={isBlinking?true:false}  delay={200}>
+                        <Image source={require("../../../assets/user2.png")} style={{ height: 90, width: 85, resizeMode: "contain" }}></Image>
+                        </BlinkView> :       
+                        <Image source={require("../../../assets/user2.png")} style={{ height: 90, width: 85, resizeMode: "contain" }}></Image>
+                     }    
                            </View>
 
                         <View style={{ flex: 1.2, height: 5, backgroundColor: color == '#ec1d27' ? "#780000" : color == '#29b6f6' ? '#0582ca' : color == '#01A147' ? '#004b23' : color == '#ffe01b' ? '#fdc500' : null, flexDirection: "row", alignItems: "flex-end",borderTopLeftRadius:5,borderTopRightRadius:5 }}>
@@ -194,9 +202,6 @@ export default PlayerBox = ({ color, customStyle, lifeline, one, two, three, fou
 
 
                 {/* <View style={[styles.piecesContainer]}>
-
-
-
 
                     {renderPiece(one)}
                     {renderPiece(two)}

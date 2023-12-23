@@ -7,6 +7,8 @@ import Svg, {
   Stop,
   Path,
   Ellipse,
+  Image,
+   Circle
 } from "react-native-svg"
 import { View } from "react-native"
 import * as Animatable from 'react-native-animatable';
@@ -18,26 +20,123 @@ const BlueGoti = (props) => (
 
 <Svg
     xmlns="http://www.w3.org/2000/svg"
-    id="Layer_1"
     data-name="Layer 1"
-    viewBox="0 0 988.09 1064.42"
+    viewBox="0 0 630.11 970.54"
     {...props}
   >
-    <Defs></Defs>
-    <Path
-      d="M917.32 1064.42h-604.8c-55.54 0-89.37-61.15-59.85-108.2l19-30.32c83.47-40.84 209-66.8 349.3-66.8 130.45 0 248 22.43 331 58.35l24.57 37.83c30.55 47-3.17 109.14-59.22 109.14Z"
-      className="cls-1"
-    />
-    <Path
-      d="M988.7 958.18c-83-51.7-200.56-84-331-84-140.35 0-265.83 37.34-349.31 96.12l202.89-465.1c-82.13-44.57-137.87-131.39-137.87-231.19 0-145.28 118.11-263 263.8-263S901 128.77 901 274.05c0 92.94-48.34 174.62-121.31 221.41Z"
+    <Defs>
+      <RadialGradient
+        id="a"
+        cx={121.55}
+        cy={766.14}
+        r={229.14}
+        gradientUnits="userSpaceOnUse"
+      >
+        <Stop offset={0.16} stopColor="#f6f6f6" />
+        <Stop offset={1} stopColor="#86c3da" />
+      </RadialGradient>
+      <RadialGradient
+        id="d"
+        cx={540.58}
+        cy={682.53}
+        r={224.54}
+        gradientUnits="userSpaceOnUse"
+      >
+        <Stop offset={0} stopColor="#f6f6f6" />
+        <Stop offset={1} stopColor="#5ebdd5" />
+      </RadialGradient>
+      <RadialGradient
+        id="e"
+        cx={344.95}
+        cy={168.81}
+        r={211.64}
+        gradientUnits="userSpaceOnUse"
+      >
+        <Stop offset={0.16} stopColor="#f6f6f6" />
+        <Stop offset={1} stopColor="#5ab9d1" />
+      </RadialGradient>
+      <LinearGradient
+        id="b"
+        x1={223.69}
+        x2={852.6}
+        y1={985.64}
+        y2={985.64}
+        gradientUnits="userSpaceOnUse"
+      >
+        <Stop offset={0.03} stopColor="#01a0c6" />
+        <Stop offset={0.53} stopColor="#f6f6f6" />
+        <Stop offset={0.9} stopColor="#01a0c6" />
+      </LinearGradient>
+      <LinearGradient
+        id="c"
+        x1={370.65}
+        x2={698.18}
+        y1={682.53}
+        y2={682.53}
+        gradientUnits="userSpaceOnUse"
+      >
+        <Stop offset={0.01} stopColor="#67b6cc" />
+        <Stop offset={0.57} stopColor="#f6f6f6" />
+        <Stop offset={1} stopColor="#5ebdd5" />
+      </LinearGradient>
+      <LinearGradient
+        id="f"
+        x1={255.43}
+        x2={690.25}
+        y1={907.04}
+        y2={878.8}
+        gradientUnits="userSpaceOnUse"
+      >
+        <Stop offset={0.03} stopColor="#157f93" />
+        <Stop offset={0.53} stopColor="#f6f6f6" />
+        <Stop offset={0.9} stopColor="#01a0c6" />
+      </LinearGradient>
+    </Defs>
+    <Ellipse
+      cx={315.6}
+      cy={758.32}
+      rx={314.51}
+      ry={127.94}
       style={{
-        fill: "#00c0f4",
+        fill: "url(#a)",
       }}
-      transform="translate(-36.91 -11)"
     />
     <Path
-      d="M839.09 151c-45.35-27.21-455.1.18-464.17-2.85s3-36.28 3-36.28c-6.92 4.9-12.76 12.49-17.66 21.95 0 0-109.33-152-360.28-97.54 0 0 154.2 60.47 27.21 120.94 0 0 217-35.19 318.86 18.6-5.56 24.94-8.43 53.18-9.83 78.76-112.5 11.31-206.23-88.29-206.23-88.29 15.1 84.71-48.36 96.76-48.36 96.76 48.74 65 218.63 23.31 253.68 13.85-.85 32.05 12.39 55.69 12.39 55.69C486.79 396.08 826.09 399 826.09 399c84.66-99.78 13-248 13-248Zm-433.94 39.48c51.4 63.5 163.27 87.69 163.27 87.69-181.41 87.68-163.27-87.69-163.27-87.69Zm214.1 86.57c81.66-2.18 168.92-76.23 168.92-76.23-40.78 197.32-168.92 76.23-168.92 76.23Z"
-      className="cls-1"
+      d="M852.6 879.53V926c0 34.16-13.41 66.45-36.33 85.39C719 1091.82 546 1091.76 546 1091.76c-160-9.26-240.29-45.36-280.34-76.77-24.25-19-39.18-51.85-40.43-87.39l-1.57-44.51c4.64 69 143.62 124.38 314.39 124.38 173.74 0 314.55-57.28 314.55-127.94Z"
+      style={{
+        fill: "url(#b)",
+      }}
+      transform="translate(-223.69 -121.21)"
+    />
+    <Path
+      d="M760.26 825.45c0 47.08-98.87 85.26-220.84 85.26s-220.83-38.18-220.83-85.26c0-17.25 13.25-33.29 36-46.7 1.06-.57 2.09-1.18 3.11-1.79 97.84-59.5 72.65-322.58 72.65-322.58H645c-12.83 229.51 43.27 299 67.11 317.94 30.16 14.56 48.15 33.03 48.15 53.13Z"
+      style={{
+        fill: "url(#c)",
+      }}
+      transform="translate(-223.69 -121.21)"
+    />
+    <Path
+      d="M761.41 825.45c0 47.08-98.86 85.26-220.83 85.26s-220.84-38.18-220.84-85.26c0-17.25 13.25-33.29 36-46.7 1.06-.57 2.08-1.18 3.1-1.79 97.84-59.5 72.65-322.58 72.65-322.58h214.7c-12.83 229.51 43.28 299 67.12 317.94 30.12 14.56 48.1 33.03 48.1 53.13Z"
+      style={{
+        opacity: 0.49,
+        fill: "url(#d)",
+      }}
+      transform="translate(-223.69 -121.21)"
+    />
+    <Circle
+      cx={315.67}
+      cy={225.05}
+      r={225.05}
+      style={{
+        fill: "url(#e)",
+      }}
+    />
+    <Path
+      d="M760.26 819.36v32.76c0 24.06-9.42 46.81-25.52 60.15C666.43 968.93 545 968.88 545 968.88c-112.36-6.52-168.75-32-196.88-54.08-17-13.39-27.51-36.54-28.39-61.57l-1.1-31.36c3.25 48.62 100.86 87.63 220.79 87.63 121.95 0 220.84-40.35 220.84-90.14Z"
+      style={{
+        fill: "url(#f)",
+      }}
+      transform="translate(-223.69 -121.21)"
     />
   </Svg>
 
@@ -266,30 +365,127 @@ const BlueGoti = (props) => (
      </Svg> */}
    </View>
 :
-    <View style={[{height:30,width:30,position:"absolute", top:-10,right:-3},]}>
+    <View style={[{height:30,width:30,position:"absolute", top:-10,right:-3}, ]}>
 
 <Svg
     xmlns="http://www.w3.org/2000/svg"
-    id="Layer_1"
     data-name="Layer 1"
-    viewBox="0 0 988.09 1064.42"
+    viewBox="0 0 630.11 970.54"
     {...props}
   >
-    <Defs></Defs>
-    <Path
-      d="M917.32 1064.42h-604.8c-55.54 0-89.37-61.15-59.85-108.2l19-30.32c83.47-40.84 209-66.8 349.3-66.8 130.45 0 248 22.43 331 58.35l24.57 37.83c30.55 47-3.17 109.14-59.22 109.14Z"
-      className="cls-1"
-    />
-    <Path
-      d="M988.7 958.18c-83-51.7-200.56-84-331-84-140.35 0-265.83 37.34-349.31 96.12l202.89-465.1c-82.13-44.57-137.87-131.39-137.87-231.19 0-145.28 118.11-263 263.8-263S901 128.77 901 274.05c0 92.94-48.34 174.62-121.31 221.41Z"
+    <Defs>
+      <RadialGradient
+        id="a"
+        cx={121.55}
+        cy={766.14}
+        r={229.14}
+        gradientUnits="userSpaceOnUse"
+      >
+        <Stop offset={0.16} stopColor="#f6f6f6" />
+        <Stop offset={1} stopColor="#86c3da" />
+      </RadialGradient>
+      <RadialGradient
+        id="d"
+        cx={540.58}
+        cy={682.53}
+        r={224.54}
+        gradientUnits="userSpaceOnUse"
+      >
+        <Stop offset={0} stopColor="#f6f6f6" />
+        <Stop offset={1} stopColor="#5ebdd5" />
+      </RadialGradient>
+      <RadialGradient
+        id="e"
+        cx={344.95}
+        cy={168.81}
+        r={211.64}
+        gradientUnits="userSpaceOnUse"
+      >
+        <Stop offset={0.16} stopColor="#f6f6f6" />
+        <Stop offset={1} stopColor="#5ab9d1" />
+      </RadialGradient>
+      <LinearGradient
+        id="b"
+        x1={223.69}
+        x2={852.6}
+        y1={985.64}
+        y2={985.64}
+        gradientUnits="userSpaceOnUse"
+      >
+        <Stop offset={0.03} stopColor="#01a0c6" />
+        <Stop offset={0.53} stopColor="#f6f6f6" />
+        <Stop offset={0.9} stopColor="#01a0c6" />
+      </LinearGradient>
+      <LinearGradient
+        id="c"
+        x1={370.65}
+        x2={698.18}
+        y1={682.53}
+        y2={682.53}
+        gradientUnits="userSpaceOnUse"
+      >
+        <Stop offset={0.01} stopColor="#67b6cc" />
+        <Stop offset={0.57} stopColor="#f6f6f6" />
+        <Stop offset={1} stopColor="#5ebdd5" />
+      </LinearGradient>
+      <LinearGradient
+        id="f"
+        x1={255.43}
+        x2={690.25}
+        y1={907.04}
+        y2={878.8}
+        gradientUnits="userSpaceOnUse"
+      >
+        <Stop offset={0.03} stopColor="#157f93" />
+        <Stop offset={0.53} stopColor="#f6f6f6" />
+        <Stop offset={0.9} stopColor="#01a0c6" />
+      </LinearGradient>
+    </Defs>
+    <Ellipse
+      cx={315.6}
+      cy={758.32}
+      rx={314.51}
+      ry={127.94}
       style={{
-        fill: "#00c0f4",
+        fill: "url(#a)",
       }}
-      transform="translate(-36.91 -11)"
     />
     <Path
-      d="M839.09 151c-45.35-27.21-455.1.18-464.17-2.85s3-36.28 3-36.28c-6.92 4.9-12.76 12.49-17.66 21.95 0 0-109.33-152-360.28-97.54 0 0 154.2 60.47 27.21 120.94 0 0 217-35.19 318.86 18.6-5.56 24.94-8.43 53.18-9.83 78.76-112.5 11.31-206.23-88.29-206.23-88.29 15.1 84.71-48.36 96.76-48.36 96.76 48.74 65 218.63 23.31 253.68 13.85-.85 32.05 12.39 55.69 12.39 55.69C486.79 396.08 826.09 399 826.09 399c84.66-99.78 13-248 13-248Zm-433.94 39.48c51.4 63.5 163.27 87.69 163.27 87.69-181.41 87.68-163.27-87.69-163.27-87.69Zm214.1 86.57c81.66-2.18 168.92-76.23 168.92-76.23-40.78 197.32-168.92 76.23-168.92 76.23Z"
-      className="cls-1"
+      d="M852.6 879.53V926c0 34.16-13.41 66.45-36.33 85.39C719 1091.82 546 1091.76 546 1091.76c-160-9.26-240.29-45.36-280.34-76.77-24.25-19-39.18-51.85-40.43-87.39l-1.57-44.51c4.64 69 143.62 124.38 314.39 124.38 173.74 0 314.55-57.28 314.55-127.94Z"
+      style={{
+        fill: "url(#b)",
+      }}
+      transform="translate(-223.69 -121.21)"
+    />
+    <Path
+      d="M760.26 825.45c0 47.08-98.87 85.26-220.84 85.26s-220.83-38.18-220.83-85.26c0-17.25 13.25-33.29 36-46.7 1.06-.57 2.09-1.18 3.11-1.79 97.84-59.5 72.65-322.58 72.65-322.58H645c-12.83 229.51 43.27 299 67.11 317.94 30.16 14.56 48.15 33.03 48.15 53.13Z"
+      style={{
+        fill: "url(#c)",
+      }}
+      transform="translate(-223.69 -121.21)"
+    />
+    <Path
+      d="M761.41 825.45c0 47.08-98.86 85.26-220.83 85.26s-220.84-38.18-220.84-85.26c0-17.25 13.25-33.29 36-46.7 1.06-.57 2.08-1.18 3.1-1.79 97.84-59.5 72.65-322.58 72.65-322.58h214.7c-12.83 229.51 43.28 299 67.12 317.94 30.12 14.56 48.1 33.03 48.1 53.13Z"
+      style={{
+        opacity: 0.49,
+        fill: "url(#d)",
+      }}
+      transform="translate(-223.69 -121.21)"
+    />
+    <Circle
+      cx={315.67}
+      cy={225.05}
+      r={225.05}
+      style={{
+        fill: "url(#e)",
+      }}
+    />
+    <Path
+      d="M760.26 819.36v32.76c0 24.06-9.42 46.81-25.52 60.15C666.43 968.93 545 968.88 545 968.88c-112.36-6.52-168.75-32-196.88-54.08-17-13.39-27.51-36.54-28.39-61.57l-1.1-31.36c3.25 48.62 100.86 87.63 220.79 87.63 121.95 0 220.84-40.35 220.84-90.14Z"
+      style={{
+        fill: "url(#f)",
+      }}
+      transform="translate(-223.69 -121.21)"
     />
   </Svg>
     {/* <Svg

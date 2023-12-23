@@ -14,9 +14,9 @@ export default HorizontalCellsContainer = ({
   onPieceSelection,
 }) => {
 
-    // {
-    //     console.log(state)
-    // }
+    {
+        // console.log("horizontal",state)
+    }
   const renderEmptySpace = () => {
     return (
       <View style={{ flex: 3 }}>
@@ -30,11 +30,12 @@ export default HorizontalCellsContainer = ({
       <View style={{ flex: 6, flexDirection: "row" }}>
         {positionsArray.map((cellPosition) => {
           return (
-            <View style={[styles.cellContainer]} key={cellPosition}>
+            <View style={[styles.cellContainer, {}]} key={cellPosition}>
+
               <CellBox
                 backgroundColor={getCellBackgroundColor(cellPosition)}
                 arrow ={getCellArrow(cellPosition)}
-                safe = {getSafeArea(cellPosition)}
+                safe = {getSafeArea(cellPosition, state.red, state.blue, state.green, state.yellow)}
                 onPieceSelection={onPieceSelection}
                 state={state}
                 position={cellPosition}
@@ -102,6 +103,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderColor: "black",
     borderWidth: 1,
+ 
   
   },
 });

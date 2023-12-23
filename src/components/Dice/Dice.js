@@ -9,6 +9,7 @@ import YellowGoti from '../Goti/YellowGoti';
 import BlueGoti from '../Goti/BlueGoti';
 import GreenGoti from '../Goti/GreenGoti';
 
+
 export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, redPlayer, yellowPlayer, greenPlayer, bluePlayer}) => {
     // const [diceValue, setDiceValue] = useState(1);
 
@@ -21,6 +22,8 @@ export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, r
     //     outputRange: ['0deg', '360deg'],
     //   });
 
+
+    const {red,yellow,green ,blue} = colors
     
   useEffect(() => {
     loadSound();
@@ -166,7 +169,7 @@ export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, r
   borderBottomWidth: 38,
   borderLeftColor: "transparent",
   borderRightColor: "transparent",
-  borderBottomColor: "#780000",
+  borderBottomColor: red,
   transform: [{ rotate: "90deg" }],
   top:19,
   left:-19.5
@@ -194,7 +197,7 @@ export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, r
   borderBottomWidth: 38,
   borderLeftColor: "transparent",
   borderRightColor: "transparent",
-  borderBottomColor: "#004b23",
+  borderBottomColor:green,
   transform: [{ rotate: "-90deg" }],
   top:-19,
   right:-20
@@ -219,7 +222,7 @@ export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, r
   borderBottomWidth: 39.5,
   borderLeftColor: "transparent",
   borderRightColor: "transparent",
-  borderBottomColor: "#0582ca",
+  borderBottomColor:blue,
   // transform: [{ rotate: "0deg" }],
   top:-39,
   left:0
@@ -244,7 +247,7 @@ export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, r
   borderBottomWidth: 39,
   borderLeftColor: "transparent",
   borderRightColor: "transparent",
-  borderBottomColor: "#fdc500",
+  borderBottomColor: yellow,
   transform: [{ rotate: "-180deg" }],
   top:-115.5,
   left:-1
