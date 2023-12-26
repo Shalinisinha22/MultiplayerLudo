@@ -18,7 +18,7 @@ const ReadyGreen = (props) => (
      animation="fadeIn"// Specify the animation name
     easing="ease-in-out"
     iterationCount="infinite"
-    duration={1000} // Animation duration in milliseconds
+    duration={500} // Animation duration in milliseconds
   >
 
 

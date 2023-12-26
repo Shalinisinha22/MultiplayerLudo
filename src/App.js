@@ -10,6 +10,8 @@ import Home from './screens/Home/Home';
 import Game from './screens/game/Game';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Winner from './screens/Winner/Winner';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class App extends Component{
  
@@ -22,6 +24,7 @@ class App extends Component{
     return {
       isGameInProgress:false,
       isStartGameModalVisible:false,
+      isGameEnd:false,
       red:{
         name:''
       },
@@ -33,10 +36,15 @@ class App extends Component{
       },
       blue:{
         name:''
-      }
+      },
+      twoPlayer:false,
+      threePlayer:false,
+      fourPlayer:false
     
    }
   }
+
+  
  
   render(){
     if(this.state.isGameInProgress){
@@ -45,9 +53,18 @@ class App extends Component{
         yellowName = {this.state.yellow.name}
         blueName = {this.state.blue.name}
         greenName = {this.state.green.name}
-        onEnd={()=>{this.setState({isGameInProgress:false})}}
+        isGameEnd={this.state.isGameEnd}
+        onEnd={()=>{this.setState({isGameInProgress:false,isGameEnd:true})}}
         />
     }
+     else if (this.state.isGameEnd){
+      return <Winner backToHome={()=>{this.setState({isStartGameModalVisible:false,isGameEnd:false})}}
+      red={this.state.red}
+      blue={this.state.blue}
+      yellow={this.state.yellow}
+      green={this.state.green}  
+      ></Winner>
+     }
     else{
       return <Home
           isStartGameModalVisible={this.state.isStartGameModalVisible}
@@ -74,8 +91,13 @@ class App extends Component{
             this.state.blue.name=name;
             this.setState({})
           }}
+          twoPlayer = {this.state.twoPlayer}
+          threePlayer = {this.state.threePlayer}
+          fourPlayer = {this.state.fourPlayer}
       />
     }
+
+ 
   }
 };
 

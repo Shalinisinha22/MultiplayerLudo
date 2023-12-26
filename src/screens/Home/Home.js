@@ -16,7 +16,8 @@ export default Home = ({
     yellow,
     green,
     blue,
-    onStart
+    onStart,
+    twoPlayer,threePlayer,fourPlayer
 }) => {
 
     const [selectedPlayers, setSelectedPlayers] = useState(null);
@@ -25,6 +26,7 @@ export default Home = ({
       setSelectedPlayers(2);
       onBlueInput('Player 1')
       onYellowInput('Player 2')
+  
 
     onNewGameButtonPress()
  
@@ -35,6 +37,7 @@ export default Home = ({
       onBlueInput('Player 1')
       onRedInput('Player 2')
       onYellowInput('Player 3')
+
       onNewGameButtonPress()
     };
   
@@ -44,6 +47,7 @@ export default Home = ({
       onRedInput('Player 2')
       onYellowInput('Player 3')
       onGreenInput('Player 4')
+ 
       onNewGameButtonPress()
     };
 
@@ -107,15 +111,16 @@ export default Home = ({
         <TwoPlayerModal
           isStartGameModalVisible={isStartGameModalVisible}
           onCancel={onCancel}
-          onRedInput={onRedInput}
+          // onRedInput={onRedInput}
           onYellowInput={onYellowInput}
           onBlueInput={onBlueInput}
-          onGreenInput={onGreenInput}
+          // onGreenInput={onGreenInput}
           red={red}
           yellow={yellow}
           green={green}
           blue={blue}
           onStart={onStart}
+          twoPlayer= {twoPlayer}
         />
       )}
 
@@ -132,6 +137,7 @@ export default Home = ({
           green={green}
           blue={blue}
           onStart={onStart}
+          threePlayer={threePlayer}
         />
       )}
 
@@ -148,6 +154,7 @@ export default Home = ({
           green={green}
           blue={blue}
           onStart={onStart}
+          fourPlayer={fourPlayer}
         />
       )}
        

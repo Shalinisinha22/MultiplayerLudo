@@ -21,7 +21,7 @@ const ReadyRed = (props) => (
      animation="fadeIn"// Specify the animation name
     easing="ease-in-out"
     iterationCount="infinite"
-    duration={1000} 
+    duration={500} 
 
     
    >

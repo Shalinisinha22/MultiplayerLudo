@@ -12,7 +12,7 @@ export const getCellBackgroundColor = (position) =>{
         case R16:
         case R17:
         case R18:
-            return red;
+            return "#c1121f";
         case Y1:
         case Y9:
         case Y14:
@@ -20,7 +20,7 @@ export const getCellBackgroundColor = (position) =>{
         case Y16:
         case Y17:
         case Y18:
-            return yellow;
+            return '#ffd500';
         case G1:
         case G9:
         case G14:

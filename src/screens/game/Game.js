@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions, ToastAndroid, Alert, ImageBackground, TouchableOpacity, Animated, ActivityIndicator, Image } from 'react-native';
+import React, { Component, useRef } from 'react';
+import { View, Text, StyleSheet, Dimensions, ToastAndroid, Alert, ImageBackground, TouchableOpacity, Animated, ActivityIndicator, Image, Button } from 'react-native';
 import { colors } from '../../util/Colors';
 import PlayerBox from '../../components/PlayerBox/PlayerBox'
 import VerticalCellsContainer from '../../components/VerticalCellsContainer/VerticalCellsContainer';
@@ -17,17 +17,18 @@ import Arrow2 from '../../../components/Svg/Arrow2';
 import Arrow3 from '../../../components/Svg/Arrow3';
 import Arrow4 from '../../../components/Svg/Arrow4';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
-
+import LinearGradient from 'react-native-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Table, Row, Rows } from 'react-native-table-component'
 
 
 export default class Game extends Component {
 
-
     constructor(props) {
         super(props);
         const { red, blue, yellow, green } = colors;
-        const { redName, blueName, yellowName, greenName } = props;
-
+        const { redName, blueName, yellowName, greenName, twoPlayer, threePlayer, fourPlayer } = props;
+        this.intervalId= null
         this.rollingSound = new Audio.Sound();
         this.rollingValue = new Animated.Value(0);
         this.onDiceRoll = this.onDiceRoll.bind(this);
@@ -55,7 +56,6 @@ export default class Game extends Component {
                 inputRange: [0, 1],
                 outputRange: ['0deg', '360deg'],
 
-
             }),
             currentTurn: null,
             timers: {
@@ -69,20 +69,280 @@ export default class Game extends Component {
             greenHeart: 3,
             yellowHeart: 3,
             counter: 0,
-            timerScreen: false
-
+            timerScreen: false,
+            remainingTime:180, // 3 minutes in seconds,
+            isActive:true,
+            firstWinner:null,
+            secondWinner:null,
+            thirdWinner:null,
+            
+            last:null,
+            redTotalScore:0,
+            yellowTotalScore:0,
+            blueTotalScore:0,
+            greenTotalScore:0,
+            winnerArray:[]
         }
 
 
     }
 
-    componentDidMount() {
 
+
+  
+    
+      stopTimer = () => {
+        clearInterval(this.intervalId);
+        this.setState({ isActive: false, remainingTime: 180 }); // Reset to 3 minutes
+         
+
+      };
+    
+      formatTime = (time) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      };
+
+
+   
+    componentDidMount() {
+  
         this.loadSound();
-        this.displayTimer()
+        this.displayTimer();
+        this.startTimer()
+
 
     }
+   
 
+
+
+ startTimer (){
+        this.intervalId = setInterval(() => {
+            this.setState(prevState => {
+            //   console.log('Previous remainingTime:', prevState.remainingTime); // Debugging line
+              return {
+                remainingTime: prevState.remainingTime - 1
+              };
+            },  async() => {
+              if (this.state.remainingTime <= 0) {
+            
+               await this.retrieveData()
+                this.props.onEnd()
+                this.stopTimer();
+              
+              }
+            });
+          }, 1000);
+    }
+
+   retrieveData = async () => {
+   console.log("retrieve data")
+    // if(this.redName !== ""){
+    //     try {
+    //         const redValue = await AsyncStorage.getItem('red');
+    //         if (redValue !== null) {
+    //           // We have data!!
+    //           console.log("rv",redValue);
+    //           this.setState({redTotalScore:redValue})
+    //         }
+    //       } catch (error) {
+    //       console.log(error)
+    //       }
+    // }
+
+    // if(this.yellowName !== ""){
+    //     try {
+    //         const yellowValue = await AsyncStorage.getItem('yellow');
+    //         if (yellowValue !== null) {
+    //           // We have data!!
+    //           console.log("yv",yellowValue);
+    //           this.setState({yellowTotalScore:yellowValue})
+    //         }
+    //       } catch (error) {
+    //         console.log(error)
+    //       }
+    // }
+
+    // if(this.greenName !== ""){
+    //     try {
+    //         const greenValue = await AsyncStorage.getItem('green');
+    //         if (greenValue !== null) {
+    //           // We have data!!
+    //           console.log("gv",greenValue);
+    //           this.setState({greenTotalScore:greenValue})
+    //         }
+    //       } catch (error) {
+    //         console.log(error)
+    //       }
+    // }
+
+    // if(this.blueName !== ""){
+    //     try {
+    //         const blueValue = await AsyncStorage.getItem('blue');
+    //         if (blueValue !== null) {
+    //           // We have data!!
+    //           console.log("bv",blueValue);
+    //           this.setState({blueTotalScore:blueValue})
+    //         }
+    //       } catch (error) {
+    //         console.log(error)
+    //       }
+    // }
+
+    const { yellowName, blueName, greenName, redName } = this.props; 
+
+if(redName!= "" && blueName!= "" && greenName != "" && yellowName != "" ){
+    try{
+        const redValue = await AsyncStorage.getItem('red');
+        const yellowValue = await AsyncStorage.getItem('yellow');
+        const greenValue = await AsyncStorage.getItem('green');
+        const blueValue = await AsyncStorage.getItem('blue');
+
+        const values = [
+            { key: 'red', value: redValue },
+            { key: 'yellow', value: yellowValue },
+            { key: 'green', value: greenValue },
+            { key: 'blue', value: blueValue },
+          ];
+        const sortedValues = values.sort((a, b) => b.value - a.value);
+        const firstGreatest = sortedValues[0].key;
+        const secondGreatest = sortedValues[1].key;
+        const thirdGreatest = sortedValues[2].key;
+        const fourthGreatest = sortedValues[3].key;
+
+        console.log('First Greatest Value:', firstGreatest);
+        console.log('Second Greatest Value:', secondGreatest);
+        console.log('Third Greatest Value:', thirdGreatest);
+        console.log('Fourth Greatest Value:', fourthGreatest);
+
+     for(let i=0;i<sortedValues.length;i++){
+        this.state.winnerArray.push(sortedValues[i])
+
+     }
+
+     await AsyncStorage.setItem('playerArray',JSON.stringify(this.state.winnerArray))
+
+        // if(blueValue > redValue && blueValue > yellowValue && blueValue > greenValue ){
+        //       console.log("blue is winner") 
+        //       this.setState({firstWinner:{firstWinnerName:this.bluePlayer, firstWinnerScore:blueValue}})
+        //        if(redValue> yellowValue && redValue > greenValue){
+        //             console.log("red second winner")
+        //             this.setState({secondWinner:{secondWinnerName:this.redPlayer, secondWinnerScore:redValue}})
+
+        //             if (yellowValue > greenValue){
+        //                 this.setState({thirdWinner:{thirdWinnerName:this.yellowPlayer, thirdWinnerScore:yellowValue}})
+        //                 this.setState({fouthWinner:{fourthWinnerName:this.greenPlayer, fourthWinnerScore:greenValue}}) 
+        //             }
+        //             else{
+        //                 this.setState({thirdWinner:{thirdWinnerName:this.greenPlayer, thirdWinnerScore:greenValue}})
+        //                 this.setState({fouthWinner:{fourthWinnerName:this.yellowPlayer, fourthWinnerScore:yellowValue}}) 
+        //             }
+        //        }
+        //        else if (yellowValue > greenValue) {
+        //         this.setState({secondWinner:{secondWinnerName:this.yellowPlayer, secondWinnerScore:yellowValue}})
+        //          if(redValue > greenValue){
+        //             this.setState({thirdWinner:{thirdWinnerName:this.redPlayer, thirdWinnerScore:redValue}})
+        //             this.setState({last:{lastName:this.greenPlayer, secondWinnerScore:greenValue}})
+        //          }
+        //          else{
+        //             this.setState({thirdWinner:{thirdWinnerName:this.greenPlayer, thirdWinnerScore:greenValue}})
+        //             this.setState({last:{lastName:this.redPlayer, secondWinnerScore:redValue}})
+        //          }
+        //        }
+
+             
+
+              
+        //        else if ( yellowValue > blueValue){
+        //         console.log("yellow second winner")
+        //         this.setState({secondWinner:{secondWinnerName:this.yellowPlayer, secondWinnerScore:yellowValue}})
+        //        }
+        //        else{
+        //         console.log("blue second winner")
+        //         this.setState({secondWinner:{secondWinnerName:this.bluePlayer, secondWinnerScore:blueValue}})
+        //        }
+
+        //     //   try {
+        //     //     await AsyncStorage.setItem('winner',JSON.stringify({winnerName:this.bluePlayer, winnerScore:blueValue, second: }));
+        //     //     console.log("red", total)
+        //     //   } catch (error) {
+        //     //     console.log("error", error)
+        //     //     // Error saving data
+        //     //   }  
+
+        // }
+    }
+    catch (error) {
+        console.log(error)
+      }
+
+}
+
+else if (redName!= "" && blueName!= "" &&  yellowName != "" ){
+    try{
+        const redValue = await AsyncStorage.getItem('red');
+        const yellowValue = await AsyncStorage.getItem('yellow');
+        const blueValue = await AsyncStorage.getItem('blue');
+
+        const values = [
+            { key: 'red', value: redValue },
+            { key: 'yellow', value: yellowValue },
+            { key: 'blue', value: blueValue },
+          ];
+        const sortedValues = values.sort((a, b) => b.value - a.value);
+        const firstGreatest = sortedValues[0].key;
+        const secondGreatest = sortedValues[1].key;
+        const thirdGreatest = sortedValues[2].key;
+     
+
+        console.log('First Greatest Value:', firstGreatest);
+        console.log('Second Greatest Value:', secondGreatest);
+        console.log('Third Greatest Value:', thirdGreatest);
+        for(let i=0;i<sortedValues.length;i++){
+            this.state.winnerArray.push(sortedValues[i])
+    
+         }
+    
+         await AsyncStorage.setItem('playerArray',JSON.stringify(this.state.winnerArray))
+
+      
+    }
+    catch (error) {
+        console.log(error)
+      }
+}
+else{
+
+    try{
+        const yellowValue = await AsyncStorage.getItem('yellow');
+        const blueValue = await AsyncStorage.getItem('blue'); 
+        const values = [
+            { key: 'yellow', value: yellowValue },
+            { key: 'blue', value: blueValue },
+          ];
+        const sortedValues = values.sort((a, b) => b.value - a.value);
+        const firstGreatest = sortedValues[0].key;
+        const secondGreatest = sortedValues[1].key;
+        console.log('First Greatest Value:', firstGreatest);
+        console.log('Second Greatest Value:', secondGreatest);
+    
+    
+        for(let i=0;i<sortedValues.length;i++){
+            this.state.winnerArray.push(sortedValues[i])
+    
+         }
+    
+         await AsyncStorage.setItem('playerArray',JSON.stringify(this.state.winnerArray))
+    }
+    catch (error) {
+        console.log(error)
+      }
+}
+
+
+ };
 
     displayTimer() {
         const { turn } = this.state;
@@ -122,7 +382,9 @@ export default class Game extends Component {
                     })
                 }
                 else if (this.state.blueHeart <= 1) {
+                    this.retrieveData()
                     this.props.onEnd()
+
                 }
 
             }
@@ -134,6 +396,7 @@ export default class Game extends Component {
                     })
                 }
                 else if (this.state.yellowHeart <= 1) {
+                    this.retrieveData()
                     this.props.onEnd()
                 }
 
@@ -147,6 +410,7 @@ export default class Game extends Component {
 
                 }
                 else if (this.state.redHeart <= 1) {
+                    this.retrieveData()
                     this.props.onEnd()
                 }
 
@@ -160,6 +424,7 @@ export default class Game extends Component {
                     })
                 }
                 else if (this.state.greenHeart <= 1) {
+                    this.retrieveData()
                     this.props.onEnd()
                 }
 
@@ -216,6 +481,8 @@ export default class Game extends Component {
 
     componentWillUnmount() {
         this.unloadSound();
+        clearInterval(this.intervalId);
+    
 
     }
 
@@ -290,10 +557,10 @@ export default class Game extends Component {
     initPieces(playerColor) {
         let time = new Date().getTime();
         return {
-            one: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: ONE, color: playerColor, updateTime: time, oneCount: [] },
-            two: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: TWO, color: playerColor, updateTime: time, twoCount: [] },
-            three: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: THREE, color: playerColor, updateTime: time, threeCount: [] },
-            four: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: FOUR, color: playerColor, updateTime: time, fourCount: [] }
+            one: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: ONE, color: playerColor, updateTime: time, oneCount: [],piecePosition:new Animated.Value(0) },
+            two: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: TWO, color: playerColor, updateTime: time, twoCount: [],piecePosition: new Animated.Value(0) },
+            three: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: THREE, color: playerColor, updateTime: time, threeCount: [],piecePosition: new Animated.Value(0) },
+            four: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: FOUR, color: playerColor, updateTime: time, fourCount: [],piecePosition: new Animated.Value(0)}
         }
     }
 
@@ -309,9 +576,7 @@ export default class Game extends Component {
 
 
     render() {
-
-
-
+        const { remainingTime } = this.state;
         return (
             <ImageBackground source={require("../../../assets/bj.png")} style={{ flex: 1, alignItems: "center", justifyContent: "center" }} >
                 {/* {this.state.turn === RED && <Arrow1></Arrow1>}
@@ -380,6 +645,15 @@ export default class Game extends Component {
 
                 </View> */}
                 {/* <View style={styles.blueDice}> */}
+
+                <Text style={{ fontSize: 28,color:"white",position:"absolute",top:40 }}>
+          {this.formatTime(remainingTime)}
+        </Text>
+        {/* {!isActive ? (
+          <Button title="Start Timer" onPress={this.startTimer} />
+        ) : (
+          <Button title="Stop Timer" onPress={this.stopTimer} />
+        )} */}
                 <View style={[styles.diceBtn3, {
                     backgroundColor: this.state.turn == BLUE ? "#0582ca" : this.state.turn == RED ? "#780000" : this.state.turn == YELLOW ? "#fdc500" : this.state.turn == GREEN ? "#004b23" : "red", borderWidth: 8,
                     borderColor: 'rgba(0,0,0,0.2)',
@@ -427,7 +701,7 @@ export default class Game extends Component {
                 <View style={styles.gameContainer}>
 
                     <View style={styles.twoPlayersContainer}>
-                        {console.log("330", this.state.timers[BLUE], this.state.timers[YELLOW])}
+                        {/* {console.log("330", this.state.timers[BLUE], this.state.timers[YELLOW])} */}
                         {this.renderPlayerBox(this.state.red, this.state.redScore, this.state.redHeart, this.state.timers[RED] ? true : false, { borderTopLeftRadius: 20 })}
                         <VerticalCellsContainer position={TOP_VERTICAL}
                             state={this.state}
@@ -750,8 +1024,8 @@ export default class Game extends Component {
                     } else if (move == 6 && positionTocheckFor < 14) {
                         isMovePossible = true;
                         possibleMove = move;
-                    }
                 }
+           }
             })
 
             return isMovePossible;
@@ -840,6 +1114,8 @@ export default class Game extends Component {
             return true;
         }
 
+    
+
 
         if (piece.position == R1 || piece.position == R9 || piece.position == Y1 || piece.position == Y9 || piece.position == G1 || piece.position == G9 || piece.position == B1 || piece.position == B9) {
             return false;
@@ -900,7 +1176,6 @@ export default class Game extends Component {
             return true;
         }
 
-
         return false;
     }
 
@@ -919,11 +1194,11 @@ export default class Game extends Component {
                 else if (this.playerHasSinglePossibleMove(player)) {
                     if (this.playerHasSingleUnfinishedPiece(player)) {
                         let singlePossibleMove = this.getSinglePossibleMove(player);
-                        console.log("singlepossiblemove", singlePossibleMove)
+                        // console.log("singlepossiblemove", singlePossibleMove)
 
                         if (singlePossibleMove) {
                             const indexOf = moves.indexOf(singlePossibleMove.move);
-                            console.log(indexOf)
+                            // console.log(indexOf)
                             if (indexOf > -1) {
                                 moves.splice(indexOf, 1);
                             }
@@ -973,7 +1248,6 @@ export default class Game extends Component {
         // const {diceRollTestData,diceRollTestDataIndex} = this.state;
         // return diceRollTestData[diceRollTestDataIndex];
     }
-
 
 
     onPieceSelection = (selectedPiece) => {
@@ -1064,8 +1338,6 @@ export default class Game extends Component {
 
     }
 
-
-
     isMovePossibleForPosition = (position, move) => {
         let isMovePossible = false;
         let positionTocheckFor = parseInt(position.substring(1, position.length))
@@ -1079,7 +1351,6 @@ export default class Game extends Component {
 
         return isMovePossible;
     }
-
 
     movePieceByPosition(piece, move) {
 
@@ -1139,14 +1410,32 @@ export default class Game extends Component {
             }
         }
         if (newPosition != "") {
+
+    
+              const animatingPiece =()=>{
+                // console.log("animation start")
+                // console.log("animation start",piece.piecePosition)
+
+                Animated.timing(piece.piecePosition, {
+                  
+                      toValue: 200,
+                      duration: 500,  // Duration of the animation in milliseconds
+                      useNativeDriver: true,
+                    }).start(()=>{
+                        piece.position = newPosition;
+                        piece.updateTime = new Date().getTime();
+                    })
+              } 
+
+              animatingPiece()
+              
+            
+        
+          
+      
+         
             piece.position = newPosition;
             piece.updateTime = new Date().getTime();
-
-
-
-
-
-
 
             if (piece.name == "one") {
                 piece.oneCount.push(move)
@@ -1224,9 +1513,6 @@ export default class Game extends Component {
 
 
     }
-
-
-
     renderPlayerBox(player, playerScore, lifeline, timer, customStyle) {
         const { one, two, three, four } = player.pieces;
         customStyle.opacity = this.state.turn == player.player ? 1 : 0.6;
@@ -1253,6 +1539,9 @@ export default class Game extends Component {
             />
         )
     }
+
+
+   
 
 }
 
@@ -1437,4 +1726,46 @@ const styles = StyleSheet.create({
     },
 })
 
-//  {"color": "yellow", "name": "one", "position": "G7", "updateTime": 1702364699116}
+     //        if (newPosition != "") {
+    // piece.position = newPosition;
+    // piece.updateTime = new Date().getTime();
+    // 
+    // initPieces(playerColor) {
+    //     let time = new Date().getTime();
+    //     return {
+    //         one: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: ONE, color: playerColor, updateTime: time, oneCount: [] },
+    //         two: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: TWO, color: playerColor, updateTime: time, twoCount: [] },
+    //         three: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: THREE, color: playerColor, updateTime: time, threeCount: [] },
+    //         four: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: FOUR, color: playerColor, updateTime: time, fourCount: [] }
+    //     }
+    // }
+
+    // how to apply jump animation on piece position i want to move my piece one by one to new position
+
+
+  
+
+// ...
+
+// Assuming 'r1' corresponds to a specific position on the game board, 
+// you can initialize the piecePosition with the numerical value of 'r1'.
+// state = {
+//   piecePosition: new Animated.Value(/* numerical value of r1 */),  // Initialize with the numerical value of 'r1'
+//   // ...
+// };
+
+// // Function to animate the piece's position
+// animatePiece = (newPosition) => {
+//   const { piecePosition } = this.state;
+
+//   Animated.timing(piecePosition, {
+//     toValue: newPosition,  // The new position you want to move to
+//     duration: 500,  // Duration of the animation in milliseconds
+//     useNativeDriver: true,
+//   }).start(() => {
+//     // Animation completed, update the piece's position in the state
+//     this.setState({ piecePosition: newPosition });
+//   });
+// };
+
+

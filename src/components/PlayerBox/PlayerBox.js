@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, Image, LogBox } from 'react-native';
 import { colors } from '../../util/Colors';
 import { HOME } from '../../util/Constants';
 import RedGoti from '../Goti/RedGoti';
@@ -13,12 +13,14 @@ import ReadyBlue from '../../../components/Svg/ReadyBlue';
 import { Entypo } from '@expo/vector-icons';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import BlinkView from 'react-native-blink-view'
+import {LinearGradient} from 'expo-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default PlayerBox = ({ color, customStyle, lifeline, one, two, three, four, onPieceSelection, animateForSelection, playerName, playerScore, timer }) => {
 
 
     {
-        console.log("color", color)
+        // console.log("color", color)
     }
     const [isAnimating, setIsAnimating] = React.useState(false);
     const [backgroundColor, setBackgroundColor] = React.useState(color);
@@ -56,15 +58,63 @@ export default PlayerBox = ({ color, customStyle, lifeline, one, two, three, fou
         }
 
         sum = onePoint + twoPoint + threePoint + fourPoint
+        console.log("sum",sum)
         // console.log(onePoint, "onepoint", twoPoint, "twoPoint", threePoint, "threePoint", fourPoint, "fourPoint")
         setScore(sum)
         setOneScore(onePoint)
         setTwoScore(twoPoint)
         setThreeScore(threePoint)
         setFourScore(fourPoint)
+        storeData(sum)
 
 
     })
+
+
+     const storeData = async (total) => {
+
+        if(color == "#ec1d27"){
+            try {
+                await AsyncStorage.setItem('red',JSON.stringify(total));
+                console.log("red", total)
+              } catch (error) {
+                console.log("error", error)
+                // Error saving data
+              }  
+        }
+        if(color == "#01A147"){
+            try {
+                await AsyncStorage.setItem('green',JSON.stringify(total));
+                console.log("green", total)
+              } catch (error) {
+                // Error saving data
+                console.log("error", error)
+              }
+        }
+        if(color == "#29b6f6"){
+            try {
+                await AsyncStorage.setItem( 'blue',JSON.stringify(total));
+                console.log("blue", total)
+              } catch (error) {
+                // Error saving data
+                console.log("error", error)
+              }
+        }
+        if(color == "#ffe01b"){
+            try {
+                await AsyncStorage.setItem( 'yellow',JSON.stringify(total));
+                console.log("yellow", total)
+              } catch (error) {
+                // Error saving data
+                console.log("error", error)
+              }
+        }
+    
+      };
+
+
+  
+
     let shouldRenderBackgroundColor = 1;
     const applyAnimationIfNeeded = () => {
         if (animateForSelection) {
@@ -125,8 +175,8 @@ export default PlayerBox = ({ color, customStyle, lifeline, one, two, three, fou
         <View style={[{ backgroundColor: color, flex: 4, } ]}>
             {/* customStyle */}
 
-      
-            <View style={[styles.innerContainer, { backgroundColor: color ,borderTopLeftRadius: 20}]}>
+     
+            <LinearGradient colors={color == "#ec1d27"?['#ec1d27', '#c1121f', '#9d0208']:color == "#ffe01b"?[ '#ffe01b', '#ffd500','#ffbd00']:color == "#01A147"?[ '#01A147','#27a300', '#005e0c']:color == "#29b6f6"?[ '#29b6f6' ,'#00a6fb','#0582ca']:['#4c669f', '#3b5998', '#192f6a']} style={[styles.innerContainer, { }]}>
                 {
                     playerName &&
                     <>
@@ -142,7 +192,7 @@ export default PlayerBox = ({ color, customStyle, lifeline, one, two, three, fou
                                        colors={['#008000', '#F7B801', '#A30000', '#A30000']}
                                     // colors={color == '#ec1d27'?['#780000', '#780000']: color == '#29b6f6'?['#0582ca', '#0582ca']: color == '#01A147'?['#004b23', '#004b23']:color == '#ffe01b'?['#fdc500', '#fdc500']:null }
                                     colorsTime={[7, 5, 2, 0]}
-                                    size={50}
+                                    size={45}
                                     strokeWidth={3}
                                     strokeLinecap='square'
 
@@ -156,19 +206,21 @@ export default PlayerBox = ({ color, customStyle, lifeline, one, two, three, fou
 
 
                             <Text style={{ fontSize: 16, color: "white", textAlign: "center" }}>Score</Text>
-                            <Text style={{ fontSize: 20, color: "white" }}>{totalScore}</Text>
+                            <Text style={{ fontSize: 23, color: "white" }}>{totalScore}</Text>
                           </View>
 
                         <View style={{ flex: 3, alignItems: "flex-start" }}>
+
+                            {/*  blinking={isBlinking?true:false}  delay={200} */}
                      {
-                        timer ?<BlinkView  style={{flex:1}} blinking={isBlinking?true:false}  delay={200}>
+                        timer ?<BlinkView style={{flex:1}} blinking={isBlinking?true:false}  delay={200}>
                         <Image source={require("../../../assets/user2.png")} style={{ height: 90, width: 85, resizeMode: "contain" }}></Image>
                         </BlinkView> :       
                         <Image source={require("../../../assets/user2.png")} style={{ height: 90, width: 85, resizeMode: "contain" }}></Image>
                      }    
                            </View>
 
-                        <View style={{ flex: 1.2, height: 5, backgroundColor: color == '#ec1d27' ? "#780000" : color == '#29b6f6' ? '#0582ca' : color == '#01A147' ? '#004b23' : color == '#ffe01b' ? '#fdc500' : null, flexDirection: "row", alignItems: "flex-end",borderTopLeftRadius:5,borderTopRightRadius:5 }}>
+                        <View style={{ flex: 1.2, height: 5, backgroundColor: color == '#ec1d27' ? "#780000" : color == '#29b6f6' ? '#0582ca' : color == '#01A147' ? '#004b23' : color == '#ffe01b' ? '#faa307' : null, flexDirection: "row", alignItems: "flex-end",borderTopLeftRadius:5,borderTopRightRadius:5 }}>
                           <Text style={{color:"white",fontSize:12, flex:1, margin:4}}>+91 99***999</Text>
                             <View style={{ flex: 1, flexDirection: "row", alignItems: "flex-end" }}>
                         
@@ -227,7 +279,9 @@ export default PlayerBox = ({ color, customStyle, lifeline, one, two, three, fou
 
 
 
-            </View>
+            </LinearGradient>
+
+
             {/* </BlinkView> */}
         </View>
     )
@@ -264,4 +318,10 @@ const styles = StyleSheet.create({
         left: 10,
         // marginTop: 1,
     },
+    linearGradient: {
+        flex: 1,
+        paddingLeft: 15,
+        paddingRight: 15,
+        borderRadius: 5
+      },
 })

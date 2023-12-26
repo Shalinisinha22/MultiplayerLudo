@@ -169,7 +169,7 @@ export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, r
   borderBottomWidth: 38,
   borderLeftColor: "transparent",
   borderRightColor: "transparent",
-  borderBottomColor: red,
+  borderBottomColor:'#c1121f',
   transform: [{ rotate: "90deg" }],
   top:19,
   left:-19.5
@@ -247,7 +247,7 @@ export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, r
   borderBottomWidth: 39,
   borderLeftColor: "transparent",
   borderRightColor: "transparent",
-  borderBottomColor: yellow,
+  borderBottomColor: '#ffd500',
   transform: [{ rotate: "-180deg" }],
   top:-115.5,
   left:-1

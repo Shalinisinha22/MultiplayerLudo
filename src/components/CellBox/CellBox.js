@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import {View , StyleSheet, TouchableOpacity, ToastAndroid } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {View , StyleSheet, TouchableOpacity, ToastAndroid, LogBox } from 'react-native';
 import { colors } from '../../util/Colors';
 import { B1, BLUE, G1, G8, GREEN, R1, RED, Y1, YELLOW } from '../../util/Constants';
 import RedGoti from '../Goti/RedGoti';
@@ -47,7 +47,9 @@ export default CellBox = ({backgroundColor, position, onPieceSelection, state,ar
     }
 
 
-
+    useEffect(() => {
+        LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
+    }, [])
 
     const shouldAnimateForSelection = () =>{
         const { red, blue, yellow, green,turn } = state;
@@ -201,8 +203,25 @@ export default CellBox = ({backgroundColor, position, onPieceSelection, state,ar
                
                   
                            <>
+                           {/* {getPieceColor() == "#ec1d27"
+                              &&
+                              <>
+                             { state.red.pieces.one.position == R1 ? isAnimating ? <ReadyRed positions ={state.red.pieces}></ReadyRed> : <RedGoti position ={state.red.pieces.one.position}></RedGoti>:state.red.playerName ? isAnimating ? <ReadyRed positions ={state.red.pieces}></ReadyRed> : <RedGoti positions ={state.red.pieces} ></RedGoti>:null}
+                             { state.red.pieces.two.position == R1 ? isAnimating ? <ReadyRed positions ={state.red.pieces}></ReadyRed> : <RedGoti position ={state.red.pieces.two.position}></RedGoti>:state.red.playerName ? isAnimating ? <ReadyRed positions ={state.red.pieces}></ReadyRed> : <RedGoti positions ={state.red.pieces} ></RedGoti>:null}
+                             { state.red.pieces.three.position == R1 ? isAnimating ? <ReadyRed positions ={state.red.pieces}></ReadyRed> : <RedGoti position ={state.red.pieces.three.position}></RedGoti>:state.red.playerName ? isAnimating ? <ReadyRed positions ={state.red.pieces}></ReadyRed> : <RedGoti positions ={state.red.pieces} ></RedGoti>:null}
+                             { state.red.pieces.four.position == R1 ? isAnimating ? <ReadyRed positions ={state.red.pieces}></ReadyRed> : <RedGoti position ={state.red.pieces.four.position}></RedGoti>:state.red.playerName ? isAnimating ? <ReadyRed positions ={state.red.pieces}></ReadyRed> : <RedGoti positions ={state.red.pieces} ></RedGoti>:null}
+                             </>
+                            } */}
+                            
+{/* <> 
+  <View style={{flex:1}}>
+  {state.red.pieces.one.position == R1 && <RedGoti position ={state.red.pieces.one.position}></RedGoti>}
+  {state.red.pieces.two.position == R1 && <RedGoti  position ={state.red.pieces.two.position}></RedGoti>}
+  {state.red.pieces.three.position == R1 && <RedGoti  position ={state.red.pieces.three.position}></RedGoti>}
+  {state.red.pieces.four.position == R1 && <RedGoti  position ={state.red.pieces.four.position}></RedGoti>}
+  </View>
+</> */}
 
-                        
                              {getPieceColor() == "#ec1d27" && state.red.playerName ? isAnimating ? <ReadyRed positions ={state.red.pieces}></ReadyRed> : <RedGoti positions ={state.red.pieces} ></RedGoti>:null}
                              {getPieceColor() == "#01A147" && state.green.playerName ? isAnimating ? <ReadyGreen></ReadyGreen> : <GreenGoti positions ={state.green.pieces}></GreenGoti>:null}
                              {getPieceColor() == "#ffe01b" && state.yellow.playerName ? isAnimating ? <ReadyYellow></ReadyYellow> : <YellowGoti positions ={state.yellow.pieces}></YellowGoti>:null}
