@@ -1,5 +1,5 @@
 import React, { Component, useRef } from 'react';
-import { View, Text, StyleSheet, Dimensions, ToastAndroid, Alert, ImageBackground, TouchableOpacity, Animated, ActivityIndicator, Image, Button } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ToastAndroid, ImageBackground, TouchableOpacity, Animated, ActivityIndicator, Image, Button, Touchable } from 'react-native';
 import { colors } from '../../util/Colors';
 import PlayerBox from '../../components/PlayerBox/PlayerBox'
 import VerticalCellsContainer from '../../components/VerticalCellsContainer/VerticalCellsContainer';
@@ -20,6 +20,10 @@ import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import LinearGradient from 'react-native-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Table, Row, Rows } from 'react-native-table-component'
+import { Alert, VStack, HStack, IconButton, Box } from "native-base";
+import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+// import * as Haptics from 'expo-haptics';
 
 
 export default class Game extends Component {
@@ -28,7 +32,7 @@ export default class Game extends Component {
         super(props);
         const { red, blue, yellow, green } = colors;
         const { redName, blueName, yellowName, greenName, twoPlayer, threePlayer, fourPlayer } = props;
-        this.intervalId= null
+        this.intervalId = null
         this.rollingSound = new Audio.Sound();
         this.rollingValue = new Animated.Value(0);
         this.onDiceRoll = this.onDiceRoll.bind(this);
@@ -70,18 +74,23 @@ export default class Game extends Component {
             yellowHeart: 3,
             counter: 0,
             timerScreen: false,
-            remainingTime:180, // 3 minutes in seconds,
-            isActive:true,
-            firstWinner:null,
-            secondWinner:null,
-            thirdWinner:null,
-            
-            last:null,
-            redTotalScore:0,
-            yellowTotalScore:0,
-            blueTotalScore:0,
-            greenTotalScore:0,
-            winnerArray:[]
+            remainingTime: 180, // 3 minutes in seconds,
+            isActive: true,
+            firstWinner: null,
+            secondWinner: null,
+            thirdWinner: null,
+
+            last: null,
+            redTotalScore: 0,
+            yellowTotalScore: 0,
+            blueTotalScore: 0,
+            greenTotalScore: 0,
+            winnerArray: [],
+            status: "warning",
+            title: "You missed a turn!",
+            subtitle: "If you miss 3 turns, you will be out of the game",
+            showAlert: false,
+            timerId: null
         }
 
 
@@ -89,279 +98,253 @@ export default class Game extends Component {
 
 
 
-  
-    
-      stopTimer = () => {
+
+
+    stopTimer = () => {
         clearInterval(this.intervalId);
         this.setState({ isActive: false, remainingTime: 180 }); // Reset to 3 minutes
-         
 
-      };
-    
-      formatTime = (time) => {
+
+    };
+
+    formatTime = (time) => {
         const minutes = Math.floor(time / 60);
         const seconds = time % 60;
         return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-      };
+    };
 
 
-   
+
     componentDidMount() {
-  
+
         this.loadSound();
         this.displayTimer();
         this.startTimer()
 
 
     }
-   
 
 
 
- startTimer (){
+
+    startTimer() {
         this.intervalId = setInterval(() => {
             this.setState(prevState => {
-            //   console.log('Previous remainingTime:', prevState.remainingTime); // Debugging line
-              return {
-                remainingTime: prevState.remainingTime - 1
-              };
-            },  async() => {
-              if (this.state.remainingTime <= 0) {
-            
-               await this.retrieveData()
-                this.props.onEnd()
-                this.stopTimer();
-              
-              }
+                //   console.log('Previous remainingTime:', prevState.remainingTime); // Debugging line
+                return {
+                    remainingTime: prevState.remainingTime - 1
+                };
+            }, async () => {
+                if (this.state.remainingTime <= 0) {
+
+                    console.log("139 called")
+
+                    await this.retrieveData()
+                    console.log("142 called")
+                    this.props.onEnd()
+                    this.stopTimer();
+
+                }
             });
-          }, 1000);
+        }, 1000);
     }
 
-   retrieveData = async () => {
-   console.log("retrieve data")
-    // if(this.redName !== ""){
-    //     try {
-    //         const redValue = await AsyncStorage.getItem('red');
-    //         if (redValue !== null) {
-    //           // We have data!!
-    //           console.log("rv",redValue);
-    //           this.setState({redTotalScore:redValue})
+    retrieveData = async () => {
+        //    console.log("retrieve data")
+
+
+        const { yellowName, blueName, greenName, redName } = this.props;
+
+        if (redName != "" && blueName != "" && greenName != "" && yellowName != "") {
+            try {
+                const redValue = await AsyncStorage.getItem('red');
+                const yellowValue = await AsyncStorage.getItem('yellow');
+                const greenValue = await AsyncStorage.getItem('green');
+                const blueValue = await AsyncStorage.getItem('blue');
+
+                const values = [
+                    { key: 'red', value: redValue },
+                    { key: 'yellow', value: yellowValue },
+                    { key: 'green', value: greenValue },
+                    { key: 'blue', value: blueValue },
+                ];
+                const sortedValues = values.sort((a, b) => b.value - a.value);
+                const firstGreatest = sortedValues[0].key;
+                const secondGreatest = sortedValues[1].key;
+                const thirdGreatest = sortedValues[2].key;
+                const fourthGreatest = sortedValues[3].key;
+
+                // console.log('First Greatest Value:', firstGreatest);
+                // console.log('Second Greatest Value:', secondGreatest);
+                // console.log('Third Greatest Value:', thirdGreatest);
+                // console.log('Fourth Greatest Value:', fourthGreatest);
+
+                for (let i = 0; i < sortedValues.length; i++) {
+                    this.state.winnerArray.push(sortedValues[i])
+
+                }
+
+                await AsyncStorage.setItem('playerArray', JSON.stringify(this.state.winnerArray))
+
+                // if(blueValue > redValue && blueValue > yellowValue && blueValue > greenValue ){
+                //       console.log("blue is winner") 
+                //       this.setState({firstWinner:{firstWinnerName:this.bluePlayer, firstWinnerScore:blueValue}})
+                //        if(redValue> yellowValue && redValue > greenValue){
+                //             console.log("red second winner")
+                //             this.setState({secondWinner:{secondWinnerName:this.redPlayer, secondWinnerScore:redValue}})
+
+                //             if (yellowValue > greenValue){
+                //                 this.setState({thirdWinner:{thirdWinnerName:this.yellowPlayer, thirdWinnerScore:yellowValue}})
+                //                 this.setState({fouthWinner:{fourthWinnerName:this.greenPlayer, fourthWinnerScore:greenValue}}) 
+                //             }
+                //             else{
+                //                 this.setState({thirdWinner:{thirdWinnerName:this.greenPlayer, thirdWinnerScore:greenValue}})
+                //                 this.setState({fouthWinner:{fourthWinnerName:this.yellowPlayer, fourthWinnerScore:yellowValue}}) 
+                //             }
+                //        }
+                //        else if (yellowValue > greenValue) {
+                //         this.setState({secondWinner:{secondWinnerName:this.yellowPlayer, secondWinnerScore:yellowValue}})
+                //          if(redValue > greenValue){
+                //             this.setState({thirdWinner:{thirdWinnerName:this.redPlayer, thirdWinnerScore:redValue}})
+                //             this.setState({last:{lastName:this.greenPlayer, secondWinnerScore:greenValue}})
+                //          }
+                //          else{
+                //             this.setState({thirdWinner:{thirdWinnerName:this.greenPlayer, thirdWinnerScore:greenValue}})
+                //             this.setState({last:{lastName:this.redPlayer, secondWinnerScore:redValue}})
+                //          }
+                //        }
+
+
+
+
+                //        else if ( yellowValue > blueValue){
+                //         console.log("yellow second winner")
+                //         this.setState({secondWinner:{secondWinnerName:this.yellowPlayer, secondWinnerScore:yellowValue}})
+                //        }
+                //        else{
+                //         console.log("blue second winner")
+                //         this.setState({secondWinner:{secondWinnerName:this.bluePlayer, secondWinnerScore:blueValue}})
+                //        }
+
+                //     //   try {
+                //     //     await AsyncStorage.setItem('winner',JSON.stringify({winnerName:this.bluePlayer, winnerScore:blueValue, second: }));
+                //     //     console.log("red", total)
+                //     //   } catch (error) {
+                //     //     console.log("error", error)
+                //     //     // Error saving data
+                //     //   }  
+
+                // }
+            }
+            catch (error) {
+                console.log(error)
+            }
+
+        }
+
+        else if (redName != "" && blueName != "" && yellowName != "") {
+            try {
+                const redValue = await AsyncStorage.getItem('red');
+                const yellowValue = await AsyncStorage.getItem('yellow');
+                const blueValue = await AsyncStorage.getItem('blue');
+
+                const values = [
+                    { key: 'red', value: redValue },
+                    { key: 'yellow', value: yellowValue },
+                    { key: 'blue', value: blueValue },
+                ];
+                const sortedValues = values.sort((a, b) => b.value - a.value);
+                const firstGreatest = sortedValues[0].key;
+                const secondGreatest = sortedValues[1].key;
+                const thirdGreatest = sortedValues[2].key;
+
+
+                // console.log('First Greatest Value:', firstGreatest);
+                // console.log('Second Greatest Value:', secondGreatest);
+                // console.log('Third Greatest Value:', thirdGreatest);
+                for (let i = 0; i < sortedValues.length; i++) {
+                    this.state.winnerArray.push(sortedValues[i])
+
+                }
+
+                await AsyncStorage.setItem('playerArray', JSON.stringify(this.state.winnerArray))
+
+
+            }
+            catch (error) {
+                console.log(error)
+            }
+        }
+        else {
+
+            try {
+                const yellowValue = await AsyncStorage.getItem('yellow');
+                const blueValue = await AsyncStorage.getItem('blue');
+                const values = [
+                    { key: 'yellow', value: yellowValue },
+                    { key: 'blue', value: blueValue },
+                ];
+                const sortedValues = values.sort((a, b) => b.value - a.value);
+                const firstGreatest = sortedValues[0].key;
+                const secondGreatest = sortedValues[1].key;
+                // console.log('First Greatest Value:', firstGreatest);
+                // console.log('Second Greatest Value:', secondGreatest);
+
+
+                for (let i = 0; i < sortedValues.length; i++) {
+                    this.state.winnerArray.push(sortedValues[i])
+
+                }
+
+                await AsyncStorage.setItem('playerArray', JSON.stringify(this.state.winnerArray))
+            }
+            catch (error) {
+                console.log(error)
+            }
+        }
+
+
+    };
+
+    // displayTimer() {
+    //     const { turn } = this.state;
+    //     const timerId = setTimeout(() => {
+    //         this.moveToNextPlayer();
+    //     }, 15000);  // 15 seconds
+
+    //     // Store the timerId in the state
+    //     this.setState(prevState => ({
+    //         timers: {
+    //             ...prevState.timers,
+    //             [turn]: timerId
     //         }
-    //       } catch (error) {
-    //       console.log(error)
-    //       }
+    //     }));
     // }
-
-    // if(this.yellowName !== ""){
-    //     try {
-    //         const yellowValue = await AsyncStorage.getItem('yellow');
-    //         if (yellowValue !== null) {
-    //           // We have data!!
-    //           console.log("yv",yellowValue);
-    //           this.setState({yellowTotalScore:yellowValue})
-    //         }
-    //       } catch (error) {
-    //         console.log(error)
-    //       }
-    // }
-
-    // if(this.greenName !== ""){
-    //     try {
-    //         const greenValue = await AsyncStorage.getItem('green');
-    //         if (greenValue !== null) {
-    //           // We have data!!
-    //           console.log("gv",greenValue);
-    //           this.setState({greenTotalScore:greenValue})
-    //         }
-    //       } catch (error) {
-    //         console.log(error)
-    //       }
-    // }
-
-    // if(this.blueName !== ""){
-    //     try {
-    //         const blueValue = await AsyncStorage.getItem('blue');
-    //         if (blueValue !== null) {
-    //           // We have data!!
-    //           console.log("bv",blueValue);
-    //           this.setState({blueTotalScore:blueValue})
-    //         }
-    //       } catch (error) {
-    //         console.log(error)
-    //       }
-    // }
-
-    const { yellowName, blueName, greenName, redName } = this.props; 
-
-if(redName!= "" && blueName!= "" && greenName != "" && yellowName != "" ){
-    try{
-        const redValue = await AsyncStorage.getItem('red');
-        const yellowValue = await AsyncStorage.getItem('yellow');
-        const greenValue = await AsyncStorage.getItem('green');
-        const blueValue = await AsyncStorage.getItem('blue');
-
-        const values = [
-            { key: 'red', value: redValue },
-            { key: 'yellow', value: yellowValue },
-            { key: 'green', value: greenValue },
-            { key: 'blue', value: blueValue },
-          ];
-        const sortedValues = values.sort((a, b) => b.value - a.value);
-        const firstGreatest = sortedValues[0].key;
-        const secondGreatest = sortedValues[1].key;
-        const thirdGreatest = sortedValues[2].key;
-        const fourthGreatest = sortedValues[3].key;
-
-        console.log('First Greatest Value:', firstGreatest);
-        console.log('Second Greatest Value:', secondGreatest);
-        console.log('Third Greatest Value:', thirdGreatest);
-        console.log('Fourth Greatest Value:', fourthGreatest);
-
-     for(let i=0;i<sortedValues.length;i++){
-        this.state.winnerArray.push(sortedValues[i])
-
-     }
-
-     await AsyncStorage.setItem('playerArray',JSON.stringify(this.state.winnerArray))
-
-        // if(blueValue > redValue && blueValue > yellowValue && blueValue > greenValue ){
-        //       console.log("blue is winner") 
-        //       this.setState({firstWinner:{firstWinnerName:this.bluePlayer, firstWinnerScore:blueValue}})
-        //        if(redValue> yellowValue && redValue > greenValue){
-        //             console.log("red second winner")
-        //             this.setState({secondWinner:{secondWinnerName:this.redPlayer, secondWinnerScore:redValue}})
-
-        //             if (yellowValue > greenValue){
-        //                 this.setState({thirdWinner:{thirdWinnerName:this.yellowPlayer, thirdWinnerScore:yellowValue}})
-        //                 this.setState({fouthWinner:{fourthWinnerName:this.greenPlayer, fourthWinnerScore:greenValue}}) 
-        //             }
-        //             else{
-        //                 this.setState({thirdWinner:{thirdWinnerName:this.greenPlayer, thirdWinnerScore:greenValue}})
-        //                 this.setState({fouthWinner:{fourthWinnerName:this.yellowPlayer, fourthWinnerScore:yellowValue}}) 
-        //             }
-        //        }
-        //        else if (yellowValue > greenValue) {
-        //         this.setState({secondWinner:{secondWinnerName:this.yellowPlayer, secondWinnerScore:yellowValue}})
-        //          if(redValue > greenValue){
-        //             this.setState({thirdWinner:{thirdWinnerName:this.redPlayer, thirdWinnerScore:redValue}})
-        //             this.setState({last:{lastName:this.greenPlayer, secondWinnerScore:greenValue}})
-        //          }
-        //          else{
-        //             this.setState({thirdWinner:{thirdWinnerName:this.greenPlayer, thirdWinnerScore:greenValue}})
-        //             this.setState({last:{lastName:this.redPlayer, secondWinnerScore:redValue}})
-        //          }
-        //        }
-
-             
-
-              
-        //        else if ( yellowValue > blueValue){
-        //         console.log("yellow second winner")
-        //         this.setState({secondWinner:{secondWinnerName:this.yellowPlayer, secondWinnerScore:yellowValue}})
-        //        }
-        //        else{
-        //         console.log("blue second winner")
-        //         this.setState({secondWinner:{secondWinnerName:this.bluePlayer, secondWinnerScore:blueValue}})
-        //        }
-
-        //     //   try {
-        //     //     await AsyncStorage.setItem('winner',JSON.stringify({winnerName:this.bluePlayer, winnerScore:blueValue, second: }));
-        //     //     console.log("red", total)
-        //     //   } catch (error) {
-        //     //     console.log("error", error)
-        //     //     // Error saving data
-        //     //   }  
-
-        // }
-    }
-    catch (error) {
-        console.log(error)
-      }
-
-}
-
-else if (redName!= "" && blueName!= "" &&  yellowName != "" ){
-    try{
-        const redValue = await AsyncStorage.getItem('red');
-        const yellowValue = await AsyncStorage.getItem('yellow');
-        const blueValue = await AsyncStorage.getItem('blue');
-
-        const values = [
-            { key: 'red', value: redValue },
-            { key: 'yellow', value: yellowValue },
-            { key: 'blue', value: blueValue },
-          ];
-        const sortedValues = values.sort((a, b) => b.value - a.value);
-        const firstGreatest = sortedValues[0].key;
-        const secondGreatest = sortedValues[1].key;
-        const thirdGreatest = sortedValues[2].key;
-     
-
-        console.log('First Greatest Value:', firstGreatest);
-        console.log('Second Greatest Value:', secondGreatest);
-        console.log('Third Greatest Value:', thirdGreatest);
-        for(let i=0;i<sortedValues.length;i++){
-            this.state.winnerArray.push(sortedValues[i])
-    
-         }
-    
-         await AsyncStorage.setItem('playerArray',JSON.stringify(this.state.winnerArray))
-
-      
-    }
-    catch (error) {
-        console.log(error)
-      }
-}
-else{
-
-    try{
-        const yellowValue = await AsyncStorage.getItem('yellow');
-        const blueValue = await AsyncStorage.getItem('blue'); 
-        const values = [
-            { key: 'yellow', value: yellowValue },
-            { key: 'blue', value: blueValue },
-          ];
-        const sortedValues = values.sort((a, b) => b.value - a.value);
-        const firstGreatest = sortedValues[0].key;
-        const secondGreatest = sortedValues[1].key;
-        console.log('First Greatest Value:', firstGreatest);
-        console.log('Second Greatest Value:', secondGreatest);
-    
-    
-        for(let i=0;i<sortedValues.length;i++){
-            this.state.winnerArray.push(sortedValues[i])
-    
-         }
-    
-         await AsyncStorage.setItem('playerArray',JSON.stringify(this.state.winnerArray))
-    }
-    catch (error) {
-        console.log(error)
-      }
-}
-
-
- };
 
     displayTimer() {
-        const { turn } = this.state;
+        const { turn, timers } = this.state;
+
+        // Clear any existing timer for the current player
+        if (timers[turn]) {
+            clearTimeout(timers[turn]);
+        }
+
         const timerId = setTimeout(() => {
             this.moveToNextPlayer();
         }, 15000);  // 15 seconds
 
-        // Store the timerId in the state
+        // Store the new timerId in the state
         this.setState(prevState => ({
             timers: {
                 ...prevState.timers,
                 [turn]: timerId
-            }
+            },
+            timerId: timerId
         }));
     }
 
 
-
-    moveToNextPlayer() {
+    async moveToNextPlayer() {
         const { turn, timers } = this.state;
 
         // Clear the current player's timer
@@ -377,12 +360,23 @@ else{
             if (turn == BLUE) {
 
                 if (this.state.blueHeart > 1) {
+                    // Haptics.selectionAsync()
                     this.setState({
-                        blueHeart: this.state.blueHeart - 1
+                        blueHeart: this.state.blueHeart - 1,
+                        showAlert: true
                     })
+                    setTimeout(() => {
+                        this.setState({
+
+                            showAlert: false
+                        })
+                    }, 3000);
+
+
                 }
                 else if (this.state.blueHeart <= 1) {
-                    this.retrieveData()
+                    await AsyncStorage.clear()
+                    // console.log("356 called")
                     this.props.onEnd()
 
                 }
@@ -391,12 +385,23 @@ else{
             if (turn == YELLOW) {
 
                 if (this.state.yellowHeart > 1) {
+                    // Haptics.selectionAsync()
                     this.setState({
-                        yellowHeart: this.state.yellowHeart - 1
+                        yellowHeart: this.state.yellowHeart - 1,
+                        showAlert: true
                     })
+
+                    setTimeout(() => {
+                        this.setState({
+
+                            showAlert: false
+                        })
+                    }, 3000);
+
                 }
                 else if (this.state.yellowHeart <= 1) {
-                    this.retrieveData()
+                    await AsyncStorage.clear()
+                    // console.log("381 called")
                     this.props.onEnd()
                 }
 
@@ -404,13 +409,23 @@ else{
             if (turn == RED) {
 
                 if (this.state.redHeart > 1) {
+                    // Haptics.selectionAsync()
                     this.setState({
-                        redHeart: this.state.redHeart - 1
+                        redHeart: this.state.redHeart - 1,
+                        showAlert: true
                     })
+                    setTimeout(() => {
+                        this.setState({
+
+                            showAlert: false
+                        })
+                    }, 3000);
+
 
                 }
                 else if (this.state.redHeart <= 1) {
-                    this.retrieveData()
+                    await AsyncStorage.clear()
+                    //  console.log("405 called")
                     this.props.onEnd()
                 }
 
@@ -418,13 +433,23 @@ else{
 
 
             if (turn == GREEN) {
+                // Haptics.selectionAsync()
                 if (this.state.greenHeart > 1) {
                     this.setState({
-                        greenHeart: this.state.greenHeart - 1
+                        greenHeart: this.state.greenHeart - 1,
+                        showAlert: true
                     })
+                    setTimeout(() => {
+                        this.setState({
+
+                            showAlert: false
+                        })
+                    }, 3000);
+
                 }
                 else if (this.state.greenHeart <= 1) {
-                    this.retrieveData()
+                    await AsyncStorage.clear()
+                    // console.log("429 called")
                     this.props.onEnd()
                 }
 
@@ -439,22 +464,21 @@ else{
         if (nextPlayer) {
 
 
-            this.setState({
-                turn: nextPlayer,
-
-            });
-
+            this.setState({ animateForSelection: false, moves: [], turn: nextPlayer }, () => {
+                this.displayTimer()
+            })
 
 
-            this.displayTimer()
 
 
-        } else {
+            // this.displayTimer()
+
+
+        }
+        else {
             // Handle the game end or next round logic here
         }
     }
-
-
 
 
 
@@ -482,7 +506,7 @@ else{
     componentWillUnmount() {
         this.unloadSound();
         clearInterval(this.intervalId);
-    
+
 
     }
 
@@ -505,13 +529,11 @@ else{
     }
 
 
-
-
     renderDiceIcons() {
         const { diceNumber, isRolling } = this.state;
 
         if (isRolling) {
-            return <Image rollTime={1000} source={require("../../../assets/DICE2.png")}></Image>
+            return <Image rollTime={300} source={require("../../../assets/DICE2.png")}></Image>
 
             //    <FontAwesome5 name="dice-d6" size={54} color="#fdfffc" 
             //   numDice={1}  // Set the number of dice as needed
@@ -521,17 +543,17 @@ else{
             // />;
         }
         if (diceNumber === 1) {
-            return <FontAwesome5 name="dice-one" size={58} color="#fdfffc" />;
+            return <FontAwesome5 name="dice-one" size={50} color="#fdfffc" />;
         } else if (diceNumber === 2) {
-            return <FontAwesome5 name="dice-two" size={58} color="#fdfffc" />;
+            return <FontAwesome5 name="dice-two" size={50} color="#fdfffc" />;
         } else if (diceNumber === 3) {
-            return <FontAwesome5 name="dice-three" size={58} color="#fdfffc" />;
+            return <FontAwesome5 name="dice-three" size={50} color="#fdfffc" />;
         } else if (diceNumber === 4) {
-            return <FontAwesome5 name="dice-four" size={58} color="#fdfffc" />;
+            return <FontAwesome5 name="dice-four" size={50} color="#fdfffc" />;
         } else if (diceNumber === 5) {
-            return <FontAwesome5 name="dice-five" size={58} color="#fdfffc" />;
+            return <FontAwesome5 name="dice-five" size={50} color="#fdfffc" />;
         } else if (diceNumber === 6) {
-            return <FontAwesome5 name="dice-six" size={58} color="#fdfffc" />;
+            return <FontAwesome5 name="dice-six" size={50} color="#fdfffc" />;
         }
 
 
@@ -557,10 +579,10 @@ else{
     initPieces(playerColor) {
         let time = new Date().getTime();
         return {
-            one: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: ONE, color: playerColor, updateTime: time, oneCount: [],piecePosition:new Animated.Value(0) },
-            two: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: TWO, color: playerColor, updateTime: time, twoCount: [],piecePosition: new Animated.Value(0) },
-            three: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: THREE, color: playerColor, updateTime: time, threeCount: [],piecePosition: new Animated.Value(0) },
-            four: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: FOUR, color: playerColor, updateTime: time, fourCount: [],piecePosition: new Animated.Value(0)}
+            one: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: ONE, color: playerColor, updateTime: time, oneCount: [], piecePosition: new Animated.Value(0) },
+            two: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: TWO, color: playerColor, updateTime: time, twoCount: [], piecePosition: new Animated.Value(0) },
+            three: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: THREE, color: playerColor, updateTime: time, threeCount: [], piecePosition: new Animated.Value(0) },
+            four: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: FOUR, color: playerColor, updateTime: time, fourCount: [], piecePosition: new Animated.Value(0) }
         }
     }
 
@@ -577,139 +599,125 @@ else{
 
     render() {
         const { remainingTime } = this.state;
+        const { redName, yellowName, greenName, blueName } = this.props;
+
         return (
-            <ImageBackground source={require("../../../assets/bj.png")} style={{ flex: 1, alignItems: "center", justifyContent: "center" }} >
-                {/* {this.state.turn === RED && <Arrow1></Arrow1>}
-                {this.state.turn === YELLOW && <Arrow2></Arrow2>}
-                {this.state.turn === GREEN && <Arrow3></Arrow3>}
-                {this.state.turn === BLUE && <Arrow4></Arrow4>} */}
-                {/* 
-                <View style={styles.redGotiBox}>
-                    <View style={{ height: "50%", width: "50%" }}>
-                        <RedGoti></RedGoti>
+
+
+            <ImageBackground source={require("../../../assets/new.png")} style={{ flex: 1, alignItems: "center" }} >
+
+
+                <View style={{ flexDirection: "row", width: Dimensions.get("screen").width, justifyContent: "space-around", alignItems: "center" }}>
+                    <TouchableOpacity style={{ height: 60, width: 60, borderRadius: 50, borderColor: "#7b2cbf", borderWidth: 4, alignItems: "center", justifyContent: "center" }}>
+
+                        <Ionicons name="settings-sharp" size={24} color="white" />
+                    </TouchableOpacity>
+
+                    <View style={{ width: 140, borderColor: "gray", borderWidth: 1, borderRadius: 20, alignItems: "center", flexDirection: "row", justifyContent: "center", padding: 4, marginTop: 40 }}>
+                        <MaterialIcons name="timer" size={28} color="white" />
+                        <Text allowFontScaling={false} style={{ fontSize: 20, color: "white", marginLeft: 3, fontWeight: "bold" }}>
+                            {this.formatTime(remainingTime)}
+                        </Text>
                     </View>
 
+
+                    <TouchableOpacity style={{ height: 45, width: 70, borderRadius: 30, borderColor: "#7b2cbf", borderWidth: 4, alignItems: "center", justifyContent: "center", padding: 5 }}>
+                        <Text allowFontScaling={false} style={{ color: "white", fontSize: 12 }}>Pot</Text>
+                        <Text allowFontScaling={false} style={{ color: "white", fontSize: 12 }}>Rs 0.4</Text>
+                    </TouchableOpacity>
                 </View>
-                <View style={styles.yellowGotiBox}>
 
-                    <View style={{ height: "50%", width: "50%" }}>
-                        <YellowGoti></YellowGoti>
-                    </View>
 
-                </View>
-                <View style={styles.blueGotiBox}>
-                    <View style={{ height: "50%", width: "50%" }}>
-                        <BlueGoti></BlueGoti></View>
-                </View>
-                <View style={styles.greenGotiBox}>
-                    <View style={{ height: "50%", width: "50%" }}>
-                        <GreenGoti></GreenGoti>
-                    </View>
-                </View> */}
-                {/* <View style={styles.redDice}>
+                {console.log(this.state.timers[RED])}
 
-                    <View style={styles.diceBtn1}>
+                {
+                    this.state.timers[RED] || this.state.timers[GREEN] || this.state.timers[BLUE] || this.state.timers[YELLOW] ?
 
-                        {this.state.turn == RED &&
-                            <Animated.View
-                                style={[
+                        <TouchableOpacity style={{
+                            height: 100, width: 100, borderRadius: 50, borderColor: "#7b2cbf", borderWidth: 7, alignItems: "center", justifyContent: "center", padding: 5, position: "absolute",
+                            bottom: "8.5%",
+                            left: "38%",
+                        }}>
+                            <CountdownCircleTimer
+                                isPlaying
+                                duration={15}
+                                // colors={[color == '#ec1d27' ? "#780000" : color == '#29b6f6' ? '#0582ca' : color == '#01A147' ? '#004b23' : color == '#ffe01b' ? '#fdc500' : null]}
 
-                                    {
-                                        transform: [{ rotate: this.state.rollingRotation }],
-                                    },
-                                ]}
-                            >
-                                <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
-                            </Animated.View>
-                        }
-                    </View>
-
-                </View>
-                <View style={styles.yellowDice}>
-
-                    <View style={styles.diceBtn2}>
-
-                        {this.state.turn == YELLOW &&
-                            <Animated.View
-                                style={[
-
-                                    {
-                                        transform: [{ rotate: this.state.rollingRotation }],
-                                    },
-                                ]}
-                            >
-                                <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
-                            </Animated.View>
-                        }
-                    </View>
-
-                </View> */}
-                {/* <View style={styles.blueDice}> */}
-
-                <Text style={{ fontSize: 28,color:"white",position:"absolute",top:40 }}>
-          {this.formatTime(remainingTime)}
-        </Text>
-        {/* {!isActive ? (
-          <Button title="Start Timer" onPress={this.startTimer} />
-        ) : (
-          <Button title="Stop Timer" onPress={this.stopTimer} />
-        )} */}
-                <View style={[styles.diceBtn3, {
-                    backgroundColor: this.state.turn == BLUE ? "#0582ca" : this.state.turn == RED ? "#780000" : this.state.turn == YELLOW ? "#fdc500" : this.state.turn == GREEN ? "#004b23" : "red", borderWidth: 8,
-                    borderColor: 'rgba(0,0,0,0.2)',
-                }]}>
-                    {/* {this.state.turn == BLUE && */}
-                    <Animated.View
-                        style={[
-
-                            {
-                                transform: [{ rotate: this.state.rollingRotation }],
-                                backgroundColor: this.state.turn == BLUE ? "#0582ca" : this.state.turn == RED ? "#780000" : this.state.turn == YELLOW ? "#fdc500" : this.state.turn == GREEN ? "#004b23" : null
-                            },
-                        ]}
-                    >
-                        <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
-                    </Animated.View>
-                    {/* } */}
-
-                </View>
-                {/* </View> */}
-                {/* <View style={styles.greenDice}>
-                    <View style={styles.diceBtn1}>
-
-                        {this.state.turn == GREEN &&
-                            <Animated.View
-                                style={[
-
-                                    {
-                                        transform: [{ rotate: this.state.rollingRotation }],
-                                    },
-                                ]}
+                                colors={['#008000', '#F7B801', '#A30000', '#A30000']}
+                                // colors={color == '#ec1d27'?['#780000', '#780000']: color == '#29b6f6'?['#0582ca', '#0582ca']: color == '#01A147'?['#004b23', '#004b23']:color == '#ffe01b'?['#fdc500', '#fdc500']:null }
+                                colorsTime={[7, 5, 2, 0]}
+                                size={110}
+                                strokeWidth={7}
+                                strokeLinecap='square'
 
                             >
-                                <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
-                            </Animated.View>
-                        }
-                    </View>
-                </View> */}
+                                {({ remainingTime }) =>
 
-                {/* <View style={{position:"absolute", top: 90, left: 60,}}>
+                                    <View style={[styles.diceBtn3, {
+                                        backgroundColor: this.state.turn == BLUE ? "#0582ca" : this.state.turn == RED ? "#780000" : this.state.turn == YELLOW ? "#fdc500" : this.state.turn == GREEN ? "#004b23" : "red", borderWidth: 8,
+                                        borderColor: 'rgba(0,0,0,0.2)',
+                                    }]}>
+                                        {/* {this.state.turn == BLUE && */}
+                                        <Animated.View
+                                            style={[
 
-             
-                </View> */}
+                                                {
+                                                    transform: [{ rotate: this.state.rollingRotation }],
+                                                    backgroundColor: this.state.turn == BLUE ? "#0582ca" : this.state.turn == RED ? "#780000" : this.state.turn == YELLOW ? "#fdc500" : this.state.turn == GREEN ? "#004b23" : null
+                                                },
+                                            ]}
+                                        >
+                                            <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
+                                        </Animated.View>
+                                        {/* } */}
+
+                                    </View>
+
+                                }
+
+                            </CountdownCircleTimer>
+                        </TouchableOpacity>
+                        :
+
+                        <TouchableOpacity style={{
+                            height: 100, width: 100, borderRadius: 50, borderColor: "#7b2cbf", borderWidth: 7, alignItems: "center", justifyContent: "center", padding: 5, position: "absolute",
+                            bottom: "8.5%", left: "38%",
+                        }}>
+                            <View style={[styles.diceBtn3, {
+                                backgroundColor: this.state.turn == BLUE ? "#0582ca" : this.state.turn == RED ? "#780000" : this.state.turn == YELLOW ? "#fdc500" : this.state.turn == GREEN ? "#004b23" : "red", borderWidth: 8,
+                                borderColor: 'rgba(0,0,0,0.2)',
+                            }]}>
+                                {/* {this.state.turn == BLUE && */}
+                                <Animated.View
+                                    style={[
+
+                                        {
+                                            transform: [{ rotate: this.state.rollingRotation }],
+                                            backgroundColor: this.state.turn == BLUE ? "#0582ca" : this.state.turn == RED ? "#780000" : this.state.turn == YELLOW ? "#fdc500" : this.state.turn == GREEN ? "#004b23" : null
+                                        },
+                                    ]}
+                                >
+                                    <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
+                                </Animated.View>
+                                {/* } */}
+
+                            </View>
+                        </TouchableOpacity>
+
+                }
 
                 <View style={styles.gameContainer}>
 
                     <View style={styles.twoPlayersContainer}>
                         {/* {console.log("330", this.state.timers[BLUE], this.state.timers[YELLOW])} */}
-                        {this.renderPlayerBox(this.state.red, this.state.redScore, this.state.redHeart, this.state.timers[RED] ? true : false, { borderTopLeftRadius: 20 })}
+                        {this.renderPlayerBox(redName, this.state.red, this.state.redScore, this.state.redHeart, this.state.timers[RED] ? true : false, this.state.diceNumber, this.state.isRolling, this.renderDiceIcons, { borderTopLeftRadius: 20 })}
                         <VerticalCellsContainer position={TOP_VERTICAL}
                             state={this.state}
                             onPieceSelection={(selectedPiece) => {
                                 this.onPieceSelection(selectedPiece);
                             }}
                         />
-                        {this.renderPlayerBox(this.state.yellow, this.state.yellowScore, this.state.yellowHeart, this.state.timers[YELLOW] != null ? true : false, { borderTopRightRadius: 20 })}
+                        {this.renderPlayerBox(yellowName, this.state.yellow, this.state.yellowScore, this.state.yellowHeart, this.state.timers[YELLOW] != null ? true : false, this.state.diceNumber, this.state.isRolling, this.renderDiceIcons, { borderTopRightRadius: 20 })}
                     </View>
                     <HorizontalCellsContainer state={this.state}
                         onDiceRoll={() => { this.onDiceRoll() }}
@@ -718,16 +726,41 @@ else{
                         }}
                     />
                     <View style={styles.twoPlayersContainer}>
-                        {this.renderPlayerBox(this.state.blue, this.state.blueScore, this.state.blueHeart, this.state.timers[BLUE] != null ? true : false, { borderBottomLeftRadius: 0 })}
+                        {this.renderPlayerBox(blueName, this.state.blue, this.state.blueScore, this.state.blueHeart, this.state.timers[BLUE] != null ? true : false, this.state.diceNumber, this.state.isRolling, this.renderDiceIcons, { borderBottomLeftRadius: 0 })}
                         <VerticalCellsContainer position={BOTTOM_VERTICAL}
                             state={this.state}
                             onPieceSelection={(selectedPiece) => {
                                 this.onPieceSelection(selectedPiece);
                             }}
                         />
-                        {this.renderPlayerBox(this.state.green, this.state.greenScore, this.state.greenHeart, this.state.timers[GREEN] ? true : false, { borderBottomRightRadius: 0 })}
+                        {this.renderPlayerBox(greenName, this.state.green, this.state.greenScore, this.state.greenHeart, this.state.timers[GREEN] ? true : false, this.state.diceNumber, this.state.isRolling, this.renderDiceIcons, { borderBottomRightRadius: 0 })}
                     </View>
                 </View>
+
+                {this.state.showAlert &&
+                    <View style={{ flex: 1, position: "absolute", bottom: 150, left: 90 }}>
+                        <Alert w="100%" status={this.state.status} style={{ backgroundColor: "#5a189a" }}>
+                            <VStack space={1} flexShrink={1} w="100%">
+                                <HStack flexShrink={1} space={2} justifyContent="space-between">
+                                    <HStack space={1} flexShrink={1}>
+                                        <Alert.Icon mt="1" />
+                                        <Text allowFontScaling={false} fontSize="md" style={{ color: "white" }}>
+                                            {this.state.title}
+                                        </Text>
+                                    </HStack>
+
+                                </HStack>
+                                <Text allowFontScaling={false} pl="6"
+                                    style={{ color: "gray", fontSize: 10 }}>
+                                    {this.state.subtitle}
+                                </Text>
+                            </VStack>
+                        </Alert>
+                    </View>
+                }
+
+
+
 
             </ImageBackground>
         )
@@ -735,16 +768,16 @@ else{
 
     async onDiceRoll() {
 
-        const { timers, turn } = this.state
-        if (timers[turn]) {
-            clearTimeout(timers[turn]);
-            this.setState(prevState => ({
-                timers: {
-                    ...prevState.timers,
-                    [this.state.turn]: null
-                }
-            }));
-        }
+        // const { timers, turn } = this.state
+        // if (timers[turn]) {
+        //     clearTimeout(timers[turn]);
+        //     this.setState(prevState => ({
+        //         timers: {
+        //             ...prevState.timers,
+        //             [this.state.turn]: null
+        //         }
+        //     }));
+        // }
 
         const { diceRollTestDataIndex, diceRollTestData, animateForSelection } = this.state;
 
@@ -790,11 +823,10 @@ else{
 
             if (diceNumber === 6) {
 
-
-
                 this.setState({ isRolling: false, moves: moves, extraChance: extraChance + 1, isWaitingForDiceRoll: false }, () => {
 
                     this.updatePlayerPieces(this.state[turn]
+
 
                     )
 
@@ -910,8 +942,25 @@ else{
         if (this.state.bonusCount > 0) {
             this.setState({ bonusCount: this.state.bonusCount - 1 });
             if (this.isPlayerFinished(this.state[turn])) {
+
+                console.log("879")
                 return turn;
             }
+            // else{
+            //     const { turn } = this.state;
+            //     const timerId = setTimeout(() => {
+            //         this.moveToNextPlayer();
+            //     }, 15000);  // 15 seconds
+
+            //     // Store the timerId in the state
+            //     this.setState(prevState => ({
+            //         timers: {
+            //             ...prevState.timers,
+            //             [turn]: timerId
+            //         }
+            //     }));
+            //     return null;
+            // }
         }
         switch (turn) {
             case RED:
@@ -937,7 +986,6 @@ else{
         four.position != FINISHED ? countOfUnfinishedPieces++ : undefined;
         return countOfUnfinishedPieces == 1;
     }
-
 
     playerHasOptionsForMoves(player) {
         let countMoveOptions = this.getCountMoveOptions(player);
@@ -1024,8 +1072,8 @@ else{
                     } else if (move == 6 && positionTocheckFor < 14) {
                         isMovePossible = true;
                         possibleMove = move;
+                    }
                 }
-           }
             })
 
             return isMovePossible;
@@ -1114,7 +1162,7 @@ else{
             return true;
         }
 
-    
+
 
 
         if (piece.position == R1 || piece.position == R9 || piece.position == Y1 || piece.position == Y9 || piece.position == G1 || piece.position == G9 || piece.position == B1 || piece.position == B9) {
@@ -1178,7 +1226,6 @@ else{
 
         return false;
     }
-
 
 
     updatePlayerPieces(player) {
@@ -1250,18 +1297,19 @@ else{
     }
 
 
-    onPieceSelection = (selectedPiece) => {
-        //   const {timers, turn} = this.state
-        //     if (timers[turn]) {
-        //         clearTimeout(timers[turn]);
-        //         this.setState(prevState => ({
-        //             timers: {
-        //                 ...prevState.timers,
-        //                 [this.state.turn]: null
-        //             }
-        //         }));
-        //     }
-        // console.log(selectedPiece)
+    onPieceSelection = async (selectedPiece) => {
+
+
+        const { timers, turn } = this.state
+        if (timers[turn]) {
+            await clearTimeout(timers[turn]);
+            await this.setState(prevState => ({
+                timers: {
+                    ...prevState.timers,
+                    [this.state.turn]: null
+                }
+            }));
+        }
         if (this.state.isWaitingForDiceRoll) {
             return;
         }
@@ -1275,6 +1323,11 @@ else{
                 return;
             }
             this.movePieceByPosition(selectedPiece, moves.shift());
+
+
+
+
+
         }
 
         else if (moves.length > 1) {
@@ -1379,6 +1432,10 @@ else{
                     let updatedPosition = (position + move + 1);
                     if (updatedPosition == 19) {
                         newPosition = FINISHED;
+
+
+
+
                     }
                     else {
                         let updatedCellAreaIndicator = cellAreaIndicator == "R" ? "Y" : cellAreaIndicator == "Y" ? "G" : cellAreaIndicator == "G" ? "B" : cellAreaIndicator == "B" ? "R" : undefined;
@@ -1411,31 +1468,38 @@ else{
         }
         if (newPosition != "") {
 
-    
-              const animatingPiece =()=>{
+
+            const animatingPiece = () => {
                 // console.log("animation start")
                 // console.log("animation start",piece.piecePosition)
 
                 Animated.timing(piece.piecePosition, {
-                  
-                      toValue: 200,
-                      duration: 500,  // Duration of the animation in milliseconds
-                      useNativeDriver: true,
-                    }).start(()=>{
-                        piece.position = newPosition;
-                        piece.updateTime = new Date().getTime();
-                    })
-              } 
 
-              animatingPiece()
-              
-            
-        
-          
-      
-         
+                    toValue: 200,
+                    duration: 500,  // Duration of the animation in milliseconds
+                    useNativeDriver: true,
+                }).start(() => {
+                    piece.position = newPosition;
+                    piece.updateTime = new Date().getTime();
+                })
+            }
+
+            animatingPiece()
+
+
+
+
+
+
             piece.position = newPosition;
             piece.updateTime = new Date().getTime();
+
+
+            if (move == 6 || this.state.extraChance >= 1) {
+                this.displayTimer();  // Display the timer
+
+                // Rest of your code for handling the dice roll and moving the piece
+            }
 
             if (piece.name == "one") {
                 piece.oneCount.push(move)
@@ -1454,25 +1518,29 @@ else{
             }
 
 
-            {
-                // console.log(piece)
-            }
+            // {
+            //     console.log("1489",piece.color)
+            // }
 
             if (piece.color == "red") {
                 redScore.push(move)
                 this.setState({ redScore: redScore })
+                console.log("redScore", redScore)
             }
             if (piece.color == "yellow") {
                 yellowScore.push(move)
                 this.setState({ yellowScore: yellowScore })
+                console.log("yellowScore", yellowScore)
             }
             if (piece.color == "blue") {
                 blueScore.push(move)
                 this.setState({ blueScore: blueScore })
+                console.log("blueScore", blueScore)
             }
             if (piece.color == "green") {
                 greenScore.push(move)
                 this.setState({ greenScore: greenScore })
+                console.log("greenScore", greenScore)
             }
 
 
@@ -1487,7 +1555,9 @@ else{
                 // console.log("moves", this.state.moves)
                 if (this.state.moves.length == 1) {
                     // this.setState({animateForSelection:false,moves:this.state.moves})
+
                     this.updatePlayerPieces(player)
+
                 }
                 else if (this.state.moves.length == 0 || this.isPlayerFinished(player)) {
                     this.setState({ animateForSelection: false, moves: [] })
@@ -1501,6 +1571,7 @@ else{
                 if (this.state.moves.length == 1) {
                     this.updatePlayerPieces(player)
 
+
                 } else if (this.state.moves.length == 0 || this.isPlayerFinished(player)) {
                     this.setState({ animateForSelection: false, moves: [], turn: this.getNextTurn() }, () => {
                         this.displayTimer()
@@ -1513,12 +1584,14 @@ else{
 
 
     }
-    renderPlayerBox(player, playerScore, lifeline, timer, customStyle) {
+    renderPlayerBox(playerName, player, playerScore, lifeline, timer, customStyle) {
         const { one, two, three, four } = player.pieces;
         customStyle.opacity = this.state.turn == player.player ? 1 : 0.6;
         let hasSix = this.state.moves.filter((move) => move == 6).length > 0;
         return (
-            <PlayerBox color={player.color}
+            <PlayerBox
+
+                color={player.color}
                 playerName={player.playerName}
                 animateForSelection={this.state.animateForSelection && this.state.turn == player.player && hasSix}
                 one={one}
@@ -1536,13 +1609,13 @@ else{
                 }}
                 timer={timer}
                 lifeline={lifeline}
+                diceNumber={this.state.diceNumber}
+                isRolling={this.state.isRolling}
+                renderDiceIcons={this.renderDiceIcons}
+
             />
         )
     }
-
-
-   
-
 }
 
 
@@ -1552,7 +1625,7 @@ const styles = StyleSheet.create({
         // width:'100%',
         // height:'100%',
         // // backgroundColor:'#ff0',
-        justifyContent: 'center',
+        // justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center'
     },
@@ -1563,7 +1636,8 @@ const styles = StyleSheet.create({
         // borderRadius:20,
         elevation: 8,
         backgroundColor: '#fff',
-        alignSelf: 'center'
+        alignSelf: 'center',
+        marginTop: 65
     },
     twoPlayersContainer: {
         flex: 4,
@@ -1634,9 +1708,9 @@ const styles = StyleSheet.create({
     diceBtn3: {
         height: 95,
         width: 95,
-        position: "absolute",
-        bottom: "10%",
-        left: "40%",
+        // position: "absolute",
+        // bottom: "8.5%",
+        // left: "38%",
         // backgroundColor: "#ffc3c3",
         borderRadius: 50,
         alignItems: "center",
@@ -1726,46 +1800,101 @@ const styles = StyleSheet.create({
     },
 })
 
-     //        if (newPosition != "") {
-    // piece.position = newPosition;
-    // piece.updateTime = new Date().getTime();
-    // 
-    // initPieces(playerColor) {
-    //     let time = new Date().getTime();
-    //     return {
-    //         one: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: ONE, color: playerColor, updateTime: time, oneCount: [] },
-    //         two: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: TWO, color: playerColor, updateTime: time, twoCount: [] },
-    //         three: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: THREE, color: playerColor, updateTime: time, threeCount: [] },
-    //         four: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: FOUR, color: playerColor, updateTime: time, fourCount: [] }
-    //     }
-    // }
-
-    // how to apply jump animation on piece position i want to move my piece one by one to new position
 
 
-  
+{/* { this.state.showAlert &&  */ }
 
-// ...
+{/* } */ }
+{/* {this.state.turn === RED && <Arrow1></Arrow1>}
+                {this.state.turn === YELLOW && <Arrow2></Arrow2>}
+                {this.state.turn === GREEN && <Arrow3></Arrow3>}
+                {this.state.turn === BLUE && <Arrow4></Arrow4>} */}
+{/* 
+                <View style={styles.redGotiBox}>
+                    <View style={{ height: "50%", width: "50%" }}>
+                        <RedGoti></RedGoti>
+                    </View>
 
-// Assuming 'r1' corresponds to a specific position on the game board, 
-// you can initialize the piecePosition with the numerical value of 'r1'.
-// state = {
-//   piecePosition: new Animated.Value(/* numerical value of r1 */),  // Initialize with the numerical value of 'r1'
-//   // ...
-// };
+                </View>
+                <View style={styles.yellowGotiBox}>
 
-// // Function to animate the piece's position
-// animatePiece = (newPosition) => {
-//   const { piecePosition } = this.state;
+                    <View style={{ height: "50%", width: "50%" }}>
+                        <YellowGoti></YellowGoti>
+                    </View>
 
-//   Animated.timing(piecePosition, {
-//     toValue: newPosition,  // The new position you want to move to
-//     duration: 500,  // Duration of the animation in milliseconds
-//     useNativeDriver: true,
-//   }).start(() => {
-//     // Animation completed, update the piece's position in the state
-//     this.setState({ piecePosition: newPosition });
-//   });
-// };
+                </View>
+                <View style={styles.blueGotiBox}>
+                    <View style={{ height: "50%", width: "50%" }}>
+                        <BlueGoti></BlueGoti></View>
+                </View>
+                <View style={styles.greenGotiBox}>
+                    <View style={{ height: "50%", width: "50%" }}>
+                        <GreenGoti></GreenGoti>
+                    </View>
+                </View> */}
+{/* <View style={styles.redDice}>
+
+                    <View style={styles.diceBtn1}>
+
+                        {this.state.turn == RED &&
+                            <Animated.View
+                                style={[
+
+                                    {
+                                        transform: [{ rotate: this.state.rollingRotation }],
+                                    },
+                                ]}
+                            >
+                                <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
+                            </Animated.View>
+                        }
+                    </View>
+
+                </View>
+                <View style={styles.yellowDice}>
+
+                    <View style={styles.diceBtn2}>
+
+                        {this.state.turn == YELLOW &&
+                            <Animated.View
+                                style={[
+
+                                    {
+                                        transform: [{ rotate: this.state.rollingRotation }],
+                                    },
+                                ]}
+                            >
+                                <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
+                            </Animated.View>
+                        }
+                    </View>
+
+                        {/* </View> */}
+{/* <View style={styles.greenDice}>
+                    <View style={styles.diceBtn1}>
+
+                        {this.state.turn == GREEN &&
+                            <Animated.View
+                                style={[
+
+                                    {
+                                        transform: [{ rotate: this.state.rollingRotation }],
+                                    },
+                                ]}
+
+                            >
+                                <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
+                            </Animated.View>
+                        }
+                    </View>
+                </View> */}
+
+{/* <View style={{position:"absolute", top: 90, left: 60,}}>
+
+             
+                </View> */}
+
+// </View> */}
+{/* <View style={styles.blueDice}> */ }
 
 

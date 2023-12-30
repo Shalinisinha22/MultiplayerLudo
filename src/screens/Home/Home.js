@@ -55,7 +55,7 @@ export default Home = ({
 
     }, [selectedPlayers])
     return (
-        <ImageBackground source={require("../../../assets/bj.png")} style={styles.container}>
+        <ImageBackground source={require("../../../assets/bg.png")} style={styles.container}>
             <Image source={require("../../../assets/applogo.png")} style={{height:180,width:170, resizeMode:"contain"}}></Image>
                 
                

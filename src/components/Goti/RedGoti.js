@@ -16,14 +16,52 @@ import { Image } from "react-native";
 
 const RedGoti = (props) => {
 
-  const [one, setOne] = useState({top: -10, right: -3})
-  const [two, setTwo] = useState({top: -20, right: -6})
-  const [three, setThree] = useState({top: -30, right: -9})
-  const [four, setFour] = useState({top: -40, right: -12})
+
+
+const getPiecePosition = (position, index) => {
+  let baseTop = -5;
+  let baseRight = -1;
+   let offset = 5; // Adjust as necessary
+
+
+  switch(position) {
+    case 'R1':
+      baseTop = -5;
+      baseRight = -1;
+      break;
+    // case 'r2':
+    //   baseTop = -10;  // Adjust as necessary
+    //   baseRight = -2; // Adjust as necessary
+    //   break;
+    // // ... Add cases for other positions if necessary
+
+    default:
+      baseTop = -10;
+      baseRight = -3;
+      break;
+  }
   
+  return {
+      top: baseTop + (index * offset),
+      right: baseRight + (index * offset)
+  };
+};
+
+const getNumberOfPiecesAtPosition = ( position) => {
+
+       let count = 0;
+       if (props.positions.one.position == position) count++;
+       if (props.positions.two.position == position) count++;
+       if (props.positions.three.position == position) count++;
+       if (props.positions.four.position == position) count++;
+       console.log("count",count)
+       return count;
+   }
 
 
-console.log("9", props.positions)
+const numberOfPieces = getNumberOfPiecesAtPosition(props.positions.position);
+const piecePosition = getPiecePosition(props.position, numberOfPieces - 1); // -1 because index starts from 0
+console.log("pieceposition",piecePosition)
 
 return (
 
@@ -31,126 +69,164 @@ return (
   props.position == FINISHED  ?  
 
 
-   <View style={{height:12,width:12, flex:1}}>
-  <Svg
+   <View style={{height:15,width:15, flex:1}}>
+   <Svg
     xmlns="http://www.w3.org/2000/svg"
-    data-name="Layer 1"
-    viewBox="0 0 630.11 970.54"
+    xmlSpace="preserve"
+    style={{
+      enableBackground: "new 0 0 1080 1080",
+    }}
+    viewBox="0 0 1080 1080"
     {...props}
   >
-    <Defs>
-      <RadialGradient
-        id="a"
-        cx={121.55}
-        cy={766.14}
-        r={229.14}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop offset={0} stopColor="#f4b5c7" />
-        <Stop offset={1} stopColor="#f93e3e" />
-      </RadialGradient>
-      <RadialGradient
-        id="d"
-        cx={530.11}
-        cy={586.82}
-        r={224.54}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop offset={0} stopColor="#f6f6f6" />
-        <Stop offset={1} stopColor="#f7142a" />
-      </RadialGradient>
-      <RadialGradient
-        id="e"
-        cx={344.95}
-        cy={168.81}
-        r={211.64}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop offset={0.16} stopColor="#f6f6f6" />
-        <Stop offset={1} stopColor="#f83d5f" />
-      </RadialGradient>
-      <LinearGradient
-        id="b"
-        x1={213.22}
-        x2={842.13}
-        y1={889.93}
-        y2={889.93}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop offset={0.03} stopColor="#bc070a" />
-        <Stop offset={0.53} stopColor="#f6f6f6" />
-        <Stop offset={0.9} stopColor="#d31309" />
-      </LinearGradient>
-      <LinearGradient
-        id="c"
-        x1={360.18}
-        x2={687.71}
-        y1={586.82}
-        y2={586.82}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop offset={0.01} stopColor="#f60f4b" />
-        <Stop offset={0.57} stopColor="#f6f6f6" />
-        <Stop offset={1} stopColor="#f52641" />
-      </LinearGradient>
-      <LinearGradient
-        id="f"
-        x1={244.96}
-        x2={679.78}
-        y1={811.33}
-        y2={783.1}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop offset={0.03} stopColor="#cc1236" />
-        <Stop offset={0.53} stopColor="#f6f6f6" />
-        <Stop offset={0.9} stopColor="#d11328" />
-      </LinearGradient>
-    </Defs>
+    <RadialGradient
+      id="a"
+      cx={334.765}
+      cy={791.644}
+      r={229.141}
+      gradientUnits="userSpaceOnUse"
+    >
+      <Stop
+        offset={0.162}
+        style={{
+          stopColor: "#f55152",
+        }}
+      />
+      <Stop
+        offset={1}
+        style={{
+          stopColor: "#a00e23",
+        }}
+      />
+    </RadialGradient>
     <Ellipse
-      cx={315.6}
-      cy={758.32}
+      cx={528.81}
+      cy={783.82}
       rx={314.51}
       ry={127.94}
       style={{
         fill: "url(#a)",
       }}
     />
+    <LinearGradient
+      id="b"
+      x1={167.915}
+      x2={703.679}
+      y1={815.833}
+      y2={894.186}
+      gradientUnits="userSpaceOnUse"
+    >
+      <Stop
+        offset={0.206}
+        style={{
+          stopColor: "#7f0d1e",
+        }}
+      />
+      <Stop
+        offset={0.529}
+        style={{
+          stopColor: "#f81717",
+        }}
+      />
+      <Stop
+        offset={0.904}
+        style={{
+          stopColor: "#770b11",
+        }}
+      />
+    </LinearGradient>
     <Path
-      d="M842.13 783.82v46.49c0 34.16-13.41 66.45-36.33 85.39-97.27 80.41-270.24 80.35-270.24 80.35-160-9.26-240.29-45.36-280.34-76.76-24.25-19-39.18-51.86-40.43-87.4l-1.57-44.51c4.64 69 143.62 124.38 314.39 124.38 173.71 0 314.52-57.27 314.52-127.94Z"
+      d="M842.13 783.82v46.49c0 34.15-13.41 66.44-36.33 85.39-97.28 80.41-270.24 80.35-270.24 80.35-159.99-9.26-240.29-45.35-280.34-76.76-24.25-19.01-39.18-51.86-40.43-87.39l-1.57-44.51c4.64 69.02 143.62 124.39 314.39 124.39 173.71-.02 314.52-57.29 314.52-127.96z"
       style={{
         fill: "url(#b)",
       }}
-      transform="translate(-213.22 -25.51)"
     />
+    <RadialGradient
+      id="c"
+      cx={511.765}
+      cy={713.412}
+      r={186.858}
+      gradientUnits="userSpaceOnUse"
+    >
+      <Stop
+        offset={0.162}
+        style={{
+          stopColor: "#f55152",
+        }}
+      />
+      <Stop
+        offset={1}
+        style={{
+          stopColor: "#a00e23",
+        }}
+      />
+    </RadialGradient>
     <Path
-      d="M749.79 729.74c0 47.08-98.87 85.26-220.79 85.26s-220.83-38.18-220.83-85.26c0-17.25 13.25-33.28 36-46.69 1.06-.58 2.08-1.19 3.11-1.8 97.84-59.5 72.65-322.58 72.65-322.58h214.64c-12.84 229.51 43.27 299 67.11 317.94 30.12 14.56 48.11 33.03 48.11 53.13Z"
+      d="M750.94 729.74c0 47.08-98.86 85.26-220.84 85.26s-220.84-38.18-220.84-85.26c0-17.25 13.25-33.29 36.04-46.7a92.9 92.9 0 0 0 3.1-1.79c.03 0 .03-.03.03-.03 97.84-59.5 72.65-322.58 72.65-322.58h214.63c-12.83 229.51 43.27 298.99 67.11 317.94 30.14 14.59 48.12 33.06 48.12 53.16z"
       style={{
         fill: "url(#c)",
       }}
-      transform="translate(-213.22 -25.51)"
     />
-    <Path
-      d="M750.94 729.74c0 47.08-98.86 85.26-220.83 85.26s-220.84-38.18-220.84-85.26c0-17.25 13.25-33.28 36-46.69 1.06-.58 2.08-1.19 3.1-1.8 97.84-59.5 72.65-322.58 72.65-322.58h214.7c-12.83 229.51 43.27 299 67.12 317.94 30.16 14.56 48.1 33.03 48.1 53.13Z"
+    <RadialGradient
+      id="d"
+      cx={558.164}
+      cy={194.311}
+      r={211.641}
+      gradientUnits="userSpaceOnUse"
+    >
+      <Stop
+        offset={0.162}
+        style={{
+          stopColor: "#f55152",
+        }}
+      />
+      <Stop
+        offset={1}
+        style={{
+          stopColor: "#a00e23",
+        }}
+      />
+    </RadialGradient>
+    <Circle
+      cx={528.89}
+      cy={250.56}
+      r={225.05}
       style={{
-        opacity: 0.49,
         fill: "url(#d)",
       }}
-      transform="translate(-213.22 -25.51)"
     />
-    <Circle
-      cx={315.67}
-      cy={225.05}
-      r={225.05}
+    <LinearGradient
+      id="e"
+      x1={244.957}
+      x2={679.78}
+      y1={811.331}
+      y2={783.096}
+      gradientUnits="userSpaceOnUse"
+    >
+      <Stop
+        offset={0.206}
+        style={{
+          stopColor: "#7f0d1e",
+        }}
+      />
+      <Stop
+        offset={0.529}
+        style={{
+          stopColor: "#f81717",
+        }}
+      />
+      <Stop
+        offset={0.904}
+        style={{
+          stopColor: "#770b11",
+        }}
+      />
+    </LinearGradient>
+    <Path
+      d="M749.79 723.65v32.76c0 24.06-9.42 46.81-25.51 60.16-68.31 56.65-189.78 56.61-189.78 56.61-112.36-6.52-168.75-31.95-196.88-54.08-17.03-13.39-27.51-36.54-28.39-61.57l-1.1-31.36c3.26 48.63 100.86 87.64 220.79 87.64 121.98-.02 220.87-40.37 220.87-90.16z"
       style={{
         fill: "url(#e)",
       }}
-    />
-    <Path
-      d="M749.79 723.65v32.76c0 24.06-9.42 46.81-25.52 60.16-68.31 56.65-189.78 56.6-189.78 56.6-112.36-6.52-168.75-31.95-196.88-54.08-17-13.39-27.51-36.54-28.39-61.57l-1.1-31.36c3.25 48.62 100.86 87.63 220.79 87.63 121.99 0 220.88-40.35 220.88-90.14Z"
-      style={{
-        fill: "url(#f)",
-      }}
-      transform="translate(-213.22 -25.51)"
     />
   </Svg>
            
@@ -380,265 +456,179 @@ return (
    </View>                   
  
  :   
- props.position ==  R1 ?  
 
 
- <View style={{height:20,width:20, flex:1}}>
-<Svg
-  xmlns="http://www.w3.org/2000/svg"
-  data-name="Layer 1"
-  viewBox="0 0 630.11 970.54"
-  {...props}
->
-  <Defs>
-    <RadialGradient
-      id="a"
-      cx={121.55}
-      cy={766.14}
-      r={229.14}
-      gradientUnits="userSpaceOnUse"
-    >
-      <Stop offset={0} stopColor="#f4b5c7" />
-      <Stop offset={1} stopColor="#f93e3e" />
-    </RadialGradient>
-    <RadialGradient
-      id="d"
-      cx={530.11}
-      cy={586.82}
-      r={224.54}
-      gradientUnits="userSpaceOnUse"
-    >
-      <Stop offset={0} stopColor="#f6f6f6" />
-      <Stop offset={1} stopColor="#f7142a" />
-    </RadialGradient>
-    <RadialGradient
-      id="e"
-      cx={344.95}
-      cy={168.81}
-      r={211.64}
-      gradientUnits="userSpaceOnUse"
-    >
-      <Stop offset={0.16} stopColor="#f6f6f6" />
-      <Stop offset={1} stopColor="#f83d5f" />
-    </RadialGradient>
-    <LinearGradient
-      id="b"
-      x1={213.22}
-      x2={842.13}
-      y1={889.93}
-      y2={889.93}
-      gradientUnits="userSpaceOnUse"
-    >
-      <Stop offset={0.03} stopColor="#bc070a" />
-      <Stop offset={0.53} stopColor="#f6f6f6" />
-      <Stop offset={0.9} stopColor="#d31309" />
-    </LinearGradient>
-    <LinearGradient
-      id="c"
-      x1={360.18}
-      x2={687.71}
-      y1={586.82}
-      y2={586.82}
-      gradientUnits="userSpaceOnUse"
-    >
-      <Stop offset={0.01} stopColor="#f60f4b" />
-      <Stop offset={0.57} stopColor="#f6f6f6" />
-      <Stop offset={1} stopColor="#f52641" />
-    </LinearGradient>
-    <LinearGradient
-      id="f"
-      x1={244.96}
-      x2={679.78}
-      y1={811.33}
-      y2={783.1}
-      gradientUnits="userSpaceOnUse"
-    >
-      <Stop offset={0.03} stopColor="#cc1236" />
-      <Stop offset={0.53} stopColor="#f6f6f6" />
-      <Stop offset={0.9} stopColor="#d11328" />
-    </LinearGradient>
-  </Defs>
-  <Ellipse
-    cx={315.6}
-    cy={758.32}
-    rx={314.51}
-    ry={127.94}
-    style={{
-      fill: "url(#a)",
-    }}
-  />
-  <Path
-    d="M842.13 783.82v46.49c0 34.16-13.41 66.45-36.33 85.39-97.27 80.41-270.24 80.35-270.24 80.35-160-9.26-240.29-45.36-280.34-76.76-24.25-19-39.18-51.86-40.43-87.4l-1.57-44.51c4.64 69 143.62 124.38 314.39 124.38 173.71 0 314.52-57.27 314.52-127.94Z"
-    style={{
-      fill: "url(#b)",
-    }}
-    transform="translate(-213.22 -25.51)"
-  />
-  <Path
-    d="M749.79 729.74c0 47.08-98.87 85.26-220.79 85.26s-220.83-38.18-220.83-85.26c0-17.25 13.25-33.28 36-46.69 1.06-.58 2.08-1.19 3.11-1.8 97.84-59.5 72.65-322.58 72.65-322.58h214.64c-12.84 229.51 43.27 299 67.11 317.94 30.12 14.56 48.11 33.03 48.11 53.13Z"
-    style={{
-      fill: "url(#c)",
-    }}
-    transform="translate(-213.22 -25.51)"
-  />
-  <Path
-    d="M750.94 729.74c0 47.08-98.86 85.26-220.83 85.26s-220.84-38.18-220.84-85.26c0-17.25 13.25-33.28 36-46.69 1.06-.58 2.08-1.19 3.1-1.8 97.84-59.5 72.65-322.58 72.65-322.58h214.7c-12.83 229.51 43.27 299 67.12 317.94 30.16 14.56 48.1 33.03 48.1 53.13Z"
-    style={{
-      opacity: 0.49,
-      fill: "url(#d)",
-    }}
-    transform="translate(-213.22 -25.51)"
-  />
-  <Circle
-    cx={315.67}
-    cy={225.05}
-    r={225.05}
-    style={{
-      fill: "url(#e)",
-    }}
-  />
-  <Path
-    d="M749.79 723.65v32.76c0 24.06-9.42 46.81-25.52 60.16-68.31 56.65-189.78 56.6-189.78 56.6-112.36-6.52-168.75-31.95-196.88-54.08-17-13.39-27.51-36.54-28.39-61.57l-1.1-31.36c3.25 48.62 100.86 87.63 220.79 87.63 121.99 0 220.88-40.35 220.88-90.14Z"
-    style={{
-      fill: "url(#f)",
-    }}
-    transform="translate(-213.22 -25.51)"
-  />
-</Svg>
-         
-   
- </View> 
- :
 
-
-<View style={{position:"absolute",height:30, width:30, top:-10, right:-3} }>
+<View style={{height:30, width:30, alignSelf:"center", position:"absolute", top: -10, right:-3} }>
 <Svg
     xmlns="http://www.w3.org/2000/svg"
-    data-name="Layer 1"
-    viewBox="0 0 630.11 970.54"
+    xmlSpace="preserve"
+    style={{
+      enableBackground: "new 0 0 1080 1080",
+    }}
+    viewBox="0 0 1080 1080"
     {...props}
   >
-    <Defs>
-      <RadialGradient
-        id="a"
-        cx={121.55}
-        cy={766.14}
-        r={229.14}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop offset={0} stopColor="#f4b5c7" />
-        <Stop offset={1} stopColor="#f93e3e" />
-      </RadialGradient>
-      <RadialGradient
-        id="d"
-        cx={530.11}
-        cy={586.82}
-        r={224.54}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop offset={0} stopColor="#f6f6f6" />
-        <Stop offset={1} stopColor="#f7142a" />
-      </RadialGradient>
-      <RadialGradient
-        id="e"
-        cx={344.95}
-        cy={168.81}
-        r={211.64}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop offset={0.16} stopColor="#f6f6f6" />
-        <Stop offset={1} stopColor="#f83d5f" />
-      </RadialGradient>
-      <LinearGradient
-        id="b"
-        x1={213.22}
-        x2={842.13}
-        y1={889.93}
-        y2={889.93}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop offset={0.03} stopColor="#bc070a" />
-        <Stop offset={0.53} stopColor="#f6f6f6" />
-        <Stop offset={0.9} stopColor="#d31309" />
-      </LinearGradient>
-      <LinearGradient
-        id="c"
-        x1={360.18}
-        x2={687.71}
-        y1={586.82}
-        y2={586.82}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop offset={0.01} stopColor="#f60f4b" />
-        <Stop offset={0.57} stopColor="#f6f6f6" />
-        <Stop offset={1} stopColor="#f52641" />
-      </LinearGradient>
-      <LinearGradient
-        id="f"
-        x1={244.96}
-        x2={679.78}
-        y1={811.33}
-        y2={783.1}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop offset={0.03} stopColor="#cc1236" />
-        <Stop offset={0.53} stopColor="#f6f6f6" />
-        <Stop offset={0.9} stopColor="#d11328" />
-      </LinearGradient>
-    </Defs>
+    <RadialGradient
+      id="a"
+      cx={334.765}
+      cy={791.644}
+      r={229.141}
+      gradientUnits="userSpaceOnUse"
+    >
+      <Stop
+        offset={0.162}
+        style={{
+          stopColor: "#f55152",
+        }}
+      />
+      <Stop
+        offset={1}
+        style={{
+          stopColor: "#a00e23",
+        }}
+      />
+    </RadialGradient>
     <Ellipse
-      cx={315.6}
-      cy={758.32}
+      cx={528.81}
+      cy={783.82}
       rx={314.51}
       ry={127.94}
       style={{
         fill: "url(#a)",
       }}
     />
+    <LinearGradient
+      id="b"
+      x1={167.915}
+      x2={703.679}
+      y1={815.833}
+      y2={894.186}
+      gradientUnits="userSpaceOnUse"
+    >
+      <Stop
+        offset={0.206}
+        style={{
+          stopColor: "#7f0d1e",
+        }}
+      />
+      <Stop
+        offset={0.529}
+        style={{
+          stopColor: "#f81717",
+        }}
+      />
+      <Stop
+        offset={0.904}
+        style={{
+          stopColor: "#770b11",
+        }}
+      />
+    </LinearGradient>
     <Path
-      d="M842.13 783.82v46.49c0 34.16-13.41 66.45-36.33 85.39-97.27 80.41-270.24 80.35-270.24 80.35-160-9.26-240.29-45.36-280.34-76.76-24.25-19-39.18-51.86-40.43-87.4l-1.57-44.51c4.64 69 143.62 124.38 314.39 124.38 173.71 0 314.52-57.27 314.52-127.94Z"
+      d="M842.13 783.82v46.49c0 34.15-13.41 66.44-36.33 85.39-97.28 80.41-270.24 80.35-270.24 80.35-159.99-9.26-240.29-45.35-280.34-76.76-24.25-19.01-39.18-51.86-40.43-87.39l-1.57-44.51c4.64 69.02 143.62 124.39 314.39 124.39 173.71-.02 314.52-57.29 314.52-127.96z"
       style={{
         fill: "url(#b)",
       }}
-      transform="translate(-213.22 -25.51)"
     />
+    <RadialGradient
+      id="c"
+      cx={511.765}
+      cy={713.412}
+      r={186.858}
+      gradientUnits="userSpaceOnUse"
+    >
+      <Stop
+        offset={0.162}
+        style={{
+          stopColor: "#f55152",
+        }}
+      />
+      <Stop
+        offset={1}
+        style={{
+          stopColor: "#a00e23",
+        }}
+      />
+    </RadialGradient>
     <Path
-      d="M749.79 729.74c0 47.08-98.87 85.26-220.79 85.26s-220.83-38.18-220.83-85.26c0-17.25 13.25-33.28 36-46.69 1.06-.58 2.08-1.19 3.11-1.8 97.84-59.5 72.65-322.58 72.65-322.58h214.64c-12.84 229.51 43.27 299 67.11 317.94 30.12 14.56 48.11 33.03 48.11 53.13Z"
+      d="M750.94 729.74c0 47.08-98.86 85.26-220.84 85.26s-220.84-38.18-220.84-85.26c0-17.25 13.25-33.29 36.04-46.7a92.9 92.9 0 0 0 3.1-1.79c.03 0 .03-.03.03-.03 97.84-59.5 72.65-322.58 72.65-322.58h214.63c-12.83 229.51 43.27 298.99 67.11 317.94 30.14 14.59 48.12 33.06 48.12 53.16z"
       style={{
         fill: "url(#c)",
       }}
-      transform="translate(-213.22 -25.51)"
     />
-    <Path
-      d="M750.94 729.74c0 47.08-98.86 85.26-220.83 85.26s-220.84-38.18-220.84-85.26c0-17.25 13.25-33.28 36-46.69 1.06-.58 2.08-1.19 3.1-1.8 97.84-59.5 72.65-322.58 72.65-322.58h214.7c-12.83 229.51 43.27 299 67.12 317.94 30.16 14.56 48.1 33.03 48.1 53.13Z"
+    <RadialGradient
+      id="d"
+      cx={558.164}
+      cy={194.311}
+      r={211.641}
+      gradientUnits="userSpaceOnUse"
+    >
+      <Stop
+        offset={0.162}
+        style={{
+          stopColor: "#f55152",
+        }}
+      />
+      <Stop
+        offset={1}
+        style={{
+          stopColor: "#a00e23",
+        }}
+      />
+    </RadialGradient>
+    <Circle
+      cx={528.89}
+      cy={250.56}
+      r={225.05}
       style={{
-        opacity: 0.49,
         fill: "url(#d)",
       }}
-      transform="translate(-213.22 -25.51)"
     />
-    <Circle
-      cx={315.67}
-      cy={225.05}
-      r={225.05}
+    <LinearGradient
+      id="e"
+      x1={244.957}
+      x2={679.78}
+      y1={811.331}
+      y2={783.096}
+      gradientUnits="userSpaceOnUse"
+    >
+      <Stop
+        offset={0.206}
+        style={{
+          stopColor: "#7f0d1e",
+        }}
+      />
+      <Stop
+        offset={0.529}
+        style={{
+          stopColor: "#f81717",
+        }}
+      />
+      <Stop
+        offset={0.904}
+        style={{
+          stopColor: "#770b11",
+        }}
+      />
+    </LinearGradient>
+    <Path
+      d="M749.79 723.65v32.76c0 24.06-9.42 46.81-25.51 60.16-68.31 56.65-189.78 56.61-189.78 56.61-112.36-6.52-168.75-31.95-196.88-54.08-17.03-13.39-27.51-36.54-28.39-61.57l-1.1-31.36c3.26 48.63 100.86 87.64 220.79 87.64 121.98-.02 220.87-40.37 220.87-90.16z"
       style={{
         fill: "url(#e)",
       }}
     />
-    <Path
-      d="M749.79 723.65v32.76c0 24.06-9.42 46.81-25.52 60.16-68.31 56.65-189.78 56.6-189.78 56.6-112.36-6.52-168.75-31.95-196.88-54.08-17-13.39-27.51-36.54-28.39-61.57l-1.1-31.36c3.25 48.62 100.86 87.63 220.79 87.63 121.99 0 220.88-40.35 220.88-90.14Z"
-      style={{
-        fill: "url(#f)",
-      }}
-      transform="translate(-213.22 -25.51)"
-    />
-</Svg>
+  </Svg>
 </View>
 
 
 
  
 )
+
+
+
+
 
 
 
@@ -664,3 +654,9 @@ const styles = StyleSheet.create({
 }
  
 )
+
+
+
+
+
+

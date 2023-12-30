@@ -5,7 +5,7 @@ import {View,ScrollView,Modal, StyleSheet, Text, TextInput, TouchableOpacity,Ale
 export default class NewGameModel extends Component{
     constructor(props){
         super(props)
-     console.log(props)
+    //  console.log(props)
 
     }
 

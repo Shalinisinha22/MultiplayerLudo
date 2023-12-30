@@ -43,8 +43,7 @@ const getStar = () =>{
 }
 
 switch(position){
-   case R1:
-          
+       case R1:     
        case R9:
        case Y1:
        case Y9:
@@ -52,8 +51,7 @@ switch(position){
        case G9:
        case B1:
        case B9:
-        return getStar() ? null :  <Ionicons name="star" size={14} color="white" style={{alignSelf:"center"}}/>
-      
+        return getStar() ? null :  <Ionicons name="star" size={14} color="white" style={{alignSelf:"center", justifyContent:"center", textAlign:"center"}}/>
        default:
         return null
 

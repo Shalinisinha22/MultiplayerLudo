@@ -5,6 +5,13 @@ import {View,ScrollView,Modal, StyleSheet, Text, TextInput, TouchableOpacity,Ale
 export default class ThreePlayerModal extends Component{
     constructor(props){
         super(props)
+
+
+        this.state = {
+            blue: 'Player 1',
+            red: 'Player 2',
+            yellow:'Player 3'
+        };
     //  console.log(props)
 
     }

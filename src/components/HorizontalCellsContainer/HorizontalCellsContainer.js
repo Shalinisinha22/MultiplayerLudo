@@ -24,7 +24,6 @@ export default HorizontalCellsContainer = ({
       </View>
     );
   };
-
   const renderRow = (positionsArray) => {
     return (
       <View style={{ flex: 6, flexDirection: "row" }}>
@@ -46,7 +45,6 @@ export default HorizontalCellsContainer = ({
       </View>
     );
   };
-
   const renderRowsContainer = (array1, array2) => {
     return (
       <View style={styles.rowsContainer}>
@@ -103,6 +101,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderColor: "black",
     borderWidth: 1,
+ 
  
   
   },

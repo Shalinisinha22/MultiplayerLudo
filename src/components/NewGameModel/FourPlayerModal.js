@@ -10,7 +10,10 @@ export default class FourPlayerModal extends Component{
     }
 
     render(){
-        return(<Modal
+        return(
+
+            <ScrollView>
+                      <Modal
             
             transparent={true}
             onRequestClose={()=>{}}
@@ -71,6 +74,9 @@ export default class FourPlayerModal extends Component{
                 </View>
             </ScrollView>
         </Modal>
+            </ScrollView>
+        
+    
         )
     }
 }

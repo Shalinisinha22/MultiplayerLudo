@@ -13,6 +13,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Winner from './screens/Winner/Winner';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 class App extends Component{
  
   constructor(props){
@@ -47,7 +48,9 @@ class App extends Component{
   
  
   render(){
-    if(this.state.isGameInProgress){
+
+  
+    if(this.state.isGameInProgress && !this.state.isGameEnd){
       return <Game
         redName = {this.state.red.name}
         yellowName = {this.state.yellow.name}
@@ -57,12 +60,28 @@ class App extends Component{
         onEnd={()=>{this.setState({isGameInProgress:false,isGameEnd:true})}}
         />
     }
-     else if (this.state.isGameEnd){
+     else if (this.state.isGameEnd && !this.state.isGameInProgress){
       return <Winner backToHome={()=>{this.setState({isStartGameModalVisible:false,isGameEnd:false})}}
       red={this.state.red}
       blue={this.state.blue}
       yellow={this.state.yellow}
-      green={this.state.green}  
+      green={this.state.green} 
+      onRedInput={(name)=>{
+        this.state.red.name=name;
+        this.setState({})
+      }}
+      onYellowInput={(name)=>{
+        this.state.yellow.name=name;
+        this.setState({})
+      }}
+      onGreenInput={(name)=>{
+        this.state.green.name=name;
+        this.setState({})
+      }}
+      onBlueInput={(name)=>{
+        this.state.blue.name=name;
+        this.setState({})
+      }} 
       ></Winner>
      }
     else{
@@ -70,7 +89,7 @@ class App extends Component{
           isStartGameModalVisible={this.state.isStartGameModalVisible}
           onNewGameButtonPress ={()=>{this.setState({isStartGameModalVisible:true})}}
           onCancel={()=>{this.setState({isStartGameModalVisible:false})}}
-          onStart={()=>{this.setState({isGameInProgress:true,isStartGameModalVisible:false})}}
+          onStart={()=>{this.setState({isGameInProgress:true,isStartGameModalVisible:false,isGameEnd:false})}}
           red={this.state.red}
           blue={this.state.blue}
           yellow={this.state.yellow}

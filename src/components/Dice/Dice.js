@@ -172,14 +172,15 @@ export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, r
   borderBottomColor:'#c1121f',
   transform: [{ rotate: "90deg" }],
   top:19,
-  left:-19.5
+  left:-19.5,
+
  }}>
 
-  <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-39,right:-18}}>
+  <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-39,right:-18, justifyContent:"space-between"}}>
   {redPlayer.pieces.one.position == FINISHED && <RedGoti position ={redPlayer.pieces.one.position}></RedGoti>}
   {redPlayer.pieces.two.position == FINISHED && <RedGoti  position ={redPlayer.pieces.two.position}></RedGoti>}
   </View>
-  <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-25,right:-16}}>
+  <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-25,right:-16,justifyContent:"space-between"}}>
   {redPlayer.pieces.three.position == FINISHED && <RedGoti  position ={redPlayer.pieces.three.position}></RedGoti>}
   {redPlayer.pieces.four.position == FINISHED && <RedGoti  position ={redPlayer.pieces.four.position}></RedGoti>}
   </View>
@@ -227,11 +228,11 @@ export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, r
   top:-39,
   left:0
  }}>
- <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-39,right:-18}}>
+ <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-39,right:-15}}>
 {bluePlayer.pieces.one.position == FINISHED && <BlueGoti position ={bluePlayer.pieces.one.position}></BlueGoti>}
 {bluePlayer.pieces.two.position == FINISHED && <BlueGoti position ={bluePlayer.pieces.two.position}></BlueGoti>}
 </View>
-<View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-25,right:-16}}>
+<View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-25,right:-15}}>
 {bluePlayer.pieces.three.position == FINISHED && <BlueGoti position ={bluePlayer.pieces.three.position}></BlueGoti>}
 {bluePlayer.pieces.four.position == FINISHED && <BlueGoti position ={bluePlayer.pieces.four.position}></BlueGoti>}
 </View>

@@ -9,13 +9,13 @@ import LudoBoard from './components/LudoBoard';
 import APP from "./src/App"
 import HomeScreen from './src/screens/Home/HomeScreen';
 import Game from './src/screens/game/Game';
-
+import { NativeBaseProvider } from 'native-base';
 
 const App = () => {
   const Stack = createNativeStackNavigator();
   return (
-
-    <NavigationContainer>
+<NativeBaseProvider>
+<NavigationContainer>
       <SafeAreaView
 
         style={{
@@ -40,6 +40,8 @@ const App = () => {
 
       </SafeAreaView>  
     </NavigationContainer>
+</NativeBaseProvider>
+
 
 
 

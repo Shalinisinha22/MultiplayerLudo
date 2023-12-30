@@ -18,6 +18,7 @@ export default CellBox = ({backgroundColor, position, onPieceSelection, state,ar
     const [highlighColor,setHighlightColor] = React.useState(backgroundColor);
     const [isAnimating,setIsAnimating] = React.useState(false);
     const [intervalId,setIntervalId] = React.useState(undefined);
+    const [piece, setPiece] = useState(null)
     
     let shouldRenderBackgroundColor = 1;
 
@@ -117,16 +118,18 @@ export default CellBox = ({backgroundColor, position, onPieceSelection, state,ar
         green.pieces.four.position == position? matched.push(green.pieces.four):undefined;
 
         let colorToReturn = colors.white;
+        let id = null
         let updateTime = 0;
 
-        matched.filter((matchedPiece)=>{
+        matched.filter((matchedPiece, id)=>{
             if(matchedPiece.updateTime>updateTime){
                 updateTime = matchedPiece.updateTime;
                 colorToReturn=matchedPiece.color==RED?red.color:matchedPiece.color==YELLOW?yellow.color:matchedPiece.color==GREEN?green.color:matchedPiece.color==BLUE?blue.color:undefined;
+                id = id
             }
         })
      
-        return colorToReturn;
+        return {colorToReturn, id};
 
     }
 
@@ -170,14 +173,29 @@ export default CellBox = ({backgroundColor, position, onPieceSelection, state,ar
     applyAnimationIfNeeded();
     let color = state.isWaitingForDiceRoll? backgroundColor : highlighColor;
 
+
+    const getNumberOfPiecesAtPosition = (props, position) => {
+   console.log(props)
+        let count = 0;
+        // if (props.pieces.one.position == position) count++;
+        // if (props.pieces.two.position == position) count++;
+        // if (props.pieces.three.position == position) count++;
+        // if (props.pieces.four.position == position) count++;
+        return count;
+    }
+
     return(
 
        
-        <TouchableOpacity style={[styles.container,{backgroundColor:color,flexWrap:"wrap",flexDirection:"row"}]}
+        <TouchableOpacity style={[styles.container,{backgroundColor:color,flexWrap:"wrap",flexDirection:"row", justifyContent:"center", width:"100%", alignItems:"center"}]}
                         onPress={()=>{
+
+
                 if(isMovePossibleFromCurrentPosition()){
                     let piece = getPiece();
+                     console.log("194",piece)
                     if(piece){
+                        setPiece(piece)
                         onPieceSelection(piece)
                     }
                 }
@@ -186,58 +204,34 @@ export default CellBox = ({backgroundColor, position, onPieceSelection, state,ar
            {arrow}
            {safe}
 
+
+       
+ 
+      {
+        shouldRenderPiece() && 
+
+
+
+        <>
+        
+       {getPieceColor().colorToReturn == "#ec1d27" && state.red.playerName ? isAnimating ? 
+  
+          <ReadyRed id ={getPieceColor().id}></ReadyRed> : <RedGoti id ={getPieceColor().id} positions={state.red.pieces} ></RedGoti>:null
          
-
-           
-           {/* {shouldRenderPiece() && 
-                   <View style={[styles.pieceStyle,{backgroundColor:getPieceColor()}]}>
-                       { state.turn == RED && <RedGoti></RedGoti>}
-                      {state.turn == GREEN && <GreenGoti></GreenGoti>}
-                      {state.turn == YELLOW && <YellowGoti></YellowGoti>}
-                      {state.turn == BLUE && <BlueGoti></BlueGoti>} */}
    
+       }
+        {getPieceColor().colorToReturn == "#01A147" && state.green.playerName ? isAnimating ? <ReadyGreen id ={getPieceColor().id}></ReadyGreen> : <GreenGoti id ={getPieceColor().id} positions ={state.green.pieces} ></GreenGoti>:null}
+        {getPieceColor().colorToReturn == "#ffe01b" && state.yellow.playerName ? isAnimating ? <ReadyYellow id ={getPieceColor().id}></ReadyYellow> : <YellowGoti id ={getPieceColor().id} positions ={state.yellow.pieces}></YellowGoti>:null}
+        {getPieceColor().colorToReturn == "#29b6f6" && state.blue.playerName ? isAnimating ? <ReadyBlue id ={getPieceColor().id}></ReadyBlue> : <BlueGoti id ={getPieceColor().id} positions ={state.blue.pieces}></BlueGoti>:null} 
+      </> 
 
+             
 
-      {shouldRenderPiece() && 
-
-               
-                  
-                           <>
-                           {/* {getPieceColor() == "#ec1d27"
-                              &&
-                              <>
-                             { state.red.pieces.one.position == R1 ? isAnimating ? <ReadyRed positions ={state.red.pieces}></ReadyRed> : <RedGoti position ={state.red.pieces.one.position}></RedGoti>:state.red.playerName ? isAnimating ? <ReadyRed positions ={state.red.pieces}></ReadyRed> : <RedGoti positions ={state.red.pieces} ></RedGoti>:null}
-                             { state.red.pieces.two.position == R1 ? isAnimating ? <ReadyRed positions ={state.red.pieces}></ReadyRed> : <RedGoti position ={state.red.pieces.two.position}></RedGoti>:state.red.playerName ? isAnimating ? <ReadyRed positions ={state.red.pieces}></ReadyRed> : <RedGoti positions ={state.red.pieces} ></RedGoti>:null}
-                             { state.red.pieces.three.position == R1 ? isAnimating ? <ReadyRed positions ={state.red.pieces}></ReadyRed> : <RedGoti position ={state.red.pieces.three.position}></RedGoti>:state.red.playerName ? isAnimating ? <ReadyRed positions ={state.red.pieces}></ReadyRed> : <RedGoti positions ={state.red.pieces} ></RedGoti>:null}
-                             { state.red.pieces.four.position == R1 ? isAnimating ? <ReadyRed positions ={state.red.pieces}></ReadyRed> : <RedGoti position ={state.red.pieces.four.position}></RedGoti>:state.red.playerName ? isAnimating ? <ReadyRed positions ={state.red.pieces}></ReadyRed> : <RedGoti positions ={state.red.pieces} ></RedGoti>:null}
-                             </>
-                            } */}
-                            
-{/* <> 
-  <View style={{flex:1}}>
-  {state.red.pieces.one.position == R1 && <RedGoti position ={state.red.pieces.one.position}></RedGoti>}
-  {state.red.pieces.two.position == R1 && <RedGoti  position ={state.red.pieces.two.position}></RedGoti>}
-  {state.red.pieces.three.position == R1 && <RedGoti  position ={state.red.pieces.three.position}></RedGoti>}
-  {state.red.pieces.four.position == R1 && <RedGoti  position ={state.red.pieces.four.position}></RedGoti>}
-  </View>
-</> */}
-
-                             {getPieceColor() == "#ec1d27" && state.red.playerName ? isAnimating ? <ReadyRed positions ={state.red.pieces}></ReadyRed> : <RedGoti positions ={state.red.pieces} ></RedGoti>:null}
-                             {getPieceColor() == "#01A147" && state.green.playerName ? isAnimating ? <ReadyGreen></ReadyGreen> : <GreenGoti positions ={state.green.pieces}></GreenGoti>:null}
-                             {getPieceColor() == "#ffe01b" && state.yellow.playerName ? isAnimating ? <ReadyYellow></ReadyYellow> : <YellowGoti positions ={state.yellow.pieces}></YellowGoti>:null}
-                             {getPieceColor() == "#29b6f6" && state.blue.playerName ? isAnimating ? <ReadyBlue></ReadyBlue> : <BlueGoti positions ={state.blue.pieces}></BlueGoti>:null} 
-                           </>
-            
- }
-      
-                  
-
-               
+      }
+                       
         </TouchableOpacity>
 
    
-
-
     )
 }
 
@@ -245,7 +239,7 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         backgroundColor: colors.white,
-        justifyContent:'center',
+        justifyContent:'center', 
         
     },
     pieceStyle:{
@@ -259,31 +253,4 @@ const styles = StyleSheet.create({
 })
 
 
-        //     <>
-
-                          
-
-
-
-                    //          { getPieceColor() == "#ec1d27" && state.red.playerName ? isAnimating ? <ReadyRed></ReadyRed> :
-                             
-
-                    // //    {
-                    // //     state.red.pieces.one.position == R1  && <RedGoti style={{top: -10, right: -3}}/>
-                    // //     state.red.pieces.two.position == R1  && <RedGoti style={{top: -20, right: -6}} />
-                    // //     state.red.pieces.three.position == R1  &&  <RedGoti style={{top: -30, right: -9}} />
-                    // //     state.red.pieces.four.position == R1  && <RedGoti style={{top: -40, right: -12}} />
-                    // //    } 
-
-                           
-                    //          <RedGoti/>:null
-
-                              
-                    //          } 
-                    //          {/* { getPieceColor() == "#ec1d27" && <RedGoti></RedGoti>} */}
-                    //          {getPieceColor() == "#01A147" && state.green.playerName ? isAnimating ? <ReadyGreen></ReadyGreen> : <GreenGoti positions ={state.green.pieces}></GreenGoti>:null}
-                    //          {getPieceColor() == "#ffe01b" && state.yellow.playerName ? isAnimating ? <ReadyYellow></ReadyYellow> : <YellowGoti positions ={state.yellow.pieces}></YellowGoti>:null}
-                    //          {getPieceColor() == "#29b6f6" && state.blue.playerName ? isAnimating ? <ReadyBlue></ReadyBlue> : <BlueGoti positions ={state.blue.pieces}></BlueGoti>:null}
-                    //     </>
-
-// if we call four times redgoti component then in x=container it shows all in one place only one component is visible it hides the three how to show all four goti 
+      
