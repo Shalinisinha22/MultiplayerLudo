@@ -6,6 +6,7 @@ import { getCellBackgroundColor } from '../../util/util';
 import {getCellArrow} from "../../util/getCellArrow"
 import CellBox from "../CellBox/CellBox";
 import getSafeArea from '../../util/getSafeArea';
+import GotiCount from '../../util/GotiCount';
 export default VerticalCellsContainer = ({position,onPieceSelection,state}) =>{
 
     const column1 = position == TOP_VERTICAL? [R11,R10,R9,R8,R7,R6]:[B5,B4,B3,B2,B1,G13];
@@ -22,6 +23,7 @@ export default VerticalCellsContainer = ({position,onPieceSelection,state}) =>{
                         <CellBox backgroundColor={getCellBackgroundColor(cellPosition)}
                              arrow ={getCellArrow(cellPosition)}
                              safe = {getSafeArea(cellPosition, state.red,state.blue,state.green,state.yellow)}
+                           
                             onPieceSelection={onPieceSelection}
                             state={state}
                             position={cellPosition}

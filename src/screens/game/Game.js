@@ -1468,29 +1468,6 @@ export default class Game extends Component {
         }
         if (newPosition != "") {
 
-
-            const animatingPiece = () => {
-                // console.log("animation start")
-                // console.log("animation start",piece.piecePosition)
-
-                Animated.timing(piece.piecePosition, {
-
-                    toValue: 200,
-                    duration: 500,  // Duration of the animation in milliseconds
-                    useNativeDriver: true,
-                }).start(() => {
-                    piece.position = newPosition;
-                    piece.updateTime = new Date().getTime();
-                })
-            }
-
-            animatingPiece()
-
-
-
-
-
-
             piece.position = newPosition;
             piece.updateTime = new Date().getTime();
 

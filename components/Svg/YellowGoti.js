@@ -2,6 +2,8 @@ import * as React from "react"
 import Svg, { Defs, LinearGradient, Stop, Path } from "react-native-svg"
 import { View } from "react-native"
 import * as Animatable from 'react-native-animatable';
+
+
 const YellowGoti = (props) => (
 
  

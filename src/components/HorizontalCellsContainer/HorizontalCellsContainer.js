@@ -7,6 +7,7 @@ import CellBox from "../CellBox/CellBox";
 import { getCellBackgroundColor } from "../../util/util";
 import { getCellArrow } from "../../util/getCellArrow";
 import getSafeArea from "../../util/getSafeArea";
+import GotiCount from "../../util/GotiCount";
 
 export default HorizontalCellsContainer = ({
   state,
@@ -35,6 +36,7 @@ export default HorizontalCellsContainer = ({
                 backgroundColor={getCellBackgroundColor(cellPosition)}
                 arrow ={getCellArrow(cellPosition)}
                 safe = {getSafeArea(cellPosition, state.red, state.blue, state.green, state.yellow)}
+                
                 onPieceSelection={onPieceSelection}
                 state={state}
                 position={cellPosition}
