@@ -20,7 +20,7 @@ export default PlayerBox = ({ color, customStyle, lifeline, one, two, three, fou
 
 
     {
-        // console.log("color", color)
+        // console.log("timer", timer)
     }
     const [isAnimating, setIsAnimating] = React.useState(false);
     const [backgroundColor, setBackgroundColor] = React.useState(color);

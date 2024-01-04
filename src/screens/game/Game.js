@@ -4,7 +4,7 @@ import { colors } from '../../util/Colors';
 import PlayerBox from '../../components/PlayerBox/PlayerBox'
 import VerticalCellsContainer from '../../components/VerticalCellsContainer/VerticalCellsContainer';
 import HorizontalCellsContainer from '../../components/HorizontalCellsContainer/HorizontalCellsContainer';
-import { FINISHED, BLUE, BOTTOM_VERTICAL, FOUR, GREEN, HOME, ONE, RED, THREE, TOP_VERTICAL, TWO, YELLOW, R1, Y1, Y9, G1, G9, B1, B9, R9, R2, R3, R4, R5, Y2, Y3, Y5, G2, G3, G4, G5, B2, B3, B4, B15 } from '../../util/Constants';
+import { FINISHED, BLUE, BOTTOM_VERTICAL, FOUR, GREEN, HOME, ONE, RED, THREE, TOP_VERTICAL, TWO, YELLOW, R1, Y1, Y9, G1, G9, B1, B9, R9, R2, R3, R4, R5, Y2, Y3, Y5, G2, G3, G4, G5, B2, B3, B4, B15, R12, R17 } from '../../util/Constants';
 import RedGoti from '../../components/Goti/RedGoti';
 import YellowGoti from '../../components/Goti/YellowGoti';
 import BlueGoti from '../../components/Goti/BlueGoti';
@@ -23,7 +23,7 @@ import { Table, Row, Rows } from 'react-native-table-component'
 import { Alert, VStack, HStack, IconButton, Box } from "native-base";
 import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-// import * as Haptics from 'expo-haptics';
+import { Haptics } from 'expo-haptics';
 
 
 export default class Game extends Component {
@@ -34,6 +34,7 @@ export default class Game extends Component {
         const { redName, blueName, yellowName, greenName, twoPlayer, threePlayer, fourPlayer } = props;
         this.intervalId = null
         this.rollingSound = new Audio.Sound();
+        this.soundObject = new Audio.Sound();
         this.rollingValue = new Animated.Value(0);
         this.onDiceRoll = this.onDiceRoll.bind(this);
         this.state = {
@@ -118,6 +119,7 @@ export default class Game extends Component {
     componentDidMount() {
 
         this.loadSound();
+        this.loadPieceBiteSound()
         this.displayTimer();
         this.startTimer()
 
@@ -137,10 +139,10 @@ export default class Game extends Component {
             }, async () => {
                 if (this.state.remainingTime <= 0) {
 
-                    console.log("139 called")
+                    // console.log("139 called")
 
                     await this.retrieveData()
-                    console.log("142 called")
+                    // console.log("142 called")
                     this.props.onEnd()
                     this.stopTimer();
 
@@ -174,10 +176,7 @@ export default class Game extends Component {
                 const thirdGreatest = sortedValues[2].key;
                 const fourthGreatest = sortedValues[3].key;
 
-                // console.log('First Greatest Value:', firstGreatest);
-                // console.log('Second Greatest Value:', secondGreatest);
-                // console.log('Third Greatest Value:', thirdGreatest);
-                // console.log('Fourth Greatest Value:', fourthGreatest);
+            
 
                 for (let i = 0; i < sortedValues.length; i++) {
                     this.state.winnerArray.push(sortedValues[i])
@@ -186,55 +185,7 @@ export default class Game extends Component {
 
                 await AsyncStorage.setItem('playerArray', JSON.stringify(this.state.winnerArray))
 
-                // if(blueValue > redValue && blueValue > yellowValue && blueValue > greenValue ){
-                //       console.log("blue is winner") 
-                //       this.setState({firstWinner:{firstWinnerName:this.bluePlayer, firstWinnerScore:blueValue}})
-                //        if(redValue> yellowValue && redValue > greenValue){
-                //             console.log("red second winner")
-                //             this.setState({secondWinner:{secondWinnerName:this.redPlayer, secondWinnerScore:redValue}})
-
-                //             if (yellowValue > greenValue){
-                //                 this.setState({thirdWinner:{thirdWinnerName:this.yellowPlayer, thirdWinnerScore:yellowValue}})
-                //                 this.setState({fouthWinner:{fourthWinnerName:this.greenPlayer, fourthWinnerScore:greenValue}}) 
-                //             }
-                //             else{
-                //                 this.setState({thirdWinner:{thirdWinnerName:this.greenPlayer, thirdWinnerScore:greenValue}})
-                //                 this.setState({fouthWinner:{fourthWinnerName:this.yellowPlayer, fourthWinnerScore:yellowValue}}) 
-                //             }
-                //        }
-                //        else if (yellowValue > greenValue) {
-                //         this.setState({secondWinner:{secondWinnerName:this.yellowPlayer, secondWinnerScore:yellowValue}})
-                //          if(redValue > greenValue){
-                //             this.setState({thirdWinner:{thirdWinnerName:this.redPlayer, thirdWinnerScore:redValue}})
-                //             this.setState({last:{lastName:this.greenPlayer, secondWinnerScore:greenValue}})
-                //          }
-                //          else{
-                //             this.setState({thirdWinner:{thirdWinnerName:this.greenPlayer, thirdWinnerScore:greenValue}})
-                //             this.setState({last:{lastName:this.redPlayer, secondWinnerScore:redValue}})
-                //          }
-                //        }
-
-
-
-
-                //        else if ( yellowValue > blueValue){
-                //         console.log("yellow second winner")
-                //         this.setState({secondWinner:{secondWinnerName:this.yellowPlayer, secondWinnerScore:yellowValue}})
-                //        }
-                //        else{
-                //         console.log("blue second winner")
-                //         this.setState({secondWinner:{secondWinnerName:this.bluePlayer, secondWinnerScore:blueValue}})
-                //        }
-
-                //     //   try {
-                //     //     await AsyncStorage.setItem('winner',JSON.stringify({winnerName:this.bluePlayer, winnerScore:blueValue, second: }));
-                //     //     console.log("red", total)
-                //     //   } catch (error) {
-                //     //     console.log("error", error)
-                //     //     // Error saving data
-                //     //   }  
-
-                // }
+             
             }
             catch (error) {
                 console.log(error)
@@ -259,9 +210,7 @@ export default class Game extends Component {
                 const thirdGreatest = sortedValues[2].key;
 
 
-                // console.log('First Greatest Value:', firstGreatest);
-                // console.log('Second Greatest Value:', secondGreatest);
-                // console.log('Third Greatest Value:', thirdGreatest);
+             
                 for (let i = 0; i < sortedValues.length; i++) {
                     this.state.winnerArray.push(sortedValues[i])
 
@@ -306,27 +255,16 @@ export default class Game extends Component {
 
     };
 
-    // displayTimer() {
-    //     const { turn } = this.state;
-    //     const timerId = setTimeout(() => {
-    //         this.moveToNextPlayer();
-    //     }, 15000);  // 15 seconds
 
-    //     // Store the timerId in the state
-    //     this.setState(prevState => ({
-    //         timers: {
-    //             ...prevState.timers,
-    //             [turn]: timerId
-    //         }
-    //     }));
-    // }
 
-    displayTimer() {
+  async  displayTimer() {
         const { turn, timers } = this.state;
+        console.log("turn",turn,timers[turn])
 
         // Clear any existing timer for the current player
         if (timers[turn]) {
-            clearTimeout(timers[turn]);
+            await clearTimeout(timers[turn]);
+          
         }
 
         const timerId = setTimeout(() => {
@@ -482,29 +420,12 @@ export default class Game extends Component {
 
 
 
-    // setTimer() {
 
-    //     const { turn, moves } = this.state;
-
-    //     const timerId = setTimeout(() => {
-
-    //         this.moveToNextPlayer();
-    //     }, 15000);  // 15 seconds
-
-    //     // Store the timerId in the state
-    //     this.setState(prevState => ({
-    //         timers: {
-    //             ...prevState.timers,
-    //             [turn]: timerId
-    //         }
-    //     }));
-
-
-    // }
 
 
     componentWillUnmount() {
         this.unloadSound();
+        this.unLoadPieceBiteSound()
         clearInterval(this.intervalId);
 
 
@@ -528,6 +449,30 @@ export default class Game extends Component {
         }
     }
 
+
+    async loadPieceBiteSound() {
+        try {
+            await this.soundObject.loadAsync(require('../../../assets/biteSound.m4a')); 
+          } catch (error) {
+            console.error('Failed to load sound', error);
+          }
+    }
+
+    async unLoadPieceBiteSound() {
+        try {
+            await this.soundObject.unloadAsync();
+        } catch (error) {
+            console.error('Error unloading sound:', error);
+        }
+    }
+
+   async playSound() {
+        try {
+          await this.soundObject.replayAsync();
+        } catch (error) {
+          console.error('Failed to play sound', error);
+        }
+      };
 
     renderDiceIcons() {
         const { diceNumber, isRolling } = this.state;
@@ -586,15 +531,8 @@ export default class Game extends Component {
         }
     }
 
-    // initPieces(playerColor) {
-    //     let time = new Date().getTime();
-    //     return {
-    //         one: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null , name: ONE, color: playerColor, updateTime: time, oneCount: [] },
-    //         two: { position:FINISHED, name: TWO, color: playerColor, updateTime: time, twoCount: [] },
-    //         three: {  position:FINISHED, name: THREE, color: playerColor, updateTime: time, threeCount: [] },
-    //         four: {  position:playerColor == RED? R1 :playerColor == YELLOW? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: FOUR, color: playerColor, updateTime: time, fourCount: [] }
-    //     }
-    // }
+
+
 
 
     render() {
@@ -628,7 +566,7 @@ export default class Game extends Component {
                 </View>
 
 
-                {console.log(this.state.timers[RED])}
+                {/* {console.log(this.state.timers[RED])} */}
 
                 {
                     this.state.timers[RED] || this.state.timers[GREEN] || this.state.timers[BLUE] || this.state.timers[YELLOW] ?
@@ -641,10 +579,7 @@ export default class Game extends Component {
                             <CountdownCircleTimer
                                 isPlaying
                                 duration={15}
-                                // colors={[color == '#ec1d27' ? "#780000" : color == '#29b6f6' ? '#0582ca' : color == '#01A147' ? '#004b23' : color == '#ffe01b' ? '#fdc500' : null]}
-
                                 colors={['#008000', '#F7B801', '#A30000', '#A30000']}
-                                // colors={color == '#ec1d27'?['#780000', '#780000']: color == '#29b6f6'?['#0582ca', '#0582ca']: color == '#01A147'?['#004b23', '#004b23']:color == '#ffe01b'?['#fdc500', '#fdc500']:null }
                                 colorsTime={[7, 5, 2, 0]}
                                 size={110}
                                 strokeWidth={7}
@@ -657,7 +592,7 @@ export default class Game extends Component {
                                         backgroundColor: this.state.turn == BLUE ? "#0582ca" : this.state.turn == RED ? "#780000" : this.state.turn == YELLOW ? "#fdc500" : this.state.turn == GREEN ? "#004b23" : "red", borderWidth: 8,
                                         borderColor: 'rgba(0,0,0,0.2)',
                                     }]}>
-                                        {/* {this.state.turn == BLUE && */}
+
                                         <Animated.View
                                             style={[
 
@@ -669,7 +604,7 @@ export default class Game extends Component {
                                         >
                                             <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
                                         </Animated.View>
-                                        {/* } */}
+
 
                                     </View>
 
@@ -687,7 +622,7 @@ export default class Game extends Component {
                                 backgroundColor: this.state.turn == BLUE ? "#0582ca" : this.state.turn == RED ? "#780000" : this.state.turn == YELLOW ? "#fdc500" : this.state.turn == GREEN ? "#004b23" : "red", borderWidth: 8,
                                 borderColor: 'rgba(0,0,0,0.2)',
                             }]}>
-                                {/* {this.state.turn == BLUE && */}
+
                                 <Animated.View
                                     style={[
 
@@ -699,7 +634,7 @@ export default class Game extends Component {
                                 >
                                     <TouchableOpacity onPress={this.onDiceRoll}>{this.renderDiceIcons()}</TouchableOpacity>
                                 </Animated.View>
-                                {/* } */}
+
 
                             </View>
                         </TouchableOpacity>
@@ -709,8 +644,8 @@ export default class Game extends Component {
                 <View style={styles.gameContainer}>
 
                     <View style={styles.twoPlayersContainer}>
-                        {/* {console.log("330", this.state.timers[BLUE], this.state.timers[YELLOW])} */}
-                        {this.renderPlayerBox(redName, this.state.red, this.state.redScore, this.state.redHeart, this.state.timers[RED] ? true : false, this.state.diceNumber, this.state.isRolling, this.renderDiceIcons, { borderTopLeftRadius: 20 })}
+
+                        {this.renderPlayerBox(redName, this.state.red, this.state.redScore, this.state.redHeart, this.state.timers[RED]!= null ? true : false, this.state.diceNumber, this.state.isRolling, this.renderDiceIcons, { borderTopLeftRadius: 20 })}
                         <VerticalCellsContainer position={TOP_VERTICAL}
                             state={this.state}
                             onPieceSelection={(selectedPiece) => {
@@ -733,7 +668,7 @@ export default class Game extends Component {
                                 this.onPieceSelection(selectedPiece);
                             }}
                         />
-                        {this.renderPlayerBox(greenName, this.state.green, this.state.greenScore, this.state.greenHeart, this.state.timers[GREEN] ? true : false, this.state.diceNumber, this.state.isRolling, this.renderDiceIcons, { borderBottomRightRadius: 0 })}
+                        {this.renderPlayerBox(greenName, this.state.green, this.state.greenScore, this.state.greenHeart, this.state.timers[GREEN]!= null ? true : false, this.state.diceNumber, this.state.isRolling, this.renderDiceIcons, { borderBottomRightRadius: 0 })}
                     </View>
                 </View>
 
@@ -807,7 +742,7 @@ export default class Game extends Component {
         this.rollingValue.setValue(0);
         Animated.timing(this.rollingValue, {
             toValue: 1,
-            duration: 400,
+            duration: 300,
             useNativeDriver: false,
         }).start(async () => {
             // Animation completed, update state and perform additional logic
@@ -848,78 +783,6 @@ export default class Game extends Component {
     }
 
 
-    // moveToNextPlayer() {
-    //     const { turn, timers } = this.state;
-
-    //     console.log("turn", turn)
-
-    //     // Clear the current player's timer
-    //     if (timers[turn]) {
-
-    //         if (turn == BLUE) {
-
-    //             if (this.state.blueHeart > 1) {
-    //                 this.setState({
-    //                     blueHeart: this.state.blueHeart - 1
-    //                 })
-    //             }
-
-    //         }
-    //         if (turn == YELLOW) {
-
-    //             if (this.state.yellowHeart > 1) {
-    //                 this.setState({
-    //                     yellowHeart: this.state.yellowHeart - 1
-    //                 })
-    //             }
-
-    //         }
-    //         if (turn == RED) {
-
-    //             if (this.state.redHeart > 1) {
-    //                 this.setState({
-    //                     redHeart: this.state.redHeart - 1
-    //                 })
-
-    //             }
-
-    //         }
-
-    //         if (turn == GREEN) {
-    //             if (this.state.greenHeart > 1) {
-    //                 this.setState({
-    //                     greenHeart: this.state.greenHeart - 1
-    //                 })
-    //             }
-
-    //         }
-    //         clearTimeout(timers[turn]);
-    //     }
-
-    //     // Get the next player
-    //     const nextPlayer = this.getNextTurn();
-
-    //     // Update the current turn in the state
-    //     if (nextPlayer) {
-
-
-    //         this.setState({
-    //             turn: nextPlayer,
-    //             moves: [],
-    //             animateForSelection: false,
-    //         });
-
-    //         this.setTimer()
-
-
-    //     } else {
-
-    //         console.log("game end")
-    //     }
-
-
-    // }
-
 
     isPlayerFinished(player) {
         const { one, two, three, four } = player.pieces;
@@ -943,7 +806,7 @@ export default class Game extends Component {
             this.setState({ bonusCount: this.state.bonusCount - 1 });
             if (this.isPlayerFinished(this.state[turn])) {
 
-                console.log("879")
+                // console.log("879")
                 return turn;
             }
             // else{
@@ -1159,6 +1022,8 @@ export default class Game extends Component {
 
 
         if (piece.position == FINISHED) {
+             this.playSound()
+            this.displayTimer()
             return true;
         }
 
@@ -1204,18 +1069,26 @@ export default class Game extends Component {
 
         const { red, blue, yellow, green } = this.state;
         if (piece.color != red.player && checkIfPositionMatchesExistingPiece(piece, red)) {
-            return true;
+            this.playSound()
+                this.displayTimer()
+                 return true;
         }
 
         if (piece.color != yellow.player && checkIfPositionMatchesExistingPiece(piece, yellow)) {
+            this.playSound()
+            this.displayTimer()
             return true;
         }
 
         if (piece.color != green.player && checkIfPositionMatchesExistingPiece(piece, green)) {
+            this.playSound()
+            this.displayTimer()
             return true;
         }
 
         if (piece.color != blue.player && checkIfPositionMatchesExistingPiece(piece, blue)) {
+            this.playSound()
+            this.displayTimer()
             return true;
 
         }
@@ -1405,16 +1278,15 @@ export default class Game extends Component {
         return isMovePossible;
     }
 
-    movePieceByPosition(piece, move) {
+   async movePieceByPosition(piece, move, delay = 200) {
 
         const { redScore, yellowScore, blueScore, greenScore } = this.state
         let newPosition = "";
         let position = parseInt(piece.position.substring(1, piece.position.length));
+        let currentPosition = position;
+        let totalMoves = move;
         // console.log("856", position)
         let cellAreaIndicator = piece.position.substring(0, 1);
-
-
-
 
         if (piece.position == HOME && move == 6) {
             newPosition = piece.color == RED ? R1 : piece.color == YELLOW ? Y1 : piece.color == GREEN ? G1 : piece.color == BLUE ? B1 : undefined;
@@ -1432,10 +1304,6 @@ export default class Game extends Component {
                     let updatedPosition = (position + move + 1);
                     if (updatedPosition == 19) {
                         newPosition = FINISHED;
-
-
-
-
                     }
                     else {
                         let updatedCellAreaIndicator = cellAreaIndicator == "R" ? "Y" : cellAreaIndicator == "Y" ? "G" : cellAreaIndicator == "G" ? "B" : cellAreaIndicator == "B" ? "R" : undefined;
@@ -1473,9 +1341,8 @@ export default class Game extends Component {
 
 
             if (move == 6 || this.state.extraChance >= 1) {
-                this.displayTimer();  // Display the timer
-
-                // Rest of your code for handling the dice roll and moving the piece
+         
+                this.displayTimer();  // Display the timer   
             }
 
             if (piece.name == "one") {
@@ -1495,29 +1362,27 @@ export default class Game extends Component {
             }
 
 
-            // {
-            //     console.log("1489",piece.color)
-            // }
+
 
             if (piece.color == "red") {
                 redScore.push(move)
                 this.setState({ redScore: redScore })
-                console.log("redScore", redScore)
+                // console.log("redScore", redScore)
             }
             if (piece.color == "yellow") {
                 yellowScore.push(move)
                 this.setState({ yellowScore: yellowScore })
-                console.log("yellowScore", yellowScore)
+                // console.log("yellowScore", yellowScore)
             }
             if (piece.color == "blue") {
                 blueScore.push(move)
                 this.setState({ blueScore: blueScore })
-                console.log("blueScore", blueScore)
+                // console.log("blueScore", blueScore)
             }
             if (piece.color == "green") {
                 greenScore.push(move)
                 this.setState({ greenScore: greenScore })
-                console.log("greenScore", greenScore)
+                // console.log("greenScore", greenScore)
             }
 
 
@@ -1527,7 +1392,7 @@ export default class Game extends Component {
         if (this.didGetBonusWithNewPosition(piece) && !this.isPlayerFinished(this.state[piece.color])) {
             let count = this.state.bonusCount + 1;
             this.setState({ bonusCount: count }, () => {
-                // console.log("count", count)
+
                 let player = this.state[piece.color]
                 // console.log("moves", this.state.moves)
                 if (this.state.moves.length == 1) {
@@ -1875,3 +1740,4 @@ const styles = StyleSheet.create({
 {/* <View style={styles.blueDice}> */ }
 
 
+// in this my piece is directly olaced to the newposition if want to move my goti one place by place then how i do this

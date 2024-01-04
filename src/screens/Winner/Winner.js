@@ -94,7 +94,7 @@ const getPlayerDetails = async()=>{
          <View style={[styles.box, {flexDirection:"row", alignItems:"center"}]}>
         { id == 0 ?
          <> 
-         <Image source={require("../../../assets/trophy.png")} style={{height:50,width:50}}></Image>
+         <Image source={require("../../../assets/trophy.png")} style={{height:40,width:40}}></Image>
            <Text allowFontScaling={false} style={{color:"white"}}>Winner</Text>
             </>   : 
             <Text allowFontScaling={false} style={{color:"white"}}>{id==1 ? "Second": id == 2? "Third" : "Fourth"}</Text> 

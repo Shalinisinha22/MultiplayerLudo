@@ -105,11 +105,9 @@ const styles = StyleSheet.create({
         padding:10
     },
     redInputStyle:{
-       
         borderColor:'#ffcccc'
     },
-    yellowInputStyle:{
-        
+    yellowInputStyle:{     
         borderColor:'#ffe01b'
     },
     blueInputStyle:{

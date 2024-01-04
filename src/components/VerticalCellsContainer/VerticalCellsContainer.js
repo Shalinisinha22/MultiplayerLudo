@@ -21,7 +21,7 @@ export default VerticalCellsContainer = ({position,onPieceSelection,state}) =>{
 
                     <View style={styles.cellContainer} key={cellPosition}>
                         <CellBox backgroundColor={getCellBackgroundColor(cellPosition)}
-                             arrow ={getCellArrow(cellPosition)}
+                             arrow ={getCellArrow(cellPosition, state.red,state.blue,state.green,state.yellow)}
                              safe = {getSafeArea(cellPosition, state.red,state.blue,state.green,state.yellow)}
                            
                             onPieceSelection={onPieceSelection}

@@ -34,7 +34,7 @@ export default HorizontalCellsContainer = ({
 
               <CellBox
                 backgroundColor={getCellBackgroundColor(cellPosition)}
-                arrow ={getCellArrow(cellPosition)}
+                arrow ={getCellArrow(cellPosition, state.red,state.blue,state.green,state.yellow)}
                 safe = {getSafeArea(cellPosition, state.red, state.blue, state.green, state.yellow)}
                 
                 onPieceSelection={onPieceSelection}

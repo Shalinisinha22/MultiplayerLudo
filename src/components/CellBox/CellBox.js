@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, ToastAndroid, LogBox } from 'react-native';
 import { colors } from '../../util/Colors';
-import { B1, B9, BLUE, G1, G8, G9, GREEN, R1, R9, RED, Y1, Y9, YELLOW } from '../../util/Constants';
+import { BLUE, GREEN, RED, YELLOW } from '../../util/Constants';
 import RedGoti from '../Goti/RedGoti';
 import YellowGoti from '../Goti/YellowGoti';
 import BlueGoti from '../Goti/BlueGoti';
@@ -10,10 +10,40 @@ import ReadyRed from '../../../components/Svg/ReadyRed';
 import ReadyGreen from '../../../components/Svg/ReadyGreen';
 import ReadyYellow from '../../../components/Svg/ReadyYellow';
 import ReadyBlue from '../../../components/Svg/ReadyBlue';
-import GotiCount from '../../util/GotiCount';
-import DefaultCell from '../../util/DefaultCell';
 
 
+
+
+const countGotiAtPosition = (state, position) => {
+    const { red, yellow, green, blue } = state;
+    const gotiPositions = []
+    if (red.playerName !== "") {
+        gotiPositions.push(red.pieces)
+    }
+    if (green.playerName !== "") {
+        gotiPositions.push(green.pieces)
+    }
+    if (yellow.playerName !== "") {
+        gotiPositions.push(yellow.pieces)
+    }
+    if (blue.playerName !== "") {
+        gotiPositions.push(blue.pieces)
+    }
+    // const gotiPositions = [red.pieces, yellow.pieces, green.pieces, blue.pieces];
+    let count = 0;
+
+
+    gotiPositions.forEach((playerPieces) => {
+        Object.values(playerPieces).forEach((piece) => {
+            if (piece.position === position) {
+                count++;
+
+            }
+        });
+    });
+
+    return { count };
+};
 
 export default CellBox = ({ backgroundColor, position, onPieceSelection, state, arrow, safe, gotiCounter }) => {
 
@@ -22,23 +52,21 @@ export default CellBox = ({ backgroundColor, position, onPieceSelection, state, 
     const [highlighColor, setHighlightColor] = React.useState(backgroundColor);
     const [isAnimating, setIsAnimating] = React.useState(false);
     const [intervalId, setIntervalId] = React.useState(undefined);
-    const [piece, setPiece] = useState(null)
-
-    const [gotiDetails, setGotiDetails] = useState([])
-
-    const array = [R1, B1, Y1, G1, R9, B9, G9, Y9]
+    const [animatePiece, setPiece] = useState(undefined)
 
     let shouldRenderBackgroundColor = 1;
 
 
-   
+
 
 
     const applyAnimationIfNeeded = () => {
 
         if (shouldAnimateForSelection()) {
             if (!isAnimating) {
+
                 setIsAnimating(true);
+
                 setIntervalId(setInterval(() => {
                     let color = backgroundColor == colors.white ? colors.white : colors.white;
                     shouldRenderBackgroundColor++;
@@ -66,6 +94,8 @@ export default CellBox = ({ backgroundColor, position, onPieceSelection, state, 
     const shouldAnimateForSelection = () => {
         const { red, blue, yellow, green, turn } = state;
         const playerToCheckFor = turn == RED ? red : turn == YELLOW ? yellow : turn == GREEN ? green : turn == BLUE ? blue : undefined;
+
+        // console.log(playerToCheckFor)
         return positionMatchesPlayerPosition(playerToCheckFor) && isMovePossibleFromCurrentPosition();
     }
 
@@ -107,9 +137,26 @@ export default CellBox = ({ backgroundColor, position, onPieceSelection, state, 
     const getPiecesOnCell = () => {
         const { red, yellow, blue, green } = state;
         const pieces = [];
+        const players = [];
 
-        const players = [red, yellow, blue, green];
 
+        if (red.playerName !== "") {
+            players.push(red)
+        }
+        if (green.playerName !== "") {
+            players.push(green)
+        }
+        if (yellow.playerName !== "") {
+            players.push(yellow)
+        }
+        if (blue.playerName !== "") {
+            players.push(blue)
+        }
+
+
+
+        // const players = [state.red.playerName ? red: null , state.yellow.playerName ? yellow: null, state.blue.playerName? blue:null, state.green.playerName?green:null];
+        //    const players = [red,yellow,blue,green]
         players.forEach((player) => {
             const playerPieces = Object.values(player.pieces);
             playerPieces.forEach((piece) => {
@@ -121,6 +168,8 @@ export default CellBox = ({ backgroundColor, position, onPieceSelection, state, 
 
         return pieces;
     };
+
+
 
 
     const getPieceColor = () => {
@@ -203,74 +252,27 @@ export default CellBox = ({ backgroundColor, position, onPieceSelection, state, 
     let color = state.isWaitingForDiceRoll ? backgroundColor : highlighColor;
 
 
-    // const getNumberOfPiecesAtPosition = (props, position) => {
-    //     console.log(props)
-    //     let count = 0;
-    //     // if (props.pieces.one.position == position) count++;
-    //     // if (props.pieces.two.position == position) count++;
-    //     // if (props.pieces.three.position == position) count++;
-    //     // if (props.pieces.four.position == position) count++;
-    //     return count;
-    // }
-
-
-    // {
-
-    //     array.map((position)=>(
-    //       gotiDetails.push(GotiCount(position, state.red, state.blue, state.green, state.yellow))
-    //     ))
-
-
-    //  }
-
-
-    // const count = DefaultCell(position, state.red, state.blue, state.green, state.yellow)
-
-
- 
-
-
-
+    const { turn } = state;
     return (
 
-   
-     
-     
-
-
         <TouchableOpacity style={[styles.container, {
-            backgroundColor: color, flexWrap: "wrap", justifyContent: "center", alignItems: "center", flexDirection: "row", flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
+            backgroundColor: color, flex: 2,
             flexDirection: 'row',
             position: 'relative',
+            flexWrap: "wrap",
+
         }]}
-
-
             onPress={() => {
 
 
                 if (isMovePossibleFromCurrentPosition()) {
                     let piece = getPiece();
-                    // console.log("194", piece)
                     if (piece) {
-                        setPiece(piece)
                         onPieceSelection(piece)
                     }
                 }
             }}
         >
-
-           {/* {
-            position == R1 ?
-            console.log(GotiCount(R1, state.red, state.blue, state.green, state.yellow)):null
-            // console.log(`Total players at position ${position}: ${count}`);
-            // console.log(`Colors of pieces at position ${position}: ${colors.join(', ')}`);
-            
-           } */}
-
-
-
 
 
 
@@ -279,160 +281,90 @@ export default CellBox = ({ backgroundColor, position, onPieceSelection, state, 
 
 
 
-
-
-
-
-
-
-
-
-
-            {/* {getPieceColor().colorToReturn == "#ec1d27" && state.red.playerName ?
-
-
-                getPiecesOnCell().map((piece, index) => (
-
-
-                    // console.log(piece)
-
-
-                    isAnimating ?
-
-                        <ReadyRed id={index} positions={piece.position}></ReadyRed> :
-                        <RedGoti id={index} positions={piece.position} ></RedGoti>
-
-                ))
-
-                : null
-
-            } */}
-
-
-
-
-     
-
-
-
-
-
-
-            {/* { getPieceColor().colorToReturn == "#ec1d27" &&  state.red.playerName ? 
- 
-     
-     getPiecesOnCell().map((piece, index) => (
-      
-            piece.color == "#ec1d27" && 
-           isAnimating ?
-  
-
-        <ReadyRed id={`r${index}`}  positions={piece.position} count = {count}></ReadyRed> :
-        <RedGoti 
-            id={`r${index}`} 
-            positions={piece.position} 
-            count = {count}
-            
-        />
-      
-                 
- ))  : null   
-
-}
-
-
-
-
-
-            {getPieceColor().colorToReturn == "#01A147" && state.green.playerName ?
-
-
-                getPiecesOnCell().map((piece, index) => (
-
-
-                    // console.log(piece)
-
-
-                    isAnimating ?
-
-                        <ReadyGreen id={`g${index}`} positions={piece.position} count = {count}></ReadyGreen> :
-                        <GreenGoti  id={`g${index}`} positions={piece.position} count = {count} ></GreenGoti>
-
-                       ))    
-
-          
-                       : null
-            }
-
-
-
-        
-
-
-
-            {getPieceColor().colorToReturn == "#29b6f6" && state.blue.playerName ?
-
-
-                getPiecesOnCell().map((piece, index) => (
-
-
-                    // console.log(piece)
-
-
-                    isAnimating ?
-
-                        <ReadyBlue   id={`b${index}`}count = {count}  positions={piece.position}></ReadyBlue> :
-                        <BlueGoti   id={`b${index}`} count = {count}  positions={piece.position} ></BlueGoti>
-
-                ))
-
-                : null
-
-            } */}
-
-
-
-
-
             {
 
-shouldRenderPiece() && getPiecesOnCell().map((piece, index) => (
+                getPiecesOnCell().map((piece, index) => {
+
+                    const gotiCount = countGotiAtPosition(state, piece.position);
+                    //    console.log("number", gotiCount)
+
+                    let height = 14;
+                    let width = 14;
+
+
+                    if (gotiCount.count >= 4) {
+                        height = 12;
+                        width = 14;
+                    }
+                    else if (gotiCount.count == 2) {
+                        height = 20;
+                        width = 15;
+                    }
+                    else if (gotiCount.count === 1) {
+                        height = 25;
+                        width = 25;
+                    }
+
+                    // else if (gotiCount.count >= 5) {
+                    //     height = 10;
+                    //     width = 10;
+                    // }
+
+                    const styles = { height: height, width: width }
+
+                    switch (piece.color) {
+                        case 'red':
+                            GotiComponent = state.red.playerName ? isAnimating && turn == RED ? ReadyRed : RedGoti : null;
+                            break;
+                        case 'green':
+                            GotiComponent = state.green.playerName ? isAnimating && turn == GREEN ? ReadyGreen : GreenGoti : null;
+                            break;
+                        case 'yellow':
+                            GotiComponent = state.yellow.playerName ? isAnimating && turn == YELLOW ? ReadyYellow : YellowGoti : null;
+                            break;
+                        case 'blue':
+                            GotiComponent = state.blue.playerName ? isAnimating && turn == BLUE ? ReadyBlue : BlueGoti : null;
+                            break;
+                        default:
+                            GotiComponent = null;
+                            break;
+                    }
 
 
 
-    
+                    return (
+                        GotiComponent && (
+                            <GotiComponent
+                                key={`${piece.color}-${index}`}
+                                id={index}
+                                positions={piece.position}
+                                height={height}
+                                width={width}
+                                count ={gotiCount.count}
+                                style={[{ alignSelf: "center", flexWrap: "wrap", padding: 0, margin: 0 }]}
+                             
 
-                    piece.color == "red" ?
-                        getPieceColor().colorToReturn == "#ec1d27" && state.red.playerName ? isAnimating ?
 
-                            <ReadyRed id={index} positions ={piece.position}></ReadyRed> : <RedGoti id={index} positions ={piece.position} ></RedGoti> : null
-                        :
-
-                        piece.color == "green" ?
-
-                            getPieceColor().colorToReturn == "#01A147" && state.green.playerName ? isAnimating ? <ReadyGreen id={index} positions ={piece.position}></ReadyGreen> : <GreenGoti id={index} positions ={piece.position} ></GreenGoti> : null
-
-                            :
-
-                            piece.color == "yellow" ?
-                                getPieceColor().colorToReturn == "#ffe01b" && state.yellow.playerName ? isAnimating ? <ReadyYellow id={index} positions ={piece.position}></ReadyYellow> : <YellowGoti id={index} positions ={piece.position}></YellowGoti> : null
-                         :
-
-                        piece.color == "blue" ?
-                          getPieceColor().colorToReturn == "#29b6f6" && state.blue.playerName ? isAnimating ? <ReadyBlue id={index} positions ={piece.position}></ReadyBlue> : <BlueGoti id={index} positions ={piece.position}></BlueGoti> : null
-:null
-           ))
-
+                            />
+                        )
+                    );
+                })
             }
 
 
 
 
+            {/* 
+            {shouldRenderPiece() && 
+                        <>
 
+                             { getPieceColor() == "#ec1d27" && state.red.playerName ? isAnimating ? <ReadyRed></ReadyRed> :<RedGoti positions ={state.red.pieces.one.position}></RedGoti>:null}
 
-
-
-
+                             {getPieceColor() == "#01A147" && state.green.playerName ? isAnimating ? <ReadyGreen></ReadyGreen> : <GreenGoti></GreenGoti>:null}
+                             {getPieceColor() == "#ffe01b" && state.yellow.playerName ? isAnimating ? <ReadyYellow></ReadyYellow> : <YellowGoti></YellowGoti>:null}
+                             {getPieceColor() == "#29b6f6" && state.blue.playerName ? isAnimating ? <ReadyBlue></ReadyBlue> : <BlueGoti></BlueGoti>:null}
+                        </>
+                  } */}
 
 
         </TouchableOpacity>

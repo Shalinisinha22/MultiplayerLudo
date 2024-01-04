@@ -173,8 +173,13 @@ export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, r
   transform: [{ rotate: "90deg" }],
   top:19,
   left:-19.5,
+  flexDirection:"column",
+  gap:2,
+  flexWrap:"wrap"
+
 
  }}>
+
 
   <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-39,right:-18, justifyContent:"space-between"}}>
   {redPlayer.pieces.one.position == FINISHED && <RedGoti position ={redPlayer.pieces.one.position}></RedGoti>}
@@ -201,7 +206,10 @@ export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, r
   borderBottomColor:green,
   transform: [{ rotate: "-90deg" }],
   top:-19,
-  right:-20
+  right:-20,
+  flexDirection:"column",
+  gap:2,
+  flexWrap:"wrap"
  }}>
  <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-39,right:-18}}>
 {greenPlayer.pieces.one.position == FINISHED && <GreenGoti position ={greenPlayer.pieces.one.position}></GreenGoti>}
@@ -226,7 +234,10 @@ export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, r
   borderBottomColor:blue,
   // transform: [{ rotate: "0deg" }],
   top:-39,
-  left:0
+  left:0,
+  flexDirection:"column",
+  gap:2,
+  flexWrap:"wrap"
  }}>
  <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-39,right:-15}}>
 {bluePlayer.pieces.one.position == FINISHED && <BlueGoti position ={bluePlayer.pieces.one.position}></BlueGoti>}
@@ -251,7 +262,10 @@ export default Dice = ({isRolling,turn,onDiceRoll,diceNumber, rollingRotation, r
   borderBottomColor: '#ffd500',
   transform: [{ rotate: "-180deg" }],
   top:-115.5,
-  left:-1
+  left:-1,
+  flexDirection:"column",
+  gap:2,
+  flexWrap:"wrap"
  }}>
    <View style={{flex:1, flexDirection:"row", position:"absolute", bottom:-39,right:-13}}>
 {yellowPlayer.pieces.one.position == FINISHED && <YellowGoti position ={yellowPlayer.pieces.one.position}></YellowGoti>}

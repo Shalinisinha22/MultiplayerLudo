@@ -60,13 +60,13 @@ export default Home = ({
                 
                
                <TouchableOpacity style={styles.newGameButton} onPress={handleTwo}>
-               <Text style={{fontSize:18}}>2 Players</Text>
+               <Text style={{fontSize:18,color:"white"}}>2 Players</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.newGameButton} onPress={handleThree}>
-               <Text style={{fontSize:18}}>3 Players</Text>
+               <Text style={{fontSize:18,color:"white"}}>3 Players</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.newGameButton} onPress={handleFour}>
-               <Text style={{fontSize:18}}>4 Players</Text>
+               <Text style={{fontSize:18,color:"white"}}>4 Players</Text>
             </TouchableOpacity>
             {/* <TouchableOpacity style={styles.newGameButton} onPress={onNewGameButtonPress}>
                 <Text >New Game</Text>
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
         fontWeight:'bold'
     },
     newGameButton:{
-        backgroundColor:'#fff',
+        backgroundColor:'#240046',
         width:200,
         padding:10,
         borderColor:'#ddd',
