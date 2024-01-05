@@ -24,6 +24,8 @@ import { Alert, VStack, HStack, IconButton, Box } from "native-base";
 import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Haptics } from 'expo-haptics';
+import { FontAwesome } from '@expo/vector-icons';
+
 
 
 export default class Game extends Component {
@@ -122,6 +124,7 @@ export default class Game extends Component {
         this.loadPieceBiteSound()
         this.displayTimer();
         this.startTimer()
+      AsyncStorage.clear()
 
 
     }
@@ -561,7 +564,7 @@ export default class Game extends Component {
 
                     <TouchableOpacity style={{ height: 45, width: 70, borderRadius: 30, borderColor: "#7b2cbf", borderWidth: 4, alignItems: "center", justifyContent: "center", padding: 5 }}>
                         <Text allowFontScaling={false} style={{ color: "white", fontSize: 12 }}>Pot</Text>
-                        <Text allowFontScaling={false} style={{ color: "white", fontSize: 12 }}>Rs 0.4</Text>
+                        <Text allowFontScaling={false} style={{ color: "white", fontSize: 12 }}><FontAwesome name="rupee" size={12} color="white" /> 0.4</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -1094,6 +1097,7 @@ export default class Game extends Component {
         }
 
         if (this.state.extraChance >= 1) {
+            
             return true;
         }
 
@@ -1339,10 +1343,14 @@ export default class Game extends Component {
             piece.position = newPosition;
             piece.updateTime = new Date().getTime();
 
+            {
+                console.log("move",move)
+            }
 
-            if (move == 6 || this.state.extraChance >= 1) {
          
-                this.displayTimer();  // Display the timer   
+            if (move == 6  && this.state.extraChance >= 1) {
+            
+                this.displayTimer();  
             }
 
             if (piece.name == "one") {
@@ -1360,9 +1368,6 @@ export default class Game extends Component {
             if (piece.name == "four") {
                 piece.fourCount.push(move)
             }
-
-
-
 
             if (piece.color == "red") {
                 redScore.push(move)

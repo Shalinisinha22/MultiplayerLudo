@@ -73,7 +73,7 @@ const getPlayerDetails = async()=>{
    
    <Text allowFontScaling={false} style={{fontSize:25,margin:20,color:"white"}}>GAME OVER</Text>
 
-     <View style={{width:350,marginBottom:20, height:200, marginTop:10}}>
+     <View style={{width:350,marginBottom:20, height:300, marginTop:10}}>
        <View style={{flex:1, borderColor:"#f8f9fa",borderWidth:0.2,flexDirection:"row"}}>
        <View style={styles.box}>
          <Text allowFontScaling={false} style={styles.head}>Status</Text>

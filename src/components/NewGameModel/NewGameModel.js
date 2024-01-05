@@ -25,11 +25,11 @@ export default class NewGameModel extends Component{
                 } */}
                 <View style={styles.modalStyle}>
                     <View style={styles.modalContainer}>
-                    <Text style={{color:'#ec1d27',marginBottom:10}}>Red Player Name</Text>
+                    <Text style={{color:'#9d0208',marginBottom:10}}>Red Player Name</Text>
                     <TextInput style={[styles.nameInputStyle,styles.redInputStyle]}
                         onChangeText={this.props.onRedInput}
                     />
-                    <Text style={{color:'#ffe01b',marginBottom:10}}>Yellow Player Name</Text>
+                    <Text style={{color:'#faa307',marginBottom:10}}>Yellow Player Name</Text>
                     <TextInput style={[styles.nameInputStyle,styles.yellowInputStyle]}
                         onChangeText={this.props.onYellowInput}
                     />
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     },
     yellowInputStyle:{
         
-        borderColor:'#ffe01b'
+        borderColor:'#faa307'
     },
     blueInputStyle:{
        

@@ -293,7 +293,7 @@ export default CellBox = ({ backgroundColor, position, onPieceSelection, state, 
 
 
                     if (gotiCount.count >= 4) {
-                        height = 12;
+                        height = 14;
                         width = 14;
                     }
                     else if (gotiCount.count == 2) {
@@ -301,8 +301,8 @@ export default CellBox = ({ backgroundColor, position, onPieceSelection, state, 
                         width = 15;
                     }
                     else if (gotiCount.count === 1) {
-                        height = 25;
-                        width = 25;
+                        height = 22;
+                        width = 22;
                     }
 
                     // else if (gotiCount.count >= 5) {

@@ -45,6 +45,10 @@ class App extends Component{
    }
   }
 
+  componentDidMount(){
+    AsyncStorage.clear()
+  }
+
   
  
   render(){
