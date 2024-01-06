@@ -93,7 +93,8 @@ export default class Game extends Component {
             title: "You missed a turn!",
             subtitle: "If you miss 3 turns, you will be out of the game",
             showAlert: false,
-            timerId: null
+            timerId: null,
+            keysToRemove: ['red', 'green', 'blue','yellow']
         }
 
 
@@ -124,12 +125,31 @@ export default class Game extends Component {
         this.loadPieceBiteSound()
         this.displayTimer();
         this.startTimer()
-      AsyncStorage.clear()
+    //   AsyncStorage.clear()
+     this.clearAsyncStorageMultiple(this.state.keysToRemove).then(success => {
+        if (success) {
+            // console.log('Keys cleared successfully');
+        } else {
+            // console.log('Failed to clear keys');
+        }
+    });
 
 
     }
 
+    async clearAsyncStorageMultiple (keysArray) {
+        try {
+            for (const key of keysArray) {
+                await AsyncStorage.removeItem(key);
+            }
+            return true; // Indicates successful clearance
+        } catch (exception) {
+            // console.log(exception);
+            return false; // Indicates failure
+        }
+    };
 
+ 
 
 
     startTimer() {
@@ -316,7 +336,7 @@ export default class Game extends Component {
 
                 }
                 else if (this.state.blueHeart <= 1) {
-                    await AsyncStorage.clear()
+                    await  this.clearAsyncStorageMultiple(this.state.keysToRemove)
                     // console.log("356 called")
                     this.props.onEnd()
 
@@ -341,7 +361,7 @@ export default class Game extends Component {
 
                 }
                 else if (this.state.yellowHeart <= 1) {
-                    await AsyncStorage.clear()
+                    await  this.clearAsyncStorageMultiple(this.state.keysToRemove)
                     // console.log("381 called")
                     this.props.onEnd()
                 }
@@ -365,7 +385,7 @@ export default class Game extends Component {
 
                 }
                 else if (this.state.redHeart <= 1) {
-                    await AsyncStorage.clear()
+                    await  this.clearAsyncStorageMultiple(this.state.keysToRemove)
                     //  console.log("405 called")
                     this.props.onEnd()
                 }
@@ -389,7 +409,7 @@ export default class Game extends Component {
 
                 }
                 else if (this.state.greenHeart <= 1) {
-                    await AsyncStorage.clear()
+                    await  this.clearAsyncStorageMultiple(this.state.keysToRemove)
                     // console.log("429 called")
                     this.props.onEnd()
                 }
@@ -420,9 +440,6 @@ export default class Game extends Component {
             // Handle the game end or next round logic here
         }
     }
-
-
-
 
 
 
@@ -533,9 +550,6 @@ export default class Game extends Component {
             four: { position: playerColor == RED ? R1 : playerColor == YELLOW ? Y1 : playerColor == GREEN ? G1 : playerColor == BLUE ? B1 : null, name: FOUR, color: playerColor, updateTime: time, fourCount: [], piecePosition: new Animated.Value(0) }
         }
     }
-
-
-
 
 
     render() {
@@ -1431,6 +1445,9 @@ export default class Game extends Component {
 
 
     }
+
+
+
     renderPlayerBox(playerName, player, playerScore, lifeline, timer, customStyle) {
         const { one, two, three, four } = player.pieces;
         customStyle.opacity = this.state.turn == player.player ? 1 : 0.6;

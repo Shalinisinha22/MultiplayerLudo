@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import {View,Text,StyleSheet,TouchableOpacity,Image, ImageBackground} from 'react-native';
+import {View,Text,StyleSheet,TouchableOpacity,Image, ImageBackground, ActivityIndicator} from 'react-native';
 import NewGameModel from '../../components/NewGameModel/NewGameModel'
 import TwoPlayerModal from '../../components/NewGameModel/TwoPlayerModal';
 import ThreePlayerModal from '../../components/NewGameModel/ThreePlayerModal';
 import FourPlayerModal from '../../components/NewGameModel/FourPlayerModal';
+import { EvilIcons } from '@expo/vector-icons';
+import axios from 'axios'
+import io from 'socket.io-client';
+
+const socket = io('http://192.168.0.110:5000');
 export default Home = ({
     isStartGameModalVisible,
     onNewGameButtonPress,
@@ -17,20 +22,90 @@ export default Home = ({
     green,
     blue,
     onStart,
-    twoPlayer,threePlayer,fourPlayer
+    twoPlayer,threePlayer,fourPlayer, mobileNumber
 }) => {
 
     const [selectedPlayers, setSelectedPlayers] = useState(null);
+    const [number,setMobileNumber]= useState(mobileNumber)
 
-    const handleTwo = () => {
-      setSelectedPlayers(2);
-      onBlueInput('Player 1')
-      onYellowInput('Player 2')
+
+
+    const [player1,setPlayer1] = useState([])
+    const [player2, setPlayer2] = useState([])
+    const [allPlayers, setAllPlayers] = useState([])
+    const [oppName, setOpp]= useState('')
+    const [flag,setFlag] = useState(false)
+
+
+    // useEffect(()=>{
+    //     getPlayerDetails()
+    // },[])
+
+    useEffect(() => {
+    
+      socket.on('find', (data) => {
+        console.log('Updated players:', data.allPlayers);
+        setAllPlayers(data.allPlayers); 
+        const foundObject = data.allPlayers.find(obj => obj.p1.p1name == `${number}` || obj.p2.p2name == `${number}`);
+        foundObject.p1.p1name == `${number}` ? setOpp(foundObject.p2.p2name) : setOpp(foundObject.p1.p1name)
+         console.log("51", foundObject.p1.p1name)
+         onBlueInput(foundObject.p1.p1name)
+         onYellowInput(foundObject.p2.p2name)
+         onStart()
+      });
+
+  
+      
+  
+      // Clean up the event listener on component unmount
+      return () => {
+        socket.off('find');
+    };
+    }, []);
+
+    // const getPlayerDetails = async()=>{
+    //       const res= await axios.get(`http://192.168.0.110:5000/getUserData?userId=${number}`)
+    //       // console.log(res.data)
+    //       setPlayer1(res.data)
+    // }
+
+    const searchingTwoPlayer= ()=>{
+      socket.on('find', (data) => {
+        console.log('Updated players:', data.allPlayers);
+        setAllPlayers(data.allPlayers); 
+        const foundObject = data.allPlayers.find(obj => obj.p1.p1name == `${number}` || obj.p2.p2name == `${number}`);
+        foundObject.p1.p1name == `${number}` ? setOpp(foundObject.p2.p2name) : setOpp(foundObject.p1.p1name)
+         console.log("51", foundObject.p1.p1name)
+      });
+      onBlueInput(foundObject.p1.p1name)
+      onYellowInput(foundObject.p2.p2name)
+      onStart()
+  
+      // Clean up the event listener on component unmount
+    //   return () => {
+    //     socket.off('find');
+    // };
+    }
+
+    const handleTwo =()=>{
+      setFlag(true)
+      socket.emit('find', { name: number });
+
+   
+    
+          // searchingTwoPlayer()
+    
+    }
+
+    // const handleTwo = () => {
+    //   setSelectedPlayers(2);
+    //   onBlueInput('Player 1')
+    //   onYellowInput('Player 2')
   
 
-    onNewGameButtonPress()
+    // onNewGameButtonPress()
  
-    };
+    // };
   
     const handleThree = () => {
       setSelectedPlayers(3);
@@ -56,6 +131,24 @@ export default Home = ({
     }, [selectedPlayers])
     return (
         <ImageBackground source={require("../../../assets/bg.png")} style={styles.container}>
+          <View style={{position:"absolute", top:10,right:20,justifyContent:"center",alignItems:"center"}}>
+            <EvilIcons name="user" size={30} color="white" />
+
+            <Text style={{color:"white",textAlign:"center",marginTop:5,fontSize:15}}>{number}</Text>
+          
+          </View>
+
+          {
+      
+           flag && <>
+          <Text style={{color:"white",fontSize:18}}>Searching for the player.....</Text>
+          <ActivityIndicator></ActivityIndicator>
+          </>
+     
+        
+   
+        }
+          
             <Image source={require("../../../assets/applogo.png")} style={{height:180,width:170, resizeMode:"contain"}}></Image>
                 
                

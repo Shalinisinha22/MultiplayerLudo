@@ -296,7 +296,7 @@ export default PlayerBox = ({ color, customStyle, lifeline, one, two, three, fou
 
 
                         <View style={{ backgroundColor: color == '#ec1d27' ? "#780000" : color == '#29b6f6' ? '#0582ca' : color == '#01A147' ? '#004b23' : color == '#ffe01b' ? '#faa307' : null, flexDirection: "row", borderTopLeftRadius: 5, borderTopRightRadius: 5, justifyContent: "space-between", alignItems: "center" }}>
-                            <Text allowFontScaling={false} style={{ color: "white", fontSize: 10, margin: 4 }}>+91 99***999</Text>
+                            <Text allowFontScaling={false} style={{ color: "white", fontSize: 10, margin: 4 }}>+91{playerName}</Text>
                             <View style={{ flexDirection: "row", alignItems: "flex-end", justifyContent: "center" }}>
 
                                 {
