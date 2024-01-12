@@ -24,11 +24,12 @@ const LoginScreen = () => {
 
         let number = await AsyncStorage.getItem('user');
 
-        console.log("27", number)
+        console.log("278", number)
 
         try {
-            const res = await axios.get(`http://192.168.0.110:5000/verify?userId=${number}`);
+            const res = await axios.get(`http://192.168.136.1:5000/verify?userId=${number}`);
             const data = res.data;
+            console.log(res.data[0])
 
             if (data.length !== 0) {
                 setVerified(true);
@@ -84,7 +85,7 @@ const LoginScreen = () => {
         if (!isFormValid) {
             console.log(name, mobileNumber);
             try {
-                const response = await axios.post("http://192.168.0.110:5000/signup", {
+                const response = await axios.post("http://192.168.136.1:5000/signup", {
                     name: name,
                     phone: mobileNumber,
                 });
